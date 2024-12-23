@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 11:54:45 by sinawara          #+#    #+#             */
-/*   Updated: 2024/12/23 11:55:35 by sinawara         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:26:52 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int main()
 {
-	printf("Makefile Works!\n");
+	char *prompt;
+	prompt = readline("_");
+	printf("%s\n", prompt);
 	return (0);
 }
