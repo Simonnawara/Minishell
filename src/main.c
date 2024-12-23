@@ -12,10 +12,22 @@
 
 #include "../includes/minishell.h"
 
-int main()
+int validate_inputs(int argc, char **argv)
 {
-	char *prompt;
-	prompt = readline("_");
-	printf("%s\n", prompt);
+	if (argc < 1)
+		return (ft_putendl_fd("Error : argument number invalid", 2), EXIT_FAILURE);
+	(void)argv;
+	return (0);
+}
+
+int main(int argc, char **argv)
+{
+	validate_inputs(argc, argv);
+	while (1)
+	{
+		char *prompt;
+		prompt = readline("> ");
+		printf("%s\n", prompt);
+	}
 	return (0);
 }

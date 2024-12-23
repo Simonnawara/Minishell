@@ -57,7 +57,7 @@ $(OBJ_DIR):
 $(NAME) : $(OBJECT)
 	@$(LOGO)
 	@make $(LIB)
-	@$(CC) $(CCFLAG) -o $(NAME) $(OBJECT) -L./libft -lft
+	@$(CC) $(CCFLAG) -o $(NAME) $(OBJECT) -L./libft -lft -lreadline -lhistory
 	@echo "$(SUCCESS_COLOR)$(NAME) - Compiled with Success"
 
 clean :
