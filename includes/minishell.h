@@ -24,7 +24,27 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+
+typedef struct s_path
+{
+	char		**paths;
+	char		*path_var;
+	char		*full_path;
+	char		*temp;
+}				t_path;
+
+
+// free.c //
+void	*free_and_return(char **array, void *return_value);
+void	free_array(char **array);
+
+// path.c //
+char	*get_path(char **env);
+char	*build_path(char *cmd, char **env);
 
 #endif
