@@ -18,7 +18,7 @@ int count_quotes(char *word, char quote)
 	return (1);
 }
 
-int count_start_quotes(char *word, char quote)
+/* int count_start_quotes(char *word, char quote)
 {
 	int i;
 
@@ -41,4 +41,4 @@ int count_end_quotes(char *word, char quote)
 		i--;
 	}
 	return (quote_count);
-}
+} */

@@ -19,33 +19,37 @@ int validate_inputs(int argc)
 	return (0);
 }
 
-char *get_command(char *word, int quote_count) // quote count = start + end quotes
+// Extracts a word between quotes.
+char *get_command(char *word, int quote_count, char quote_type) // quote count = start + end quotes
 {
 	char *middle;
-	int start_quotes;
-	int end_quotes;
 	int len;
 	int i;
 	int j;
 
-	start_quotes = count_start_quotes(word, word[0]);
-	end_quotes = count_end_quotes(word, word[0]);
 	len = ft_strlen(word);
-	if (len <= 2)
+	if (len <= quote_count)
 	{
 		ft_printf("word between quotes is too short\n");
 		return (ft_strdup(""));
 	}
-	middle = malloc(sizeof(char) * ((len - quote_count) + 1));
+	middle = malloc(sizeof(char) * (len - (quote_count) + 1));
 	if (!middle)
 		return (NULL);
-	i = start_quotes;
+
+	i = 0;
 	j = 0;
-	while (i < len - end_quotes)
+	while (word[i])
 	{
-		middle[j] = word[i];
-		i++;
-		j++;
+		while (word[i] == quote_type)
+			i++;
+		while(word[i] && word[i] != quote_type)
+		{
+			middle[j] = word[i];
+			j++;
+			i++;
+		}
+		break ;
 	}
 	middle[j] = '\0';
 	return (middle);
@@ -57,35 +61,61 @@ int parse_prompt(char *prompt, char **env)
 	char **res;
 	int i = -1;
 	int total_quotes;
+	char quote_type;
+	char *cmd;
 
 	if (!ft_strncmp(prompt, "exit", 4))
 		exit (EXIT_FAILURE);
 	res = ft_split(prompt, ' ');
 	while (res[++i])
 	{
-		ft_printf("%s\n", res[i]);
-		total_quotes = count_start_quotes(res[i], res[i][0]) + count_end_quotes(res[i], res[i][0]);
+		if (res[i][0] == 34 || res[i][ft_strlen(res[i]) - 1] == 34) //determines of quote type is double
+			quote_type = 34;
+		else if (res[i][0] == 39 || res[i][ft_strlen(res[i]) - 1] == 39) // or single quotes
+			quote_type = 39;
+		else
+			quote_type = 0;
+
+		ft_printf("%s\n", res[i]); //prints the word to make sure we have it correct
+
+		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
 		if (build_path(res[i], env))
 			ft_printf("Is a command\n");
-		else if (total_quotes % 2 == 0) //count_quotes(res[i], res[i][0]) != 1
+		else if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
-			printf("Amount of quotes : %d\n", total_quotes);
-			if (build_path(get_command(res[i], count_quotes(res[i], res[i][0])), env))
+			cmd = get_command(res[i], total_quotes, quote_type);
+			if (cmd && build_path(cmd, env))
 				printf("Is between even quotes, and is a command\n");
+			free(cmd);
 		}
 	}
-	return (i); // i = number of words in the prompt
+	/* i = 0;
+	while (res[i])
+	{
+		free(res[i]);
+		i++;
+	}
+	free(res); */
+	return (1); // i = number of words in the prompt
 }
 
 int main(int argc, char **argv, char **env)
 {
 	(void)argv;
-	validate_inputs(argc);
+	if (validate_inputs(argc))
+		return (EXIT_FAILURE);
 	while (1)
 	{
 		char *prompt;
 		prompt = readline("> ");
+		if (!prompt)
+		{
+			ft_printf("Exiting...\n");
+			break ;
+		}
+		//if (*prompt)
 		parse_prompt(prompt, env);
+		free(prompt);
 	}
 	return (0);
 }
