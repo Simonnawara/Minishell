@@ -113,9 +113,23 @@ int main(int argc, char **argv, char **env)
 			ft_printf("Exiting...\n");
 			break ;
 		}
-		//if (*prompt)
 		parse_prompt(prompt, env);
 		free(prompt);
 	}
 	return (0);
 }
+
+/*
+-> Parsing technique :  Precedence Climbing
+						Generating an AST - Abstract Sytax Tree
+
+What is grammar ?
+Type of grammar used for this project = CFG (Context Free Grammar)
+We can create a grammar that tells us how am arithmetic expression can be formed
+
+Precedence Climbing :
+https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing
+
+Goal of the algo : treat an expression as a bunch of nested sub-expressions.
+Each sub_expression has in common the lowest precedence level of the operators it contains.
+*/
