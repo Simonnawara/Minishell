@@ -47,4 +47,9 @@ void	free_array(char **array);
 char	*get_path(char **env);
 char	*build_path(char *cmd, char **env);
 
+// quotes.c //
+int count_quotes(char *word, char quote);
+int count_start_quotes(char *word, char quote);
+int count_end_quotes(char *word, char quote);
+
 #endif
