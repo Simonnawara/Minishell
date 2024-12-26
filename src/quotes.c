@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:37 by sinawara          #+#    #+#             */
-/*   Updated: 2024/12/26 14:56:39 by sinawara         ###   ########.fr       */
+/*   Updated: 2024/12/26 15:19:00 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int count_quotes(char *word, char quote)
 			quote_count++;
 		i++;
 	}
-	if (quote_count % 2 == 0)
-		return (quote_count);
-	return (1);
+	//if (quote_count % 2 == 0)
+	return (quote_count);
+	//return (1);
 }
 
 int get_quote_type(char start_quote, char end_quote)
