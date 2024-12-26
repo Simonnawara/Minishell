@@ -49,7 +49,6 @@ char	*build_path(char *cmd, char **env);
 
 // quotes.c //
 int count_quotes(char *word, char quote);
-int count_start_quotes(char *word, char quote);
-int count_end_quotes(char *word, char quote);
+int get_quote_type(char start_quote, char end_quote);
 
 #endif

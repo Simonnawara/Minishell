@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/26 14:50:37 by sinawara          #+#    #+#             */
+/*   Updated: 2024/12/26 14:56:39 by sinawara         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int count_quotes(char *word, char quote)
@@ -16,6 +28,19 @@ int count_quotes(char *word, char quote)
 	if (quote_count % 2 == 0)
 		return (quote_count);
 	return (1);
+}
+
+int get_quote_type(char start_quote, char end_quote)
+{
+	int	quote_type;
+
+	if (start_quote == 34 || end_quote == 34) //determines of quote type is double
+			quote_type = 34;
+	else if (start_quote == 39 || end_quote == 39) // or single quotes
+			quote_type = 39;
+	else
+			quote_type = 0;
+	return (quote_type);
 }
 
 /* int count_start_quotes(char *word, char quote)

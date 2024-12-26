@@ -65,18 +65,15 @@ int parse_prompt(char *prompt, char **env)
 	char *cmd;
 
 	if (!ft_strncmp(prompt, "exit", 4))
-		exit (EXIT_FAILURE);
+		exit (EXIT_SUCCESS);
 	res = ft_split(prompt, ' ');
+	printf("The whole prompt : %s\n", prompt);
+	// res = tokenize(prompt)
 	while (res[++i])
 	{
-		if (res[i][0] == 34 || res[i][ft_strlen(res[i]) - 1] == 34) //determines of quote type is double
-			quote_type = 34;
-		else if (res[i][0] == 39 || res[i][ft_strlen(res[i]) - 1] == 39) // or single quotes
-			quote_type = 39;
-		else
-			quote_type = 0;
+		quote_type = get_quote_type(res[i][0], res[i][ft_strlen(res[i]) - 1]);
 
-		ft_printf("%s\n", res[i]); //prints the word to make sure we have it correct
+		ft_printf("%s\n", res[i]); //prints the word to make sure we have it correctly
 
 		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
 		if (build_path(res[i], env))
@@ -89,24 +86,24 @@ int parse_prompt(char *prompt, char **env)
 			free(cmd);
 		}
 	}
-	/* i = 0;
+	i = 0;
 	while (res[i])
 	{
 		free(res[i]);
 		i++;
 	}
-	free(res); */
+	free(res);
 	return (1); // i = number of words in the prompt
 }
 
 int main(int argc, char **argv, char **env)
 {
+	char *prompt;
 	(void)argv;
 	if (validate_inputs(argc))
 		return (EXIT_FAILURE);
 	while (1)
 	{
-		char *prompt;
 		prompt = readline("> ");
 		if (!prompt)
 		{
@@ -132,4 +129,21 @@ https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climb
 
 Goal of the algo : treat an expression as a bunch of nested sub-expressions.
 Each sub_expression has in common the lowest precedence level of the operators it contains.
+
+- Get with the whole notion of Associativity
+
+The precedence climbing algorithm is a recursice parsing technique often used for evaluating or parsing
+mathematical expressions with operators of different precedence levels.
+It ensures that higher precedence operators are evaluated before lower precedence ones
+
+-> How it actually works :
+
+- Atoms are either numbers or parenthesized expressions.
+- Expressions consist of atoms connected by binary operators.
+
+The algo is operator guided. Its fundamental step is to consume the next atom and look at the operator following it. 
+If the operator has precendence lower than the lowest acceptable for the current stop, the algorithm returns.
+Otherwise, it calls itself in a loop to handle the sub-expression.
+
+
 */
