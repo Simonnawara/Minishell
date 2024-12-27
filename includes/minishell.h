@@ -42,6 +42,7 @@ typedef struct s_path
 // free.c //
 void	*free_and_return(char **array, void *return_value);
 void	free_array(char **array);
+char	**free_split(char **res);
 
 // path.c //
 char	*get_path(char **env);
