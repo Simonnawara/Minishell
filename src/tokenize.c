@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2024/12/28 15:59:14 by sinawara         ###   ########.fr       */
+/*   Updated: 2024/12/28 19:35:16 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,19 @@ int count_words(const char *str)
 
     while (str[i])
     {
-        // Skip whitespace
-        while (str[i] && isspace(str[i]))
+        while (str[i] && isspace(str[i])) // Skip whitespace
             i++;
-
         if (!str[i])
             break;
-
         count++;  // Found start of a new word/quoted string
-
-        // Handle quoted strings
-        if (str[i] == '"' || str[i] == '\'')
+        if (str[i] == '"' || str[i] == '\'') // Handle quoted strings
         {
             quote_type = str[i];
             if (!move_past_quotes(str, quote_type, &i))
                 return (-1);  // Error: unclosed quote
             continue;
         }
-
-        // Handle regular words
-        while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'')
+        while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'') // Handle regular words
             i++;
     }
     return count;
@@ -71,9 +64,7 @@ static char *get_word(const char *str, int *pos)
 
     start = *pos;
     len = 0;
-
-    // If it starts with a quote
-    if (str[start] == '"' || str[start] == '\'')
+    if (str[start] == '"' || str[start] == '\'') // If it starts with a quote
     {
         quote_type = str[start];
         len++;  // Include opening quote
@@ -82,18 +73,15 @@ static char *get_word(const char *str, int *pos)
         if (str[start + len] == quote_type)
             len++;  // Include closing quote
     }
-    // Regular word
-    else
+    else // Regular word
     {
         while (str[start + len] && !isspace(str[start + len]) &&
                str[start + len] != '"' && str[start + len] != '\'')
             len++;
     }
-
     word = malloc(sizeof(char) * (len + 1));
     if (!word)
         return (NULL);
-
     ft_strlcpy(word, str + start, len + 1);
     *pos += len;
     return (word);
@@ -109,34 +97,27 @@ char **tokenize(char *prompt)
     int pos;
     int token_idx;
 
-    // Skip leading whitespace
     pos = 0;
-    while (prompt[pos] && isspace(prompt[pos]))
+    while (prompt[pos] && isspace(prompt[pos])) // Skip leading whitespace
         pos++;
-
     word_count = count_words(prompt);
     if (word_count < 0)
         return (ft_printf("Error: Unclosed quote\n"), NULL);
-
     tokens = malloc(sizeof(char *) * (word_count + 1));
     if (!tokens)
         return (NULL);
-
     token_idx = 0;
     while (prompt[pos])
     {
-        // Skip whitespace
-        while (prompt[pos] && isspace(prompt[pos]))
+        while (prompt[pos] && isspace(prompt[pos])) // Skip whitespace
             pos++;
-
         if (!prompt[pos])
             break;
-
         tokens[token_idx] = get_word(prompt, &pos);
         if (!tokens[token_idx])
         {
-            // Cleanup on error
-            for (i = 0; i < token_idx; i++)
+			i = -1;
+            while (++i < token_idx) // Cleanup on error
                 free(tokens[i]);
             free(tokens);
             return (NULL);
@@ -146,9 +127,3 @@ char **tokenize(char *prompt)
     tokens[token_idx] = NULL;
     return (tokens);
 }
-
-
-
-
-
-
