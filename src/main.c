@@ -63,7 +63,6 @@ int parse_prompt(char *prompt, char **env)
 
 	if (!ft_strncmp(prompt, "exit", 4))
 		exit (EXIT_SUCCESS);
-	//res = ft_split(prompt, ' ');
 	res = tokenize(prompt);
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
@@ -72,7 +71,7 @@ int parse_prompt(char *prompt, char **env)
 	{
 		ft_printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
 
-		if (res[i][0] ==  res[i][ft_strlen(res[i]) - 1]) //means quotes qre around the word
+		if (res[i][0] ==  res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39)) //means quotes qre around the word
 			quote_type = res[i][0];
 		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
 
@@ -80,6 +79,12 @@ int parse_prompt(char *prompt, char **env)
 			ft_printf("Is a command\n");
 		else if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
+			if (ft_strlen(res[i]) == 2)
+			{
+				printf("Word between quotes is empty\n");
+				i++;
+				continue;
+			}
 			cmd = get_command(res[i], total_quotes, quote_type);
 			if (cmd && build_path(cmd, env))
 				printf("Is between even quotes, and is a command\n");
@@ -103,8 +108,11 @@ int main(int argc, char **argv, char **env)
 {
 	char *prompt;
 	(void)argv;
+
 	if (validate_inputs(argc))
 		return (EXIT_FAILURE);
+
+	using_history(); //initializes history managment
 	while (1)
 	{
 		prompt = readline("> ");
@@ -113,9 +121,14 @@ int main(int argc, char **argv, char **env)
 			ft_printf("Exiting...\n");
 			break ;
 		}
+		if (ft_strlen(prompt) > 0)
+			add_history(prompt); //adds the last written prompt to the history
+
 		parse_prompt(prompt, env);
+
 		free(prompt);
 	}
+	clear_history();
 	return (0);
 }
 
