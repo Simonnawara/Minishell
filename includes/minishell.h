@@ -52,4 +52,7 @@ char	*build_path(char *cmd, char **env);
 int count_quotes(char *word, char quote);
 int get_quote_type(char start_quote, char end_quote);
 
+// tokenize.c //
+char **tokenize(char *prompt);
+
 #endif

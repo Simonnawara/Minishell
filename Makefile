@@ -12,7 +12,7 @@
 
 NAME = minishell
 SRCS =  main.c free.c path.c \
-		quotes.c #tokenization.c
+		quotes.c tokenize.c
 CC = gcc
 CCFLAG = -Wall -Werror -Wextra
 LIB = -C ./libft/

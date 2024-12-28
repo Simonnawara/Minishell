@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:37 by sinawara          #+#    #+#             */
-/*   Updated: 2024/12/26 15:19:00 by sinawara         ###   ########.fr       */
+/*   Updated: 2024/12/28 14:56:19 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int count_quotes(char *word, char quote)
 	int i;
 	int quote_count;
 
+	if (!word)
+		return (0);
 	i = 0;
 	quote_count = 0;
 	while (word[i])
@@ -25,15 +27,18 @@ int count_quotes(char *word, char quote)
 			quote_count++;
 		i++;
 	}
-	//if (quote_count % 2 == 0)
 	return (quote_count);
-	//return (1);
 }
 
 int get_quote_type(char start_quote, char end_quote)
 {
 	int	quote_type;
 
+	if (start_quote == end_quote)
+	{
+		if (start_quote == 34 || start_quote == 39)
+			return (start_quote);
+	}
 	if (start_quote == 34 || end_quote == 34) //determines of quote type is double
 			quote_type = 34;
 	else if (start_quote == 39 || end_quote == 39) // or single quotes

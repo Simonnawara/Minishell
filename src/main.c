@@ -28,12 +28,10 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 	int j;
 
 	len = ft_strlen(word);
-	if (len <= quote_count)
-	{
-		ft_printf("word between quotes is too short\n");
-		return (ft_strdup(""));
-	}
-	middle = malloc(sizeof(char) * (len - (quote_count) + 1));
+	if (len == 2 && word[0] == quote_type && word[1] == quote_type)
+        return (ft_strdup(""));
+
+	middle = malloc(sizeof(char) * (len - quote_count + 1));
 	if (!middle)
 		return (NULL);
 
@@ -41,15 +39,14 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 	j = 0;
 	while (word[i])
 	{
-		while (word[i] == quote_type)
+		if (word[i] == quote_type) //while(word[i] == quote_type)
 			i++;
-		while(word[i] && word[i] != quote_type)
+		else //while(word[i] && word[i] != quote_type)
 		{
 			middle[j] = word[i];
 			j++;
 			i++;
 		}
-		break ;
 	}
 	middle[j] = '\0';
 	return (middle);
@@ -59,23 +56,26 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 int parse_prompt(char *prompt, char **env)
 {
 	char **res;
-	int i = -1;
+	int i;
 	int total_quotes;
 	char quote_type;
 	char *cmd;
 
 	if (!ft_strncmp(prompt, "exit", 4))
 		exit (EXIT_SUCCESS);
-	res = ft_split(prompt, ' ');
-	printf("The whole prompt : %s\n", prompt);
-	// res = tokenize(prompt)
-	while (res[++i])
+	//res = ft_split(prompt, ' ');
+	res = tokenize(prompt);
+	if (!res)
+		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
+	i = 0;
+	while (res[i])
 	{
-		quote_type = get_quote_type(res[i][0], res[i][ft_strlen(res[i]) - 1]);
+		ft_printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
 
-		ft_printf("%s\n", res[i]); //prints the word to make sure we have it correctly
-
+		if (res[i][0] ==  res[i][ft_strlen(res[i]) - 1]) //means quotes qre around the word
+			quote_type = res[i][0];
 		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
+
 		if (build_path(res[i], env))
 			ft_printf("Is a command\n");
 		else if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
@@ -85,6 +85,9 @@ int parse_prompt(char *prompt, char **env)
 				printf("Is between even quotes, and is a command\n");
 			free(cmd);
 		}
+		else
+			ft_printf("Is a standalone token or unknown\n");
+		i++;
 	}
 	i = 0;
 	while (res[i])
@@ -93,7 +96,7 @@ int parse_prompt(char *prompt, char **env)
 		i++;
 	}
 	free(res);
-	return (1); // i = number of words in the prompt
+	return (1);
 }
 
 int main(int argc, char **argv, char **env)
@@ -141,7 +144,7 @@ It ensures that higher precedence operators are evaluated before lower precedenc
 - Atoms are either numbers or parenthesized expressions.
 - Expressions consist of atoms connected by binary operators.
 
-The algo is operator guided. Its fundamental step is to consume the next atom and look at the operator following it. 
+The algo is operator guided. Its fundamental step is to consume the next atom and look at the operator following it.
 If the operator has precendence lower than the lowest acceptable for the current stop, the algorithm returns.
 Otherwise, it calls itself in a loop to handle the sub-expression.
 
