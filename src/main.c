@@ -71,12 +71,14 @@ int parse_prompt(char *prompt, char **env)
 	{
 		ft_printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
 
-		if (res[i][0] ==  res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39)) //means quotes qre around the word
+		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39)) //quotes are around the word
 			quote_type = res[i][0];
 		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
 
-		if (build_path(res[i], env))
-			ft_printf("Is a command\n");
+		if (access(res[i], F_OK | X_OK) == 0)
+			printf("Is an ABSOLUTE PATH command\n");
+		else if (build_path(res[i], env))
+			printf("Is a command\n");
 		else if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
 			if (ft_strlen(res[i]) == 2)
@@ -86,12 +88,14 @@ int parse_prompt(char *prompt, char **env)
 				continue;
 			}
 			cmd = get_command(res[i], total_quotes, quote_type);
-			if (cmd && build_path(cmd, env))
+			if (access(cmd, F_OK | X_OK) == 0)
+				printf("Is between even quotes, and is an ABSOLUTE PATH command\n");
+			else if (cmd && build_path(cmd, env))
 				printf("Is between even quotes, and is a command\n");
 			free(cmd);
 		}
 		else
-			ft_printf("Is a standalone token or unknown\n");
+			printf("Is a standalone token or unknown\n");
 		i++;
 	}
 	i = 0;
@@ -125,41 +129,8 @@ int main(int argc, char **argv, char **env)
 			add_history(prompt); //adds the last written prompt to the history
 
 		parse_prompt(prompt, env);
-
 		free(prompt);
 	}
 	clear_history();
 	return (0);
 }
-
-/*
--> Parsing technique :  Precedence Climbing
-						Generating an AST - Abstract Sytax Tree
-
-What is grammar ?
-Type of grammar used for this project = CFG (Context Free Grammar)
-We can create a grammar that tells us how am arithmetic expression can be formed
-
-Precedence Climbing :
-https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing
-
-Goal of the algo : treat an expression as a bunch of nested sub-expressions.
-Each sub_expression has in common the lowest precedence level of the operators it contains.
-
-- Get with the whole notion of Associativity
-
-The precedence climbing algorithm is a recursice parsing technique often used for evaluating or parsing
-mathematical expressions with operators of different precedence levels.
-It ensures that higher precedence operators are evaluated before lower precedence ones
-
--> How it actually works :
-
-- Atoms are either numbers or parenthesized expressions.
-- Expressions consist of atoms connected by binary operators.
-
-The algo is operator guided. Its fundamental step is to consume the next atom and look at the operator following it.
-If the operator has precendence lower than the lowest acceptable for the current stop, the algorithm returns.
-Otherwise, it calls itself in a loop to handle the sub-expression.
-
-
-*/
