@@ -131,35 +131,3 @@ int main(int argc, char **argv, char **env)
 	clear_history();
 	return (0);
 }
-
-/*
--> Parsing technique :  Precedence Climbing
-						Generating an AST - Abstract Sytax Tree
-
-What is grammar ?
-Type of grammar used for this project = CFG (Context Free Grammar)
-We can create a grammar that tells us how am arithmetic expression can be formed
-
-Precedence Climbing :
-https://eli.thegreenplace.net/2012/08/02/parsing-expressions-by-precedence-climbing
-
-Goal of the algo : treat an expression as a bunch of nested sub-expressions.
-Each sub_expression has in common the lowest precedence level of the operators it contains.
-
-- Get with the whole notion of Associativity
-
-The precedence climbing algorithm is a recursice parsing technique often used for evaluating or parsing
-mathematical expressions with operators of different precedence levels.
-It ensures that higher precedence operators are evaluated before lower precedence ones
-
--> How it actually works :
-
-- Atoms are either numbers or parenthesized expressions.
-- Expressions consist of atoms connected by binary operators.
-
-The algo is operator guided. Its fundamental step is to consume the next atom and look at the operator following it.
-If the operator has precendence lower than the lowest acceptable for the current stop, the algorithm returns.
-Otherwise, it calls itself in a loop to handle the sub-expression.
-
-
-*/
