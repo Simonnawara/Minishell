@@ -71,12 +71,14 @@ int parse_prompt(char *prompt, char **env)
 	{
 		ft_printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
 
-		if (res[i][0] ==  res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39)) //means quotes qre around the word
+		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39)) //quotes are around the word
 			quote_type = res[i][0];
 		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
 
-		if (build_path(res[i], env))
-			ft_printf("Is a command\n");
+		if (access(res[i], F_OK | X_OK) == 0)
+			printf("Is an ABSOLUTE PATH command\n");
+		else if (build_path(res[i], env))
+			printf("Is a command\n");
 		else if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
 			if (ft_strlen(res[i]) == 2)
@@ -86,12 +88,14 @@ int parse_prompt(char *prompt, char **env)
 				continue;
 			}
 			cmd = get_command(res[i], total_quotes, quote_type);
-			if (cmd && build_path(cmd, env))
+			if (access(cmd, F_OK | X_OK) == 0)
+				printf("Is between even quotes, and is an ABSOLUTE PATH command\n");
+			else if (cmd && build_path(cmd, env))
 				printf("Is between even quotes, and is a command\n");
 			free(cmd);
 		}
 		else
-			ft_printf("Is a standalone token or unknown\n");
+			printf("Is a standalone token or unknown\n");
 		i++;
 	}
 	i = 0;
@@ -125,7 +129,6 @@ int main(int argc, char **argv, char **env)
 			add_history(prompt); //adds the last written prompt to the history
 
 		parse_prompt(prompt, env);
-
 		free(prompt);
 	}
 	clear_history();

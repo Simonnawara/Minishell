@@ -37,8 +37,11 @@ char	*build_path(char *cmd, char **env)
 		if (!path_struct.full_path)
 			return ((char *)free_and_return(path_struct.paths, NULL));
 		if (access(path_struct.full_path, F_OK | X_OK) == 0)
+		{
+			printf("Command Path : %s\n", path_struct.full_path);
 			return ((char *)free_and_return(path_struct.paths,
 					path_struct.full_path));
+		}
 		free(path_struct.full_path);
 	}
 	return (free_and_return(path_struct.paths, NULL));
