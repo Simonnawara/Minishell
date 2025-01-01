@@ -39,6 +39,35 @@ typedef struct s_path
 }				t_path;
 
 
+typedef enum e_token_type {
+    T_WORD,         // Regular words and quoted strings
+    T_COMMAND,      // Known shell commands
+    T_REDIRECT_IN,  // <
+    T_REDIRECT_OUT, // >
+    T_APPEND,       // >>
+    T_PIPE,         // |
+    T_AND,          // &&
+    T_OR,           // ||
+    T_SEMICOLON,    // ;
+    T_PAREN_L,      // (
+    T_PAREN_R       // )
+} t_token_type;
+
+typedef struct s_token {
+    char        *value;
+    t_token_type type;
+    struct s_token *next;
+} t_token;
+
+typedef struct s_command {
+    char    *name;
+    char    **args;
+    char    *input_file;
+    char    *output_file;
+    int     append_output;
+    struct s_command *next;  // For piped commands
+} t_command;
+
 // free.c //
 void	*free_and_return(char **array, void *return_value);
 void	free_array(char **array);
@@ -52,7 +81,11 @@ char	*build_path(char *cmd, char **env);
 int count_quotes(char *word, char quote);
 int get_quote_type(char start_quote, char end_quote);
 
-// tokenize.c //
+// token_builder.c //
 char **tokenize(char *prompt);
+
+// token_list.c //
+t_token_type	get_operator_type(char *token);
+t_token_type	classify_token(char *token, char **env);
 
 #endif
