@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/02 16:52:20 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/02 18:51:45 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,56 @@ t_ast_node	*build_ast(t_token **tokens)
 		return (root);
 	}
 	return (NULL);
+}
+
+void print_ast(t_ast_node *root)
+{
+    if (!root)
+        return;
+
+    // Print the type of the current node
+    if (root->type == T_COMMAND)
+        printf("Command: %s\n", root->value);
+    else if (root->type == T_WORD)
+        printf("Word: %s\n", root->value);
+    else if (root->type == T_PIPE)
+        printf("Pipe\n");
+    else if (root->type == T_AND)
+        printf("AND\n");
+    else if (root->type == T_OR)
+        printf("OR\n");
+    else if (root->type == T_REDIRECT_IN)
+        printf("Redirect In: %s\n", root->value);
+    else if (root->type == T_REDIRECT_OUT)
+        printf("Redirect Out: %s\n", root->value);
+    else if (root->type == T_APPEND)
+        printf("Append Redirect: %s\n", root->value);
+    else if (root->type == T_SEMICOLON)
+        printf("Semicolon\n");
+
+    // Recursively print the left and right subtrees
+    if (root->left)
+    {
+        printf("Left Child:\n");
+        print_ast(root->left);
+    }
+
+    if (root->right)
+    {
+        printf("Right Child:\n");
+        print_ast(root->right);
+    }
+}
+
+// Helper function to start the AST printing process
+void print_full_ast(t_ast_node *root)
+{
+    if (!root)
+    {
+        printf("AST is empty!\n");
+        return;
+    }
+
+    printf("AST:\n");
+    print_ast(root);
 }

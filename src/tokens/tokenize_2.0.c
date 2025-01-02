@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:13:53 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/02 18:20:39 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/02 20:21:41 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ t_token	*tokenize_input(char *input)
 			i += ft_strlen(temp);
 			free(temp);
 		}
+		ft_printf("Token: %s, Type: %d\n", tokens->value, tokens->type);
 	}
 	return (tokens);
 }

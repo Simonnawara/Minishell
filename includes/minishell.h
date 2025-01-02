@@ -88,6 +88,10 @@ typedef struct s_ast_node
 	struct s_ast_node *right;
 }	t_ast_node;
 
+
+// main.c //
+char *get_command(char *word, int quote_count, char quote_type);
+
 // free.c //
 void	free_array(char **array);
 void	*free_and_return(char **array, void *return_value);
@@ -96,7 +100,6 @@ void	free_token_list(t_token *tokens);
 void	free_ast_node(t_ast_node *node);
 void	free_ast(t_ast_node *root);
 void	free_command_table(t_command_table *cmd);
-
 
 // path.c //
 char	*get_path(char **env);
@@ -126,12 +129,14 @@ char	**copy_string_array(char **arr);
 t_ast_node *create_ast_node(t_token_type type, char *value);
 t_ast_node *build_command_node(t_token **tokens);
 t_ast_node	*build_ast(t_token **tokens);
+void print_ast(t_ast_node *root);
+void print_full_ast(t_ast_node *root);
+
 
 // execute_ast.c //
 void	execute_ast(t_ast_node *root, char **env);
 
 // tokenize_2.0.c //
 t_token	*tokenize_input(char *input);
-
 
 #endif

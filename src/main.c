@@ -120,6 +120,7 @@ int	parse_prompt(char *prompt, char **env)
 	if (!ast)
 		return (free_token_list(tokens), 1);
 	execute_ast(ast, env);
+	print_full_ast(ast);
 	free_ast(ast);
 	free_token_list(tokens);
 	return (0);
