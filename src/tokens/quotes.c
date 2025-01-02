@@ -6,11 +6,11 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:37 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/01 18:52:40 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:38:46 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int count_quotes(char *word, char quote)
 {

@@ -53,7 +53,7 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 }
 
 
-int parse_prompt(char *prompt, char **env)
+/* int parse_prompt(char *prompt, char **env)
 {
 	char **res;
 	int i;
@@ -104,6 +104,25 @@ int parse_prompt(char *prompt, char **env)
 	}
 	free_array(res);
 	return (1);
+} */
+
+int	parse_prompt(char *prompt, char **env)
+{
+	t_token		*tokens;
+	t_ast_node	*ast;
+
+	if (!ft_strncmp(prompt, "exit", 4))
+		exit(EXIT_SUCCESS);
+	tokens = tokenize_input(prompt);
+	if (!tokens)
+		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
+	ast = build_ast(&tokens);
+	if (!ast)
+		return (free_token_list(tokens), 1);
+	execute_ast(ast, env);
+	free_ast(ast);
+	free_token_list(tokens);
+	return (0);
 }
 
 int main(int argc, char **argv, char **env)

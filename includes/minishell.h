@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-# define MINISHEL_H
+# define MINISHELL_H
 
 # include "../libft/include/ft_printf.h"
 # include "../libft/include/get_next_line.h"
@@ -29,7 +29,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-
 typedef struct s_path
 {
 	char		**paths;
@@ -38,8 +37,8 @@ typedef struct s_path
 	char		*temp;
 }				t_path;
 
-
-typedef enum e_token_type {
+typedef enum e_token_type
+{
     T_WORD,         // Regular words and quoted strings
     T_COMMAND,      // Known shell commands
     T_REDIRECT_IN,  // <
@@ -53,25 +52,51 @@ typedef enum e_token_type {
     T_PAREN_R       // )
 } t_token_type;
 
-typedef struct s_token {
+typedef struct s_token
+{
     char        *value;
     t_token_type type;
     struct s_token *next;
 } t_token;
 
-typedef struct s_command {
+/* typedef struct s_command
+{
     char    *name;
     char    **args;
     char    *input_file;
     char    *output_file;
     int     append_output;
     struct s_command *next;  // For piped commands
-} t_command;
+} t_command; */
+
+typedef struct s_command_table
+{
+	char	*cmd;
+	char	**args;
+	char	*infile;
+	char	*outfile;
+	int		append;
+	int		pipe_out;
+}	t_command_table;
+
+typedef struct s_ast_node
+{
+	t_token_type type;
+	char *value;
+	char **args;
+	struct s_ast_node *left;
+	struct s_ast_node *right;
+}	t_ast_node;
 
 // free.c //
-void	*free_and_return(char **array, void *return_value);
 void	free_array(char **array);
+void	*free_and_return(char **array, void *return_value);
 char	**free_split(char **res);
+void	free_token_list(t_token *tokens);
+void	free_ast_node(t_ast_node *node);
+void	free_ast(t_ast_node *root);
+void	free_command_table(t_command_table *cmd);
+
 
 // path.c //
 char	*get_path(char **env);
@@ -83,9 +108,30 @@ int get_quote_type(char start_quote, char end_quote);
 
 // token_builder.c //
 char **tokenize(char *prompt);
+int count_words(const char *str);
 
 // token_list.c //
 t_token_type	get_operator_type(char *token);
 t_token_type	classify_token(char *token, char **env);
+
+// build_ast_utils.c //
+t_command_table	*init_command_table(void);
+int	add_argument_to_command(t_ast_node *cmd_node, char *arg);
+int	execute_command(t_ast_node *cmd_node, char **env);
+int	execute_pipe(t_ast_node *left, t_ast_node *right, char **env);
+t_command_table	*convert_node_to_command(t_ast_node *node);
+char	**copy_string_array(char **arr);
+
+// build_ast.c //
+t_ast_node *create_ast_node(t_token_type type, char *value);
+t_ast_node *build_command_node(t_token **tokens);
+t_ast_node	*build_ast(t_token **tokens);
+
+// execute_ast.c //
+void	execute_ast(t_ast_node *root, char **env);
+
+// tokenize_2.0.c //
+t_token	*tokenize_input(char *input);
+
 
 #endif
