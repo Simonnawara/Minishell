@@ -113,7 +113,7 @@ int	parse_prompt(char *prompt, char **env)
 
 	if (!ft_strncmp(prompt, "exit", 4))
 		exit(EXIT_SUCCESS);
-	tokens = tokenize_input(prompt);
+	tokens = tokenize_input(prompt, env);
 	if (!tokens)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
 	ast = build_ast(&tokens);
