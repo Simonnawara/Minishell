@@ -1,16 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_builder.c                                    :+:      :+:    :+:   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/02 16:38:46 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:21:22 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int is_operator(char c)
+{
+    return (c == '>' || c == '<' || c == '|' || c == ';' || 
+            c == '&' || c == '(' || c == ')');
+}
+
+static int get_operator_len(const char *str)
+{
+    if ((str[0] == '>' && str[1] == '>') ||
+        (str[0] == '<' && str[1] == '<') ||
+        (str[0] == '&' && str[1] == '&') ||
+        (str[0] == '|' && str[1] == '|'))
+        return (2);
+    return (1);
+}
 
 static int move_past_quotes(const char *str, char quote_type, int *i)
 {
@@ -49,6 +65,11 @@ int count_words(const char *str)
                 return (-1);  // Error: unclosed quote
             continue;
         }
+		if (is_operator(str[i]))
+		{
+			i += get_operator_len(str + i);
+			continue;
+		}
         while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'') // Handle regular words
             i++;
     }
@@ -73,9 +94,12 @@ static char *get_word(const char *str, int *pos)
         if (str[start + len] == quote_type)
             len++;  // Include closing quote
     }
+	else if (is_operator(str[start]))
+		len = get_operator_len(str + start);
     else // Regular word
     {
-        while (str[start + len] && !isspace(str[start + len]) &&
+       while (str[start + len] && !isspace(str[start + len]) && 
+               !is_operator(str[start + len]) && 
                str[start + len] != '"' && str[start + len] != '\'')
             len++;
     }
@@ -86,8 +110,6 @@ static char *get_word(const char *str, int *pos)
     *pos += len;
     return (word);
 }
-
-
 
 char **tokenize(char *prompt)
 {

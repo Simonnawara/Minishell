@@ -15,8 +15,8 @@ SRCS =  main.c \
 		utils/free.c \
 		tokens/path.c \
 		tokens/quotes.c \
-		tokens/token_builder.c \
-		tokens/token_list.c \
+		tokens/tokenize.c \
+		tokens/token_type.c \
 		tokens/tokenize_2.0.c \
 		ast/build_ast.c \
 		ast/build_ast_utils.c \

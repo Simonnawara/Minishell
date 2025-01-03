@@ -6,13 +6,13 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:13:53 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/03 13:20:40 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/03 16:02:12 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	get_word_length(char *str)
+/* int	get_word_length(char *str)
 {
 	int	len;
 
@@ -22,38 +22,7 @@ int	get_word_length(char *str)
 	return (len);
 }
 
-t_token	*create_token(char *value, t_token_type type)
-{
-	t_token	*token;
 
-	token = malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->value = ft_strdup(value);
-	if (!token->value)
-	{
-		free(token);
-		return (NULL);
-	}
-	token->type = type;
-	token->next = NULL;
-	return (token);
-}
-
-void	add_token(t_token **list, t_token *new)
-{
-	t_token	*current;
-
-	if (!*list)
-		*list = new;
-	else
-	{
-		current = *list;
-		while (current->next)
-			current = current->next;
-		current->next = new;
-	}
-}
 
 char *extract_quoted_token(char *str, int *i, char quote)
 {
@@ -78,19 +47,6 @@ char *extract_quoted_token(char *str, int *i, char quote)
         return NULL;
     ft_strlcpy(token, str + start, len + 1);
     return token;
-}
-
-void print_token_info(t_token *token)
-{
-    const char *type_str[] = {
-        "WORD", "COMMAND", "REDIRECT_IN", "REDIRECT_OUT",
-        "APPEND", "PIPE", "AND", "OR", "SEMICOLON",
-        "PAREN_L", "PAREN_R"
-    };
-
-    printf("\033[1;34mToken:\033[0m '%s'\n", token->value);
-    printf("\033[1;32mType:\033[0m %s (%d)\n", type_str[token->type], token->type);
-    printf("------------------------\n");
 }
 
 t_token *tokenize_input(char *input, char **env)
@@ -163,4 +119,51 @@ t_token *tokenize_input(char *input, char **env)
         }
     }
     return (tokens);
+}*/ 
+
+void print_token_info(t_token *token)
+{
+    const char *type_str[] = {
+        "WORD", "COMMAND", "REDIRECT_IN", "REDIRECT_OUT",
+        "APPEND", "PIPE", "AND", "OR", "SEMICOLON",
+        "PAREN_L", "PAREN_R"
+    };
+
+    printf("\033[1;34mToken:\033[0m '%s'\n", token->value);
+    printf("\033[1;32mType:\033[0m %s (%d)\n", type_str[token->type], token->type);
+    printf("------------------------\n");
+}
+
+
+t_token	*create_token(char *value, t_token_type type)
+{
+	t_token	*token;
+
+	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
+	token->value = ft_strdup(value);
+	if (!token->value)
+	{
+		free(token);
+		return (NULL);
+	}
+	token->type = type;
+	token->next = NULL;
+	return (token);
+}
+
+void	add_token(t_token **list, t_token *new)
+{
+	t_token	*current;
+
+	if (!*list)
+		*list = new;
+	else
+	{
+		current = *list;
+		while (current->next)
+			current = current->next;
+		current->next = new;
+	}
 }
