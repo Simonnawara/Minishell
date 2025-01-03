@@ -6,13 +6,13 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:13:53 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/03 00:22:11 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:20:40 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	get_word_length(char *str)
+int	get_word_length(char *str)
 {
 	int	len;
 
@@ -22,7 +22,7 @@ static int	get_word_length(char *str)
 	return (len);
 }
 
-static t_token	*create_token(char *value, t_token_type type)
+t_token	*create_token(char *value, t_token_type type)
 {
 	t_token	*token;
 
@@ -40,7 +40,7 @@ static t_token	*create_token(char *value, t_token_type type)
 	return (token);
 }
 
-static void	add_token(t_token **list, t_token *new)
+void	add_token(t_token **list, t_token *new)
 {
 	t_token	*current;
 
@@ -55,7 +55,7 @@ static void	add_token(t_token **list, t_token *new)
 	}
 }
 
-static char *extract_quoted_token(char *str, int *i, char quote)
+char *extract_quoted_token(char *str, int *i, char quote)
 {
     int     start;
     int     len;
@@ -106,16 +106,17 @@ t_token *tokenize_input(char *input, char **env)
     i = 0;
     while (input[i])
     {
-        while (input[i] && isspace(input[i]))
+        while (input[i] && isspace(input[i])) //skips whitespaces
             i++;
         if (!input[i])
             break;
-        if (input[i] == '"' || input[i] == '\'')
+        if (input[i] == '"' || input[i] == '\'') //if we find a quote
         {
+			printf("We have detected a quote\n");
             temp = extract_quoted_token(input, &i, input[i]);
             if (!temp)
                 return (free_token_list(tokens), NULL);
-            new_token = create_token(temp, T_WORD);
+            new_token = create_token(temp, T_WORD); //if it's between quotes, it's definitely a word
             free(temp);
             if (!new_token)
                 return (free_token_list(tokens), NULL);
@@ -124,6 +125,7 @@ t_token *tokenize_input(char *input, char **env)
         }
         else if (ft_strchr("<>|&;", input[i]))
         {
+			printf("Using classify token here\n");
             if ((input[i] == '>' && input[i + 1] == '>') ||
                 (input[i] == '|' && input[i + 1] == '|') ||
                 (input[i] == '&' && input[i + 1] == '&'))
@@ -139,7 +141,6 @@ t_token *tokenize_input(char *input, char **env)
             if (!temp)
                 return (free_token_list(tokens), NULL);
             new_token = create_token(temp, classify_token(temp, env));
-			printf("using classify_token\n");
             free(temp);
             if (!new_token)
                 return (free_token_list(tokens), NULL);
@@ -148,11 +149,11 @@ t_token *tokenize_input(char *input, char **env)
         }
         else
         {
+			printf("using T_WORD\n");
             temp = ft_substr(input, i, get_word_length(input + i));
             if (!temp)
                 return (free_token_list(tokens), NULL);
-            new_token = create_token(temp, T_WORD);
-			printf("using T_WORD\n");
+            new_token = create_token(temp, T_COMMAND);
             free(temp);
             if (!new_token)
                 return (free_token_list(tokens), NULL);

@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/02 18:51:45 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/03 14:00:29 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,24 @@ t_ast_node	*build_ast(t_token **tokens)
 		root->right = build_ast(tokens);
 		if (!root->right)
 			return (free_ast_node(root), NULL);
+		return (root);
+	}
+	// Add to build_ast function
+	if (current->type == T_REDIRECT_IN || current->type == T_REDIRECT_OUT || 
+    current->type == T_APPEND)
+	{
+		root = create_ast_node(current->type, current->value);
+		if (!root)
+			return (NULL);
+		*tokens = current->next;
+		// Redirection needs a file name
+		if (!*tokens || (*tokens)->type != T_WORD)
+			return (free_ast_node(root), NULL);
+		root->right = create_ast_node(T_WORD, (*tokens)->value);
+		if (!root->right)
+			return (free_ast_node(root), NULL);
+		*tokens = (*tokens)->next;
+		root->left = build_ast(tokens);
 		return (root);
 	}
 	return (NULL);

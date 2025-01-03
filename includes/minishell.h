@@ -139,7 +139,10 @@ void	execute_ast(t_ast_node *root, char **env);
 // tokenize_2.0.c //
 //t_token	*tokenize_input(char *input);
 t_token	*tokenize_input(char *input, char **env);
-char *get_command_path(char *cmd, char **env);
-char *get_env_value(char *name, char **env);
+int	get_word_length(char *str);
+t_token	*create_token(char *value, t_token_type type);
+void	add_token(t_token **list, t_token *new);
+char *extract_quoted_token(char *str, int *i, char quote);
+void print_token_info(t_token *token);
 
 #endif

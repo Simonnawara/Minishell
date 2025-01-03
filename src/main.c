@@ -53,17 +53,23 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 }
 
 
-/* int parse_prompt(char *prompt, char **env)
+int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt, char **env)
 {
-	char **res;
-	int i;
-	int total_quotes;
-	char quote_type;
-	char *cmd;
+	char			**res;
+	int				i;
+	int				total_quotes;
+	char			quote_type;
+	char			*cmd;
 	t_token_type	type;
+	t_token			*tokens;
+	t_token			*new_token;
+	t_ast_node		*ast;
 
+	if (!prompt)
+		return (1);
 	if (!ft_strncmp(prompt, "exit", 4))
 		exit (EXIT_SUCCESS);
+	tokens = NULL;
 	res = tokenize(prompt);
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
@@ -84,15 +90,40 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 			else
 			{
 				cmd = get_command(res[i], total_quotes, quote_type);
+				if (!cmd)
+				{
+					free_token_list(tokens);
+					free_array(res);
+			        return (1);
+				}
+
 				type = classify_token(cmd, env);
+				new_token = create_token(cmd, type);
+				free(cmd);
+				if (!new_token)
+				{
+					free_token_list(tokens);
+					free_array(res);
+			        return (1);
+				}
+				add_token(&tokens, new_token);
+				print_token_info(new_token);
 				if (type == T_COMMAND)
 					printf("Is between even quotes, and is a command\n");
-				free(cmd);
 			}
 		}
 		else
 		{
 			type = classify_token(res[i], env);
+			new_token = create_token(res[i], type);
+			if (!new_token)
+			{
+				free_token_list(tokens);
+				free_array(res);
+		        return (1);
+			}
+			add_token(&tokens, new_token);
+			print_token_info(new_token);
 			if (type == T_COMMAND)
 				printf("Is a command\n");
 			else if (type != T_WORD)
@@ -102,11 +133,28 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 		}
 		i++;
 	}
-	free_array(res);
-	return (1);
-} */
 
-int	parse_prompt(char *prompt, char **env)
+	printf("AST has not been built yet\n");
+	ast = build_ast(&tokens);
+	if (!ast)
+	{
+		free_token_list(tokens);
+		return (1);
+	}
+
+	printf("AST built successfully\n");
+	execute_ast(ast, env);
+	printf("Executing succesfull\n\n");
+
+	free(ast);
+	free_token_list(tokens);
+	free_array(res);
+
+	return (0);
+	//return (tokens);
+}
+
+/* int	parse_prompt(char *prompt, char **env)
 {
 	t_token		*tokens;
 	t_ast_node	*ast;
@@ -124,7 +172,8 @@ int	parse_prompt(char *prompt, char **env)
 	free_ast(ast);
 	free_token_list(tokens);
 	return (0);
-}
+} */
+
 
 int main(int argc, char **argv, char **env)
 {
