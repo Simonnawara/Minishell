@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/02 16:38:46 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/03 22:35:25 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,17 @@ void	free_array(char **array)
 	while (array[i])
 	{
 		free(array[i]);
+		array[i] = NULL;
 		i++;
 	}
 	free(array);
+	array = NULL;
 }
 
 void	*free_and_return(char **array, void *return_value)
 {
 	free_array(array);
 	return (return_value);
-}
-
-char	**free_split(char **res)
-{
-	size_t	i;
-
-	i = 0;
-	while (res[i])
-	{
-		free(res[i]);
-		i++;
-	}
-	free(res);
-	return (NULL);
 }
 
 void	free_token_list(t_token *tokens)
@@ -54,7 +42,8 @@ void	free_token_list(t_token *tokens)
 	while (tokens)
 	{
 		tmp = tokens->next;
-		free(tokens->value);
+		if(tokens->value)
+			free(tokens->value);
 		free(tokens);
 		tokens = tmp;
 	}

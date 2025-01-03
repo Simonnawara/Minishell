@@ -107,7 +107,6 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 			        return (1);
 				}
 				add_token(&tokens, new_token);
-				print_token_info(new_token);
 			}
 		}
 		else
@@ -121,8 +120,20 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		        return (1);
 			}
 			add_token(&tokens, new_token);
-			print_token_info(new_token);
+
+			if (check_pipe(new_token->type, res, i)
+			|| check_redirect(new_token->type, res, i)
+			|| check_parenth(res))
+			{
+				if (tokens)
+					free_token_list(tokens);
+				if (res)
+					free_array(res);
+				return (1);
+			}
 		}
+		print_token_info(new_token); //pipe type = 5
+
 		i++;
 	}
 
@@ -140,8 +151,9 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	printf("\033[1;32mExecuting succesfull\033[0m\n\n");
 
 	free(ast);
-	free_token_list(tokens); */
-	free_array(res);
+	free_token_list(tokens);
+	*/
+	//ree_array(res);
 
 	return (0);
 	//return (tokens);

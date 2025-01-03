@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:13:53 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/03 16:02:12 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/03 18:17:36 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_token *tokenize_input(char *input, char **env)
         }
     }
     return (tokens);
-}*/ 
+}*/
 
 void print_token_info(t_token *token)
 {

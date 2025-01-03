@@ -59,16 +59,6 @@ typedef struct s_token
     struct s_token *next;
 } t_token;
 
-/* typedef struct s_command
-{
-    char    *name;
-    char    **args;
-    char    *input_file;
-    char    *output_file;
-    int     append_output;
-    struct s_command *next;  // For piped commands
-} t_command; */
-
 typedef struct s_command_table
 {
 	char	*cmd;
@@ -95,7 +85,6 @@ char *get_command(char *word, int quote_count, char quote_type);
 // free.c //
 void	free_array(char **array);
 void	*free_and_return(char **array, void *return_value);
-char	**free_split(char **res);
 void	free_token_list(t_token *tokens);
 void	free_ast_node(t_ast_node *node);
 void	free_ast(t_ast_node *root);
@@ -113,9 +102,12 @@ int get_quote_type(char start_quote, char end_quote);
 char **tokenize(char *prompt);
 int count_words(const char *str);
 
-// token_list.c //
+// token_type.c //
 t_token_type	get_operator_type(char *token);
 t_token_type	classify_token(char *token, char **env);
+int check_pipe(t_token_type type, char **res, int i);
+int check_redirect(t_token_type type, char **res, int i);
+int check_parenth(char **res);
 
 // build_ast_utils.c //
 t_command_table	*init_command_table(void);

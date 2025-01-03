@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/03 16:21:22 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/03 22:32:10 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int is_operator(char c)
 {
-    return (c == '>' || c == '<' || c == '|' || c == ';' || 
+    return (c == '>' || c == '<' || c == '|' || c == ';' ||
             c == '&' || c == '(' || c == ')');
 }
 
@@ -70,7 +70,8 @@ int count_words(const char *str)
 			i += get_operator_len(str + i);
 			continue;
 		}
-        while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'') // Handle regular words
+
+        while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'' && !is_operator(str[i]))
             i++;
     }
     return count;
@@ -93,16 +94,23 @@ static char *get_word(const char *str, int *pos)
             len++;
         if (str[start + len] == quote_type)
             len++;  // Include closing quote
+        else
+        {
+            ft_putendl_fd("Error: Unclosed quote", 2);
+            return (NULL);
+        }
     }
 	else if (is_operator(str[start]))
 		len = get_operator_len(str + start);
     else // Regular word
     {
-       while (str[start + len] && !isspace(str[start + len]) && 
-               !is_operator(str[start + len]) && 
+       while (str[start + len] && !isspace(str[start + len]) &&
+               !is_operator(str[start + len]) &&
                str[start + len] != '"' && str[start + len] != '\'')
             len++;
     }
+    if (len == 0) // Avoid malloc(0)
+        return (NULL);
     word = malloc(sizeof(char) * (len + 1));
     if (!word)
         return (NULL);
