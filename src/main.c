@@ -63,7 +63,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	t_token_type	type;
 	t_token			*tokens;
 	t_token			*new_token;
-	//t_ast_node		*ast;
+	t_ast_node		*ast;
 
 	if (!prompt || !*prompt)
 		return (1);
@@ -76,7 +76,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	i = 0;
 	while (res[i])
 	{
-		ft_printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
+		//printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
 
 		quote_type = 0;
 		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39))
@@ -107,6 +107,8 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 			        return (1);
 				}
 				add_token(&tokens, new_token);
+				if (!tokens)
+    				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
 			}
 		}
 		else
@@ -120,6 +122,8 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		        return (1);
 			}
 			add_token(&tokens, new_token);
+			if (!tokens)
+				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
 
 			if (check_pipe(new_token->type, res, i)
 			|| check_redirect(new_token->type, res, i)
@@ -132,11 +136,11 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 				return (1);
 			}
 		}
-		print_token_info(new_token);
+		//print_token_info(new_token);
 		i++;
 	}
 
-/* 	printf("AST has not been built yet\n");
+ 	//printf("AST has not been built yet\n");
 	ast = build_ast(&tokens);
 	if (!ast)
 	{
@@ -145,13 +149,13 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		return (1);
 	}
 
-	printf("AST built successfully\n");
+	//printf("AST built successfully\n");
 	execute_ast(ast, env);
-	printf("\033[1;32mExecuting succesfull\033[0m\n\n");
+	//printf("\033[1;32mExecuting succesfull\033[0m\n\n");
 
 	free(ast);
 	free_token_list(tokens);
-	*/
+
 	//ree_array(res);
 
 	return (0);

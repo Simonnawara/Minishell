@@ -6,13 +6,11 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:27:29 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/02 16:53:01 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/05 21:56:23 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/* Command Building Functions */
 
 t_command_table	*init_command_table(void)
 {
@@ -29,33 +27,6 @@ t_command_table	*init_command_table(void)
 	cmd->pipe_out = 0;
 	return (cmd);
 }
-
-int	add_argument_to_command(t_ast_node *cmd_node, char *arg)
-{
-	char	**new_args;
-	int		arg_count;
-	int		i;
-
-	arg_count = 0;
-	while (cmd_node->args && cmd_node->args[arg_count])
-		arg_count++;
-	new_args = malloc(sizeof(char *) * (arg_count + 2));
-	if (!new_args)
-		return (0);
-	i = 0;
-	while (i < arg_count)
-	{
-		new_args[i] = cmd_node->args[i];
-		i++;
-	}
-	new_args[i] = ft_strdup(arg);
-	new_args[i + 1] = NULL;
-	free(cmd_node->args);
-	cmd_node->args = new_args;
-	return (1);
-}
-
-/* Execution Functions */
 
 int	execute_command(t_ast_node *cmd_node, char **env)
 {

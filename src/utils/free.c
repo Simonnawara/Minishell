@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/03 22:35:25 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/05 21:44:46 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,24 @@ void	free_token_list(t_token *tokens)
 	}
 }
 
-void	free_ast_node(t_ast_node *node)
+void free_ast_node(t_ast_node *node)
 {
-	if (!node)
-		return ;
-	free(node->value);
-	free(node);
+    if (!node)
+        return;
+
+    if (node->value)
+        free(node->value);
+
+    if (node->args)
+    {
+        for (int i = 0; node->args[i]; i++)
+            free(node->args[i]);
+        free(node->args);
+    }
+
+    free_ast_node(node->left);
+    free_ast_node(node->right);
+    free(node);
 }
 
 void	free_ast(t_ast_node *root)
