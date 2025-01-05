@@ -90,6 +90,9 @@ void	free_ast_node(t_ast_node *node);
 void	free_ast(t_ast_node *root);
 void	free_command_table(t_command_table *cmd);
 
+// errors.c //
+void	file_error(char *filename);
+
 // path.c //
 char	*get_path(char **env);
 char	*build_path(char *cmd, char **env);

@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/03 22:34:16 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/05 17:46:36 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,23 @@ int check_redirect(t_token_type type, char **res, int i)
 			return (1);
 		}
 
-		if (type == T_REDIRECT_OUT || type == T_APPEND)
-			open(res[i + 1], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		if (type == T_REDIRECT_OUT)
+		{
+			if (open(res[i + 1], O_WRONLY | O_TRUNC | O_CREAT, 0644) < 0)
+			{
+				file_error(res[i + 1]);
+				return (1);
+			}
+		}
+
+		if (type == T_APPEND)
+		{
+			if (open(res[i + 1], O_WRONLY | O_CREAT, 0644) < 0)
+			{
+				file_error(res[i + 1]);
+				return (1);
+			}
+		}
 		// check if we cam access thhe file / create it depending on the type of redirection.
 	}
 	return (0);

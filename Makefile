@@ -13,6 +13,7 @@
 NAME = minishell
 SRCS =  main.c \
 		utils/free.c \
+		utils/errors.c \
 		tokens/path.c \
 		tokens/quotes.c \
 		tokens/tokenize.c \

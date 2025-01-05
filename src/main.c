@@ -39,9 +39,9 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 	j = 0;
 	while (word[i])
 	{
-		if (word[i] == quote_type) //while(word[i] == quote_type)
+		if (word[i] == quote_type)
 			i++;
-		else //while(word[i] && word[i] != quote_type)
+		else
 		{
 			middle[j] = word[i];
 			j++;
@@ -81,7 +81,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		quote_type = 0;
 		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39))
 			quote_type = res[i][0];
-		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
+		total_quotes = count_quotes(res[i], quote_type);
 
 		if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
@@ -132,8 +132,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 				return (1);
 			}
 		}
-		print_token_info(new_token); //pipe type = 5
-
+		print_token_info(new_token);
 		i++;
 	}
 
