@@ -92,6 +92,7 @@ void	free_command_table(t_command_table *cmd);
 
 // errors.c //
 void	file_error(char *filename);
+int	is_command_found(char *word, char **env);
 
 // path.c //
 char	*get_path(char **env);

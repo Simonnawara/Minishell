@@ -74,6 +74,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
 	i = 0;
+	
 	while (res[i])
 	{
 		//printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
@@ -136,11 +137,12 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 				return (1);
 			}
 		}
-		//print_token_info(new_token);
+		print_token_info(new_token);
+		if (is_command_found(res[0], env))
+		return (0);
 		i++;
 	}
 
- 	//printf("AST has not been built yet\n");
 	ast = build_ast(&tokens);
 	if (!ast)
 	{
@@ -148,15 +150,13 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		free_token_list(tokens);
 		return (1);
 	}
-
-	//printf("AST built successfully\n");
 	execute_ast(ast, env);
 	//printf("\033[1;32mExecuting succesfull\033[0m\n\n");
 
 	free(ast);
 	free_token_list(tokens);
 
-	//ree_array(res);
+	free_array(res);
 
 	return (0);
 	//return (tokens);

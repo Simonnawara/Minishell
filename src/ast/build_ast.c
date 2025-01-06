@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/05 21:51:26 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:41:49 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_ast_node *create_ast_node(t_token_type type, char *value)
 	node->value = ft_strdup(value);
 	node->left = NULL;
 	node->right = NULL;
+	node->args = NULL;
 	return (node);
 }
 
@@ -74,7 +75,7 @@ t_ast_node *build_command_node(t_token **tokens)
 	cmd_node = create_ast_node(T_COMMAND, current->value);
 	if (!cmd_node)
 		return (NULL);
-	cmd_node->args = NULL;
+	// cmd_node->args = NULL;
 	if (!add_argument_to_command(cmd_node, current->value))  // Add command itself as first argument
     {
         free_ast_node(cmd_node);
@@ -102,14 +103,7 @@ t_ast_node	*build_ast(t_token **tokens)
 	if (!current)
 		return (NULL);
 	if (current->type == T_COMMAND)
-	{
 		return (build_command_node(tokens));
-		printf("AST Command Node: %s\n", root->value);
-		if (*tokens)
-			printf("Next Token After Command Node: %s\n", (*tokens)->value);
-		else
-			printf("No More Tokens After Command Node\n");
-	}
 	if (current->type == T_PIPE || current->type == T_AND
 		|| current->type == T_OR)
 	{
@@ -144,56 +138,4 @@ t_ast_node	*build_ast(t_token **tokens)
 		return (root);
 	}
 	return (NULL);
-}
-
-void print_ast(t_ast_node *root)
-{
-    if (!root)
-        return;
-
-    // Print the type of the current node
-    if (root->type == T_COMMAND)
-        printf("Command: %s\n", root->value);
-    else if (root->type == T_WORD)
-        printf("Word: %s\n", root->value);
-    else if (root->type == T_PIPE)
-        printf("Pipe\n");
-    else if (root->type == T_AND)
-        printf("AND\n");
-    else if (root->type == T_OR)
-        printf("OR\n");
-    else if (root->type == T_REDIRECT_IN)
-        printf("Redirect In: %s\n", root->value);
-    else if (root->type == T_REDIRECT_OUT)
-        printf("Redirect Out: %s\n", root->value);
-    else if (root->type == T_APPEND)
-        printf("Append Redirect: %s\n", root->value);
-    else if (root->type == T_SEMICOLON)
-        printf("Semicolon\n");
-
-    // Recursively print the left and right subtrees
-    if (root->left)
-    {
-        printf("Left Child:\n");
-        print_ast(root->left);
-    }
-
-    if (root->right)
-    {
-        printf("Right Child:\n");
-        print_ast(root->right);
-    }
-}
-
-// Helper function to start the AST printing process
-void print_full_ast(t_ast_node *root)
-{
-    if (!root)
-    {
-        printf("AST is empty!\n");
-        return;
-    }
-
-    printf("AST:\n");
-    print_ast(root);
 }
