@@ -85,6 +85,8 @@ char *get_command(char *word, int quote_count, char quote_type);
 // free.c //
 void	free_array(char **array);
 void	*free_and_return(char **array, void *return_value);
+int		free_word_and_return(char *word, int return_value);
+int		free_array_and_return(char **array, int return_value);
 void	free_token_list(t_token *tokens);
 void	free_ast_node(t_ast_node *node);
 void	free_ast(t_ast_node *root);
@@ -93,6 +95,7 @@ void	free_command_table(t_command_table *cmd);
 // errors.c //
 void	file_error(char *filename);
 int	is_command_found(char *word, char **env);
+int verify_forbidden_tokens(char *prompt);
 
 // path.c //
 char	*get_path(char **env);
@@ -102,9 +105,10 @@ char	*build_path(char *cmd, char **env);
 int count_quotes(char *word, char quote);
 int get_quote_type(char start_quote, char end_quote);
 
-// token_builder.c //
+// tokenize.c //
 char **tokenize(char *prompt);
 int count_words(const char *str);
+int move_past_quotes(const char *str, char quote_type, int *i);
 
 // token_type.c //
 t_token_type	get_operator_type(char *token);

@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/03 22:32:10 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:31:35 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int get_operator_len(const char *str)
     return (1);
 }
 
-static int move_past_quotes(const char *str, char quote_type, int *i)
+int move_past_quotes(const char *str, char quote_type, int *i)
 {
     (*i)++;  // Move past the opening quote
     while (str[*i] && str[*i] != quote_type)

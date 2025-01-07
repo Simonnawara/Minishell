@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/05 21:44:46 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:42:21 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@ void	free_array(char **array)
 void	*free_and_return(char **array, void *return_value)
 {
 	free_array(array);
+	return (return_value);
+}
+
+int	free_array_and_return(char **array, int return_value)
+{
+	free_array(array);
+	return (return_value);
+}
+
+int	free_word_and_return(char *word, int return_value)
+{
+	free(word);
 	return (return_value);
 }
 
