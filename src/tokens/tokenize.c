@@ -6,13 +6,29 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2024/12/28 19:35:16 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:31:35 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-static int move_past_quotes(const char *str, char quote_type, int *i)
+static int is_operator(char c)
+{
+    return (c == '>' || c == '<' || c == '|' || c == ';' ||
+            c == '&' || c == '(' || c == ')');
+}
+
+static int get_operator_len(const char *str)
+{
+    if ((str[0] == '>' && str[1] == '>') ||
+        (str[0] == '<' && str[1] == '<') ||
+        (str[0] == '&' && str[1] == '&') ||
+        (str[0] == '|' && str[1] == '|'))
+        return (2);
+    return (1);
+}
+
+int move_past_quotes(const char *str, char quote_type, int *i)
 {
     (*i)++;  // Move past the opening quote
     while (str[*i] && str[*i] != quote_type)
@@ -49,7 +65,13 @@ int count_words(const char *str)
                 return (-1);  // Error: unclosed quote
             continue;
         }
-        while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'') // Handle regular words
+		if (is_operator(str[i]))
+		{
+			i += get_operator_len(str + i);
+			continue;
+		}
+
+        while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'' && !is_operator(str[i]))
             i++;
     }
     return count;
@@ -72,13 +94,23 @@ static char *get_word(const char *str, int *pos)
             len++;
         if (str[start + len] == quote_type)
             len++;  // Include closing quote
+        else
+        {
+            ft_putendl_fd("Error: Unclosed quote", 2);
+            return (NULL);
+        }
     }
+	else if (is_operator(str[start]))
+		len = get_operator_len(str + start);
     else // Regular word
     {
-        while (str[start + len] && !isspace(str[start + len]) &&
+       while (str[start + len] && !isspace(str[start + len]) &&
+               !is_operator(str[start + len]) &&
                str[start + len] != '"' && str[start + len] != '\'')
             len++;
     }
+    if (len == 0) // Avoid malloc(0)
+        return (NULL);
     word = malloc(sizeof(char) * (len + 1));
     if (!word)
         return (NULL);
@@ -86,8 +118,6 @@ static char *get_word(const char *str, int *pos)
     *pos += len;
     return (word);
 }
-
-
 
 char **tokenize(char *prompt)
 {

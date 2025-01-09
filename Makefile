@@ -11,8 +11,17 @@
 # **************************************************************************** #
 
 NAME = minishell
-SRCS =  main.c free.c path.c \
-		quotes.c tokenize.c
+SRCS =  main.c \
+		utils/free.c \
+		utils/errors.c \
+		tokens/path.c \
+		tokens/quotes.c \
+		tokens/tokenize.c \
+		tokens/token_type.c \
+		tokens/tokenize_2.0.c \
+		ast/build_ast.c \
+		ast/build_ast_utils.c \
+		ast/execute_ast.c
 CC = gcc
 CCFLAG = -Wall -Werror -Wextra
 LIB = -C ./libft/
@@ -49,6 +58,7 @@ $(MINECRAFT_GREEN)╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚�
 all :  $(NAME)
 
 $(OBJ_DIR)/%.o: $(D_SRCS)%.c | $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	@$(CC) $(CCFLAG) -I./libft -I/includes -o $@ -c $<
 
 # Create obj directory if it doesn't exist

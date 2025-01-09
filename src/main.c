@@ -39,9 +39,9 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 	j = 0;
 	while (word[i])
 	{
-		if (word[i] == quote_type) //while(word[i] == quote_type)
+		if (word[i] == quote_type)
 			i++;
-		else //while(word[i] && word[i] != quote_type)
+		else
 		{
 			middle[j] = word[i];
 			j++;
@@ -53,60 +53,114 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 }
 
 
-int parse_prompt(char *prompt, char **env)
+int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt, char **env)
 {
-	char **res;
-	int i;
-	int total_quotes;
-	char quote_type;
-	char *cmd;
+	char			**res;
+	int				i;
+	int				total_quotes;
+	char			quote_type;
+	char			*cmd;
+	t_token_type	type;
+	t_token			*tokens;
+	t_token			*new_token;
+	t_ast_node		*ast;
 
+	if (!prompt || !*prompt)
+		return (1);
 	if (!ft_strncmp(prompt, "exit", 4))
 		exit (EXIT_SUCCESS);
+	tokens = NULL;
 	res = tokenize(prompt);
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
 	i = 0;
+	
 	while (res[i])
 	{
-		ft_printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
+		//printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
 
-		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39)) //quotes are around the word
+		quote_type = 0;
+		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39))
 			quote_type = res[i][0];
-		total_quotes = count_quotes(res[i], quote_type); //calculates the amount of quotes in the word
+		total_quotes = count_quotes(res[i], quote_type);
 
-		if (access(res[i], F_OK | X_OK) == 0)
-			printf("Is an ABSOLUTE PATH command\n");
-		else if (build_path(res[i], env))
-			printf("Is a command\n");
-		else if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
+		if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
 			if (ft_strlen(res[i]) == 2)
-			{
 				printf("Word between quotes is empty\n");
-				i++;
-				continue;
+			else
+			{
+				cmd = get_command(res[i], total_quotes, quote_type);
+				if (!cmd)
+				{
+					free_token_list(tokens);
+					free_array(res);
+			        return (1);
+				}
+				type = classify_token(cmd, env);
+				new_token = create_token(cmd, type);
+				free(cmd);
+				if (!new_token)
+				{
+					free_token_list(tokens);
+					free_array(res);
+			        return (1);
+				}
+				add_token(&tokens, new_token);
+				if (!tokens)
+    				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
 			}
-			cmd = get_command(res[i], total_quotes, quote_type);
-			if (access(cmd, F_OK | X_OK) == 0)
-				printf("Is between even quotes, and is an ABSOLUTE PATH command\n");
-			else if (cmd && build_path(cmd, env))
-				printf("Is between even quotes, and is a command\n");
-			free(cmd);
 		}
 		else
-			printf("Is a standalone token or unknown\n");
+		{
+			type = classify_token(res[i], env);
+			new_token = create_token(res[i], type);
+			if (!new_token)
+			{
+				free_token_list(tokens);
+				free_array(res);
+		        return (1);
+			}
+			add_token(&tokens, new_token);
+			if (!tokens)
+				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
+
+			if (check_pipe(new_token->type, res, i)
+			|| check_redirect(new_token->type, res, i)
+			|| check_parenth(res))
+			{
+				if (tokens)
+					free_token_list(tokens);
+				if (res)
+					free_array(res);
+				return (1);
+			}
+		}
+		//print_token_info(new_token);
+		if (is_command_found(res[0], env))
+			return (0);
 		i++;
 	}
-	i = 0;
-	while (res[i])
+
+	ast = build_ast(&tokens);
+	if (!ast)
 	{
-		free(res[i]);
-		i++;
+		ft_putendl_fd("Error: Failed to build AST", 2);
+		free_token_list(tokens);
+		return (1);
 	}
-	free(res);
-	return (1);
+	execute_ast(ast, env);
+	//printf("\033[1;32mAST Executing succesfull\033[0m\n\n");
+
+	free(ast);
+	free_token_list(tokens);
+
+	free_array(res);
+
+	return (0);
+	//return (tokens);
 }
+
 
 int main(int argc, char **argv, char **env)
 {
@@ -127,7 +181,9 @@ int main(int argc, char **argv, char **env)
 		}
 		if (ft_strlen(prompt) > 0)
 			add_history(prompt); //adds the last written prompt to the history
-
+		if (verify_forbidden_tokens(prompt))
+			return (1);
+		printf("\033[1;32mNo invalid tokens\033[0m\n\n");
 		parse_prompt(prompt, env);
 		free(prompt);
 	}

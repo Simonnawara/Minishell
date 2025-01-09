@@ -6,11 +6,11 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:37 by sinawara          #+#    #+#             */
-/*   Updated: 2024/12/28 14:56:19 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:38:46 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int count_quotes(char *word, char quote)
 {
@@ -47,28 +47,3 @@ int get_quote_type(char start_quote, char end_quote)
 			quote_type = 0;
 	return (quote_type);
 }
-
-/* int count_start_quotes(char *word, char quote)
-{
-	int i;
-
-	i = 0;
-	while (word[i] && word[i] == quote)
-		i++;
-	return (i);
-}
-
-int count_end_quotes(char *word, char quote)
-{
-	int i;
-	int quote_count;
-
-	i = ft_strlen(word) - 1;
-	quote_count = 0;
-	while (i >= 0 && word[i] == quote)
-	{
-		quote_count++;
-		i--;
-	}
-	return (quote_count);
-} */

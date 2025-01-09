@@ -1,4 +1,16 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/02 16:35:50 by sinawara          #+#    #+#             */
+/*   Updated: 2025/01/05 17:48:29 by sinawara         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 char	*get_path(char **env)
 {
@@ -13,7 +25,6 @@ char	*get_path(char **env)
 	}
 	return (NULL);
 }
-
 
 char	*build_path(char *cmd, char **env)
 {
@@ -38,7 +49,6 @@ char	*build_path(char *cmd, char **env)
 			return ((char *)free_and_return(path_struct.paths, NULL));
 		if (access(path_struct.full_path, F_OK | X_OK) == 0)
 		{
-			printf("Command Path : %s\n", path_struct.full_path);
 			return ((char *)free_and_return(path_struct.paths,
 					path_struct.full_path));
 		}
