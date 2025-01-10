@@ -182,8 +182,11 @@ int main(int argc, char **argv, char **env)
 		if (ft_strlen(prompt) > 0)
 			add_history(prompt); //adds the last written prompt to the history
 		if (verify_forbidden_tokens(prompt))
-			return (1);
-		printf("\033[1;32mNo invalid tokens\033[0m\n\n");
+		{
+			free(prompt);
+			continue ;
+		}
+		//printf("\033[1;32mNo invalid tokens\033[0m\n");
 		parse_prompt(prompt, env);
 		free(prompt);
 	}
