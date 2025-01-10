@@ -64,6 +64,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	t_token			*tokens;
 	t_token			*new_token;
 	t_ast_node		*ast;
+	t_exec			exec;
 
 	if (!prompt || !*prompt)
 		return (1);
@@ -149,7 +150,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		free_token_list(tokens);
 		return (1);
 	}
-	execute_ast(ast, env);
+	execute_ast(ast, &exec);
 	//printf("\033[1;32mAST Executing succesfull\033[0m\n\n");
 
 	free(ast);

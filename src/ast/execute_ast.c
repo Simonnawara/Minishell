@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/06 13:42:30 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/10 10:08:28 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,60 +15,32 @@
 
 int g_exit_status = 0;
 
-void execute_ast(t_ast_node *root, char **env)
-{
-    if (!root)
-        return;
 
-    if (root->type == T_COMMAND)
-        execute_command(root, env);
-    else if (root->type == T_PIPE)
-        execute_pipe(root->left, root->right, env);
-    else if (root->type == T_REDIRECT_IN)
+static void uptdate_last_status(t_exec *exec, int status)
+{
+    exec->last_status = status;
+}
+int execute_ast(t_ast_node *ast, t_exec *exec)
+{
+    int status;
+    
+    if (!ast)
+        return (0);
+    if (ast->type == T_PIPE)
     {
-        int fd = open(root->right->value, O_RDONLY);
-        if (fd < 0)
-        {
-            perror("open");
-            g_exit_status = 1;
-            return;
-        }
-        int saved_stdin = dup(STDIN_FILENO);
-        dup2(fd, STDIN_FILENO);
-        close(fd);
-        execute_ast(root->left, env);
-        dup2(saved_stdin, STDIN_FILENO);
-        close(saved_stdin);
+        status = execute_pipe_node(ast, exec); 
+        uptdate_last_status(exec, status);
+        return (status);
     }
-    else if (root->type == T_REDIRECT_OUT || root->type == T_APPEND)
+    if (ast->type == T_AND || ast->type == T_OR)
     {
-        int flags = (root->type == T_REDIRECT_OUT) ? 
-                   (O_WRONLY | O_CREAT | O_TRUNC) : 
-                   (O_WRONLY | O_CREAT | O_APPEND);
-        int fd = open(root->right->value, flags, 0644);
-        if (fd < 0)
-        {
-            perror("open");
-            g_exit_status = 1;
-            return;
-        }
-        int saved_stdout = dup(STDOUT_FILENO);
-        dup2(fd, STDOUT_FILENO);
-        close(fd);
-        execute_ast(root->left, env);
-        dup2(saved_stdout, STDOUT_FILENO);
-        close(saved_stdout);
+        status = execute_logical_node(ast, exec);
+        uptdate_last_status(exec, status);
+        return (status);
     }
-    else if (root->type == T_AND)
+    if (ast->type == T_COMMAND)
     {
-        execute_ast(root->left, env);
-        if (g_exit_status == 0)
-            execute_ast(root->right, env);
+        status = execute_simple_command(ast, exec);
     }
-    else if (root->type == T_OR)
-    {
-        execute_ast(root->left, env);
-        if (g_exit_status != 0)
-            execute_ast(root->right, env);
-    }
+    return (1);
 }
