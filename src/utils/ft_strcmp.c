@@ -6,9 +6,11 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:30:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/10 14:33:34 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:46:39 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../../includes/minishell.h"
 
 int ft_strcmp(const char *s1, const char *s2)
 {
