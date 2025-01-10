@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 10:08:44 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 15:41:39 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:52:02 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 		return (ft_echo(cmd->args));
 	if (!strcmp(cmd->cmd, "env"))
 	    return (ft_env(cmd->args, exec->env));
-    if (!strncmp(cmd->cmd, "export", 6))
+    if (!strcmp(cmd->cmd, "export"))
 		return (ft_export(cmd->args, exec->env));
 	return (1);
 }
@@ -74,8 +74,8 @@ int execute_simple_command(t_ast_node *node, t_exec *exec)
 	cmd.append = 0;
 	if (is_builtin(cmd.cmd))
 		ret = execute_builtin(&cmd, exec);
-	//else
-		//et = execute_extern_cmd(&cmd, exec);
+	else
+		ret = execute_extern_cmd(&cmd, exec);
 	exec->last_status = ret;
 	return (ret);
 }

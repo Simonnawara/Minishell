@@ -164,6 +164,9 @@ int execute_simple_command(t_ast_node *node, t_exec *exec);
 //Builtin *.c
 int ft_echo(char **args);
 
+//redirection_input
+int setup_redirection(t_command_table *cmd);
+
 // env.c //
 char *get_env_value(char **env, const char *name);
 int ft_env(char **args, char **env);
