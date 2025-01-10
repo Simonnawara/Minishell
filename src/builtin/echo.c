@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 10:37:07 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 11:20:11 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:41:45 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@ static int print_args(char **args, int index, int n_option)
 	int i;
 
 	i = index;
+	while (args[i])
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1])
+			ft_putchar_fd(' ', 1);
+		i++;
+	}
+	if (!n_option)
+		ft_putchar_fd('\n', 1);
 }
 int ft_echo(char **args)
 {
@@ -52,4 +61,5 @@ int ft_echo(char **args)
 		i++;
 	}
 	print_args(args, i, n_option);
+	return (0);
 }
