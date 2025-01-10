@@ -23,7 +23,11 @@ SRCS =  main.c \
 		ast/build_ast_utils.c \
 		ast/execute_ast.c \
 		exec/execute_pipe.c \
-		exec/error_pipe.c
+		exec/error_pipe.c \
+		exec/exec_logic_node.c \
+		exec/exec_simple_command.c \
+		builtin/echo.c
+
 CC = gcc
 CCFLAG = -Wall -Werror -Wextra
 LIB = -C ./libft/
