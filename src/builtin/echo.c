@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 10:37:07 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 11:41:45 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:48:41 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ static int is_present(char *arg)
 	i = 1;
 	while (arg[i])
 	{
-		if (!arg[i] != 'n')
+		if (arg[i] != 'n')
 			return (0);
 		i++;
 	}
 	return (i > 1);
 }
 
-static int print_args(char **args, int index, int n_option)
+static void print_args(char **args, int index, int n_option)
 {
 	int i;
 
@@ -55,7 +55,7 @@ int ft_echo(char **args)
 	}
 	i = 1;
 	n_option = 0;
-	while (args[i] && is_n_present(args[i]))
+	while (args[i] && is_present(args[i]))
 	{
 		n_option = 1;
 		i++;
