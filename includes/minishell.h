@@ -148,7 +148,6 @@ t_ast_node	*build_ast(t_token **tokens);
 void print_ast(t_ast_node *root);
 void print_full_ast(t_ast_node *root);
 
-
 // execute_ast.c //
 int execute_ast(t_ast_node *ast, t_exec *exec);
 
@@ -157,6 +156,12 @@ int execute_pipe_node(t_ast_node *ast, t_exec *exec);
 
 //execute_logical_operator
 int execute_logical_node(t_ast_node *node, t_exec *exec);
+
+//exec_simple_command.c
+int execute_simple_command(t_ast_node *node, t_exec *exec);
+
+//Builtin *.c
+int ft_echo(char **args);
 
 // tokenize_2.0.c //
 //t_token	*tokenize_input(char *input);

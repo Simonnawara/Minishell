@@ -78,7 +78,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	
 	while (res[i])
 	{
-		printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
+		//printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
 
 		quote_type = 0;
 		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39))
@@ -137,7 +137,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 				return (1);
 			}
 		}
-		print_token_info(new_token);
+		//print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;
@@ -151,7 +151,7 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		return (1);
 	}
 	execute_ast(ast, &exec);
-	printf("\033[1;32mAST Executing succesfull\033[0m\n\n");
+	//printf("\033[1;32mAST Executing succesfull\033[0m\n\n");
 
 	free(ast);
 	free_token_list(tokens);
