@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 10:08:44 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 14:32:59 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:39:24 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 static int is_builtin(char *cmd)
 {
-	return (!ft_strncmp(cmd, "echo", ft_strlen(cmd)) || 
-		!ft_strncmp(cmd, "cd", ft_strlen(cmd)) ||
-		!ft_strncmp(cmd, "pwd",ft_strlen(cmd)) || 
-		!ft_strncmp(cmd, "export", ft_strlen(cmd)) ||
-		!ft_strncmp(cmd, "unset", ft_strlen(cmd)) || 
-		!ft_strncmp(cmd, "env", ft_strlen(cmd)) ||
-		!ft_strncmp(cmd, "exit",ft_strlen(cmd)));
+	return (!ft_strcmp(cmd, "echo") || 
+		!ft_strcmp(cmd, "cd") ||
+		!ft_strcmp(cmd, "pwd") || 
+		!ft_strcmp(cmd, "export") ||
+		!ft_strcmp(cmd, "unset") || 
+		!ft_strcmp(cmd, "env") ||
+		!ft_strcmp(cmd, "exit"));
 }
 
 static int execute_builtin(t_command_table *cmd, t_exec *exec)
@@ -28,13 +28,38 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 	(void)exec;
 	if (!strcmp(cmd->cmd, "echo"))
 		return (ft_echo(cmd->args));
-	if (!strncmp(cmd->cmd, "env", ft_strlen(cmd)))
+	if (!strcmp(cmd->cmd, "env"))
 	    return (ft_env(cmd->args, exec->env));
-    if (!strncmp(cmd->cmd, "export", 6))
+    if (!strcmp(cmd->cmd, "export"))
 		return (ft_export(cmd->args, exec->env));
-	return (0);
+	return (1);
 }
+static int execute_extern_cmd(t_command_table *cmd, t_exec *exec)
+{
+	char *cmd_path;
+	pid_t pid;
+	int status;
 
+	cmd_path = get_path(exec->env);
+	if (!cmd_path)
+	{
+		ft_putendl_fd("minishell: command not found: ", 2);
+		ft_putendl_fd(cmd->cmd,2);
+		return (127);
+	}
+	pid = fork();
+	if (pid == -1)
+		return (fork_error());
+	if (pid == 0)
+	{
+		setup_redirection(cmd);
+		execve(cmd_path, cmd->args, exec->env); //Proteger le execve avec un big_free
+		exit(126);
+	}
+	free(cmd_path);
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
+}
 int execute_simple_command(t_ast_node *node, t_exec *exec)
 {
 	t_command_table cmd;
@@ -50,8 +75,8 @@ int execute_simple_command(t_ast_node *node, t_exec *exec)
 	cmd.append = 0;
 	if (is_builtin(cmd.cmd))
 		ret = execute_builtin(&cmd, exec);
-	//else
-		//et = execute_extern_cmd(&cmd, exec);
+	else
+		ret = execute_extern_cmd(&cmd, exec);
 	exec->last_status = ret;
 	return (ret);
 }
