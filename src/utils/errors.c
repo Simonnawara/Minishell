@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/07 16:35:43 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:55:09 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	is_command_found(char *word, char **env)
 			free_word_and_return(word, 1);
 	}
 	type = classify_token(cmd, env);
-	if (type == T_WORD)
+	if (type == T_WORD && !is_builtin(cmd))
 	{
 		write(2, cmd, ft_strlen(cmd));
 		ft_putendl_fd(" : command not found", 2);

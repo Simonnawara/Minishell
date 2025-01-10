@@ -108,6 +108,7 @@ void	free_command_table(t_command_table *cmd);
 void	file_error(char *filename);
 int	is_command_found(char *word, char **env);
 int verify_forbidden_tokens(char *prompt);
+int ft_strcmp(const char *s1, const char *s2);
 
 //error_pipe.c
 int pipe_error(void);
@@ -160,6 +161,7 @@ int execute_logical_node(t_ast_node *node, t_exec *exec);
 
 //exec_simple_command.c
 int execute_simple_command(t_ast_node *node, t_exec *exec);
+int is_builtin(char *cmd);
 
 //Builtin *.c
 int ft_echo(char **args);

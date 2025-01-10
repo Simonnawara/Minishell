@@ -1,18 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exec_simple_command.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/10 10:08:44 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 15:52:02 by trouilla         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #include "../../includes/minishell.h"
 
-static int is_builtin(char *cmd)
+int is_builtin(char *cmd)
 {
 	return (!ft_strcmp(cmd, "echo") || 
 		!ft_strcmp(cmd, "cd") ||
@@ -51,7 +41,7 @@ static int execute_extern_cmd(t_command_table *cmd, t_exec *exec)
 		return (fork_error());
 	if (pid == 0)
 	{
-		setup_redirection(cmd);
+		//setup_redirection(cmd);
 		execve(cmd_path, cmd->args, exec->env); //Proteger le execve avec un big_free
 		exit(126);
 	}

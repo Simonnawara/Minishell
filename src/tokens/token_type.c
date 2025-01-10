@@ -6,24 +6,11 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/10 15:38:28 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:03:54 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static int check_builtin(char *token)
-{
-	if (token[0] == 'echo'
-		|| token[0] == 'cd'
-		|| token[0] == 'pwd'
-		|| token[0] == 'export'
-		|| token[0] == 'unset'
-		|| token[0] == 'env'
-		|| token[0] == 'exit')
-		return (1);
-	return (0);
-}
 
 t_token_type	get_operator_type(char *token)
 {
@@ -45,8 +32,6 @@ t_token_type	get_operator_type(char *token)
 		return (T_PAREN_L);
 	if (token[0] == ')')
 		return (T_PAREN_R);
-	if (check_builtin(token[0]))
-		return (T_BUILTIN);
 	return (T_WORD);
 }
 
@@ -59,6 +44,8 @@ t_token_type	classify_token(char *token, char **env)
 	type = get_operator_type(token);
 	if (type != T_WORD)
 		return (type);
+	if (is_builtin(token))
+		return (T_COMMAND);
 	if (access(token, F_OK | X_OK) == 0 || build_path(token, env))
 		return (T_COMMAND);
 	return (T_WORD);
