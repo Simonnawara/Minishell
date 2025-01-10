@@ -163,6 +163,11 @@ int execute_simple_command(t_ast_node *node, t_exec *exec);
 //Builtin *.c
 int ft_echo(char **args);
 
+// env.c //
+char *get_env_value(char **env, const char *name);
+int ft_env(char **args, char **env);
+int ft_export(char **args, char **env);
+
 // tokenize_2.0.c //
 //t_token	*tokenize_input(char *input);
 t_token	*tokenize_input(char *input, char **env);

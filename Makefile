@@ -14,6 +14,7 @@ NAME = minishell
 SRCS =  main.c \
 		utils/free.c \
 		utils/errors.c \
+		utils/ft_strcmp.c \
 		tokens/path.c \
 		tokens/quotes.c \
 		tokens/tokenize.c \
@@ -26,7 +27,8 @@ SRCS =  main.c \
 		exec/error_pipe.c \
 		exec/exec_logic_node.c \
 		exec/exec_simple_command.c \
-		builtin/echo.c
+		builtin/echo.c \
+		builtin/env.c
 
 CC = gcc
 CCFLAG = -Wall -Werror -Wextra
