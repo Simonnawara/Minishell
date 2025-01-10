@@ -28,6 +28,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <errno.h>
 
 typedef struct s_path
 {
@@ -78,6 +79,16 @@ typedef struct s_ast_node
 	struct s_ast_node *right;
 }	t_ast_node;
 
+typedef struct s_exec
+{
+	t_ast_node *ast; //avoir argument commande + type
+	t_path *path_info; //info sur chemin cmd
+	int last_status; // Dernier code de retour
+	int pipe_read; // Descripteur lecture pipe
+	int pipe_write; // Descripteur ecriture pipe
+	char **env; //Environnement 
+}	t_exec;
+
 
 // main.c //
 char *get_command(char *word, int quote_count, char quote_type);
@@ -96,6 +107,11 @@ void	free_command_table(t_command_table *cmd);
 void	file_error(char *filename);
 int	is_command_found(char *word, char **env);
 int verify_forbidden_tokens(char *prompt);
+
+//error_pipe.c
+int pipe_error(void);
+void close_pipe(int pipe_fd[2]);
+int fork_error(void);
 
 // path.c //
 char	*get_path(char **env);
@@ -134,7 +150,13 @@ void print_full_ast(t_ast_node *root);
 
 
 // execute_ast.c //
-void	execute_ast(t_ast_node *root, char **env);
+int execute_ast(t_ast_node *ast, t_exec *exec);
+
+//execute_pipe.c
+int execute_pipe_node(t_ast_node *ast, t_exec *exec);
+
+//execute_logical_operator
+int execute_logical_node(t_ast_node *node, t_exec *exec);
 
 // tokenize_2.0.c //
 //t_token	*tokenize_input(char *input);

@@ -21,7 +21,9 @@ SRCS =  main.c \
 		tokens/tokenize_2.0.c \
 		ast/build_ast.c \
 		ast/build_ast_utils.c \
-		ast/execute_ast.c
+		ast/execute_ast.c \
+		exec/execute_pipe.c \
+		exec/error_pipe.c
 CC = gcc
 CCFLAG = -Wall -Werror -Wextra
 LIB = -C ./libft/
