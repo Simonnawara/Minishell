@@ -50,7 +50,8 @@ typedef enum e_token_type
     T_OR,           // ||
     T_SEMICOLON,    // ;
     T_PAREN_L,      // (
-    T_PAREN_R       // )
+    T_PAREN_R,       // )
+	T_BUILTIN
 } t_token_type;
 
 typedef struct s_token

@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 10:08:44 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 14:32:59 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:29:13 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,11 @@ static int is_builtin(char *cmd)
 
 static int execute_builtin(t_command_table *cmd, t_exec *exec)
 {
-	(void)exec;
 	if (!strcmp(cmd->cmd, "echo"))
 		return (ft_echo(cmd->args));
-	if (!strncmp(cmd->cmd, "env", ft_strlen(cmd)))
+	if (!strcmp(cmd->cmd, "env"))
 	    return (ft_env(cmd->args, exec->env));
-    if (!strncmp(cmd->cmd, "export", 6))
+    if (!strcmp(cmd->cmd, "export"))	
 		return (ft_export(cmd->args, exec->env));
 	return (0);
 }
@@ -51,7 +50,7 @@ int execute_simple_command(t_ast_node *node, t_exec *exec)
 	if (is_builtin(cmd.cmd))
 		ret = execute_builtin(&cmd, exec);
 	//else
-		//et = execute_extern_cmd(&cmd, exec);
+		//ret = execute_extern_cmd(&cmd, exec);
 	exec->last_status = ret;
 	return (ret);
 }

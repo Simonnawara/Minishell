@@ -71,6 +71,8 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	if (!ft_strncmp(prompt, "exit", 4))
 		exit (EXIT_SUCCESS);
 	tokens = NULL;
+	ft_memset(&exec, 0, sizeof(t_exec));
+	exec.env = env;
 	res = tokenize(prompt);
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);

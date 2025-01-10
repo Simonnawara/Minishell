@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 13:10:20 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/10 14:31:46 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:20:56 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,11 +145,13 @@ int ft_env(char **args, char **env)
         return (1);
     }
     i = 0;
+	printf("In env\n");
     while (env[i])
     {
-        ft_putendl_fd(env[i], 1);
+        printf("%s\n", env[i]);
         i++;
     }
+	printf("LASKDJASKLJDASKLDJ\n");
     return (0);
 }
 
