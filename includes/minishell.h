@@ -168,6 +168,7 @@ int ft_echo(char **args);
 int ft_cd(char **args, char **env);
 int	ft_pwd();
 int	ft_export(char **args, t_exec *exec);
+int	ft_unset(char **args, t_exec *exec);
 
 //redirection_input
 int setup_redirection(t_command_table *cmd);

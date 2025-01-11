@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 11:09:28 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/11 11:20:40 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/11 12:22:20 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,11 @@
 
 static char	*get_envir_value(char **env, char *key)
 {
-	int	key_len;
 	int	i;
+	int key_len;
 
 	if (!env || !key)
-	{
 		return (NULL);
-	}
 	key_len = ft_strlen(key);
 	i = 0;
 	while (env[i])
