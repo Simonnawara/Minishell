@@ -26,6 +26,7 @@
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
@@ -87,7 +88,7 @@ typedef struct s_exec
 	int last_status; // Dernier code de retour
 	int pipe_read; // Descripteur lecture pipe
 	int pipe_write; // Descripteur ecriture pipe
-	char **env; //Environnement 
+	char **env; //Environnement
 }	t_exec;
 
 
