@@ -17,7 +17,7 @@
 # include "../libft/include/get_next_line.h"
 # include "../libft/include/libft.h"
 # include <fcntl.h>
-# include <limits.h>
+# include <linux/limits.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
