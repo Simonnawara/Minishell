@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/10 16:04:25 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:41:14 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,26 @@
 
 int add_argument_to_command(t_ast_node *cmd_node, char *arg)
 {
-    int i = 0;
+    int i;
+	int j;
     char **new_args;
 
-    // Count existing arguments
-    if (cmd_node->args)
+	i = 0;
+	j = -1;
+    if (cmd_node->args)  // Count existing arguments
     {
         while (cmd_node->args[i])
             i++;
     }
-
-    // Allocate new array with space for one more argument
-    new_args = malloc(sizeof(char *) * (i + 2));
+    new_args = malloc(sizeof(char *) * (i + 2)); // Allocate new array with space for one more argument
     if (!new_args)
-        return 0;
-
-    // Copy existing arguments
-    for (int j = 0; j < i; j++)
-        new_args[j] = ft_strdup(cmd_node->args[j]);
-
-    // Add new argument
-    new_args[i] = ft_strdup(arg);
+		return 0;
+	while (++j < i) // Copy existing arguments
+		new_args[j] = ft_strdup(cmd_node->args[j]);
+    new_args[i] = ft_strdup(arg); // Add new argument
     new_args[i + 1] = NULL;
-
-    // Free old arguments array
-    if (cmd_node->args)
-    {
-        for (int j = 0; cmd_node->args[j]; j++)
-            free(cmd_node->args[j]);
-        free(cmd_node->args);
-    }
-
+    if (cmd_node->args) // Free old arguments array
+		free_array(cmd_node->args);
     cmd_node->args = new_args;
     return 1;
 }
@@ -75,7 +64,6 @@ t_ast_node *build_command_node(t_token **tokens)
 	cmd_node = create_ast_node(T_COMMAND, current->value);
 	if (!cmd_node)
 		return (NULL);
-	// cmd_node->args = NULL;
 	if (!add_argument_to_command(cmd_node, current->value))  // Add command itself as first argument
     {
         free_ast_node(cmd_node);
@@ -98,7 +86,6 @@ t_ast_node	*build_ast(t_token **tokens)
 	t_ast_node	*root;
 	t_token		*current;
 
-
 	current = *tokens;
 	if (!current)
 		return (NULL);
@@ -119,7 +106,6 @@ t_ast_node	*build_ast(t_token **tokens)
 			return (free_ast_node(root), NULL);
 		return (root);
 	}
-	// Add to build_ast function
 	if (current->type == T_REDIRECT_IN || current->type == T_REDIRECT_OUT ||
     current->type == T_APPEND)
 	{
@@ -127,8 +113,7 @@ t_ast_node	*build_ast(t_token **tokens)
 		if (!root)
 			return (NULL);
 		*tokens = current->next;
-		// Redirection needs a file name
-		if (!*tokens || (*tokens)->type != T_WORD)
+		if (!*tokens || (*tokens)->type != T_WORD) // Redirection needs a file name
 			return (free_ast_node(root), NULL);
 		root->right = create_ast_node(T_WORD, (*tokens)->value);
 		if (!root->right)

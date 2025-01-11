@@ -20,7 +20,7 @@ int validate_inputs(int argc)
 }
 
 // Extracts a word between quotes.
-char *get_command(char *word, int quote_count, char quote_type) // quote count = start + end quotes
+char *get_command(char *word, int quote_count, char quote_type)
 {
 	char *middle;
 	int len;
@@ -30,30 +30,23 @@ char *get_command(char *word, int quote_count, char quote_type) // quote count =
 	len = ft_strlen(word);
 	if (len == 2 && word[0] == quote_type && word[1] == quote_type)
         return (ft_strdup(""));
-
 	middle = malloc(sizeof(char) * (len - quote_count + 1));
 	if (!middle)
 		return (NULL);
-
 	i = 0;
 	j = 0;
 	while (word[i])
 	{
-		if (word[i] == quote_type)
-			i++;
-		else
-		{
-			middle[j] = word[i];
-			j++;
-			i++;
-		}
+		if (word[i] != quote_type)
+			middle[j++] = word[i];
+		i++;
 	}
 	middle[j] = '\0';
 	return (middle);
 }
 
 
-int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt, char **env)
+int parse_prompt(char *prompt, char **env)
 {
 	char			**res;
 	int				i;
@@ -77,16 +70,13 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
 	i = 0;
-	
+
 	while (res[i])
 	{
-		//printf("Token %d: %s\n", i + 1, res[i]); //prints the word to make sure we have it correctly
-
 		quote_type = 0;
 		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39))
 			quote_type = res[i][0];
 		total_quotes = count_quotes(res[i], quote_type);
-
 		if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
 			if (ft_strlen(res[i]) == 2)
@@ -127,10 +117,8 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 			add_token(&tokens, new_token);
 			if (!tokens)
 				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
-
 			if (check_pipe(new_token->type, res, i)
-			|| check_redirect(new_token->type, res, i)
-			|| check_parenth(res))
+			|| check_redirect(new_token->type, res, i))
 			{
 				if (tokens)
 					free_token_list(tokens);
@@ -144,7 +132,6 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 			return (0);
 		i++;
 	}
-
 	ast = build_ast(&tokens);
 	if (!ast)
 	{
@@ -153,15 +140,10 @@ int parse_prompt(char *prompt, char **env) //t_token *parse_prompt(char *prompt,
 		return (1);
 	}
 	execute_ast(ast, &exec);
-	//printf("\033[1;32mAST Executing succesfull\033[0m\n\n");
-
 	free(ast);
 	free_token_list(tokens);
-
 	free_array(res);
-
 	return (0);
-	//return (tokens);
 }
 
 
@@ -172,8 +154,7 @@ int main(int argc, char **argv, char **env)
 
 	if (validate_inputs(argc))
 		return (EXIT_FAILURE);
-
-	using_history(); //initializes history managment
+	using_history();
 	while (1)
 	{
 		prompt = readline("> ");
@@ -183,16 +164,14 @@ int main(int argc, char **argv, char **env)
 			break ;
 		}
 		if (ft_strlen(prompt) > 0)
-			add_history(prompt); //adds the last written prompt to the history
+			add_history(prompt);
 		if (verify_forbidden_tokens(prompt))
 		{
 			free(prompt);
 			continue ;
 		}
-		//printf("\033[1;32mNo invalid tokens\033[0m\n");
 		parse_prompt(prompt, env);
 		free(prompt);
 	}
 	clear_history();
-	return (0);
 }

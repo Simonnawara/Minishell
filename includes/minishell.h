@@ -134,7 +134,6 @@ t_token_type	get_operator_type(char *token);
 t_token_type	classify_token(char *token, char **env);
 int check_pipe(t_token_type type, char **res, int i);
 int check_redirect(t_token_type type, char **res, int i);
-int check_parenth(char **res);
 
 // build_ast_utils.c //
 t_command_table	*init_command_table(void);

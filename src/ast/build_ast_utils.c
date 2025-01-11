@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:27:29 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/10 11:54:35 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:40:23 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ t_command_table	*convert_node_to_command(t_ast_node *node)
 	}
 	return (cmd);
 }
-
-/* Utility Functions */
 
 char	**copy_string_array(char **arr)
 {
