@@ -30,6 +30,7 @@ SRCS =  main.c \
 		builtin/echo.c \
 		builtin/cd.c \
 		builtin/pwd.c \
+		builtin/export.c \
 		exec/set_env_cd.c \
 		exec/redirection_setup.c
 
