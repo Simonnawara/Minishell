@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/10 16:03:54 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/11 14:12:38 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ t_token_type	get_operator_type(char *token)
 t_token_type	classify_token(char *token, char **env)
 {
 	t_token_type	type;
+	struct stat path_stat;
+
 
 	if (!token || !*token)
 		return (T_WORD);
@@ -45,9 +47,28 @@ t_token_type	classify_token(char *token, char **env)
 	if (type != T_WORD)
 		return (type);
 	if (is_builtin(token))
+	{
+		//printf("Is a builtin\n");
 		return (T_COMMAND);
-	if (access(token, F_OK | X_OK) == 0 || build_path(token, env))
+	}
+	if (build_path(token, env)) // for straightforward commands
 		return (T_COMMAND);
+
+	if (access(token, X_OK) == 0) // for absolute paths
+	{
+		if (stat(token, &path_stat) != 0) //get file info
+		{
+			perror("stat"); //Handle error in retrieving file info
+			return (T_WORD);
+		}
+		if (S_ISDIR(path_stat.st_mode)) //check if it's a directory
+		{
+			//printf("Error : '%s' is a directory\n", token);
+			return (T_WORD);
+		}
+		else if (access(token, X_OK) == 0) //check if it's an executable
+			return (T_COMMAND);
+	}
 	return (T_WORD);
 }
 
