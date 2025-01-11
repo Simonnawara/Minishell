@@ -177,6 +177,11 @@ int	ft_exit(t_ast_node *node, t_exec *exec);
 int setup_redirection(t_command_table *cmd);
 //set_env_cd.c
 int	set_env_value(char **env, const char *key, const char *value);
+//external command .c
+int	execute_external_command(t_command_table *cmd, t_exec *exec);
+//extern_cmd_path
+char	*find_command_path(char *cmd, t_path *path_info);
+char	*search_in_path(t_path *path_info, char *cmd);
 
 // tokenize_2.0.c //
 //t_token	*tokenize_input(char *input);

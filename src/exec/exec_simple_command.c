@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/11 12:50:50 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:16:30 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 	}
 	return (1);
 }
-static int execute_extern_cmd(t_command_table *cmd, t_exec *exec)
+/* static int execute_extern_cmd(t_command_table *cmd, t_exec *exec)
 {
 	char *cmd_path;
 	pid_t pid;
@@ -73,7 +73,7 @@ static int execute_extern_cmd(t_command_table *cmd, t_exec *exec)
 	free(cmd_path);
 	waitpid(pid, &status, 0);
 	return (WEXITSTATUS(status));
-}
+} */
 int execute_simple_command(t_ast_node *node, t_exec *exec)
 {
 	t_command_table cmd;
@@ -90,7 +90,7 @@ int execute_simple_command(t_ast_node *node, t_exec *exec)
 	if (is_builtin(cmd.cmd))
 		ret = execute_builtin(&cmd, exec);
 	else
-		ret = execute_extern_cmd(&cmd, exec);
+		ret = execute_external_command(&cmd, exec);
 	exec->last_status = ret;
 	return (ret);
 }
