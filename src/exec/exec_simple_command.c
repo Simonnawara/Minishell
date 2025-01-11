@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 16:17:09 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/11 10:32:24 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 {
 	if (!strcmp(cmd->cmd, "echo"))
 		return (ft_echo(cmd->args));
+	if (!strcmp(cmd->cmd, "cd"))
+		return (ft_cd(cmd->args, exec->env));
 	if (!strcmp(cmd->cmd, "env"))
 	    return (ft_env(cmd->args, exec->env));
     if (!strcmp(cmd->cmd, "export"))
@@ -52,8 +54,9 @@ static int execute_extern_cmd(t_command_table *cmd, t_exec *exec)
 		return (fork_error());
 	if (pid == 0)
 	{
-		//setup_redirection(cmd);
-		execve(cmd_path, cmd->args, exec->env); //Proteger le execve avec un big_free
+		setup_redirection(cmd);
+		if (execve(cmd_path, cmd->args, exec->env) == -1)
+			return (1); //Proteger le execve avec un big_free
 		exit(126);
 	}
 	free(cmd_path);

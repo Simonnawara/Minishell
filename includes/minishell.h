@@ -166,6 +166,9 @@ int is_builtin(char *cmd);
 //Builtin *.c
 int ft_echo(char **args);
 
+//cd.c
+int	set_env_value(char **env, const char *key, const char *value);
+int ft_cd(char **args, char **env);
 //redirection_input
 int setup_redirection(t_command_table *cmd);
 

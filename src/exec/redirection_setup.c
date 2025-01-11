@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:02:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/10 16:11:11 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/11 09:22:15 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int setup_redirection(t_command_table *cmd)
 {
 	if (setup_input(cmd) == -1)
 		return (-1);
-	if (setup_output(cmd) == -1);
+	if (setup_output(cmd) == -1)
 		return (-1);
 	return (0);
 }
