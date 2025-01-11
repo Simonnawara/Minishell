@@ -33,6 +33,7 @@ SRCS =  main.c \
 		builtin/export.c \
 		builtin/unset.c \
 		builtin/env.c \
+		builtin/exit.c \
 		exec/set_env_cd.c \
 		exec/redirection_setup.c
 
