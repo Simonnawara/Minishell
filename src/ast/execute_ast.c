@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/10 15:29:49 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/11 09:20:11 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int execute_ast(t_ast_node *ast, t_exec *exec)
     if (ast->type == T_COMMAND)
     {
         status = execute_simple_command(ast, exec);
+        uptdate_last_status(exec, status);
+        return (status);
     }
     return (1);
 }
