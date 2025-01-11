@@ -28,9 +28,9 @@ SRCS =  main.c \
 		exec/exec_logic_node.c \
 		exec/exec_simple_command.c \
 		builtin/echo.c \
-		builtin/env.c \
 		builtin/cd.c \
-		builtin/set_envir_value.c \
+		builtin/pwd.c \
+		exec/set_env_cd.c \
 		exec/redirection_setup.c
 
 CC = gcc
