@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:35:50 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/05 17:48:29 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:30:13 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,8 @@ char	*build_path(char *cmd, char **env)
 		if (!path_struct.full_path)
 			return ((char *)free_and_return(path_struct.paths, NULL));
 		if (access(path_struct.full_path, F_OK | X_OK) == 0)
-		{
 			return ((char *)free_and_return(path_struct.paths,
 					path_struct.full_path));
-		}
 		free(path_struct.full_path);
 	}
 	return (free_and_return(path_struct.paths, NULL));

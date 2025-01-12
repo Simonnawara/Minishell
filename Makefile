@@ -14,6 +14,7 @@ NAME = minishell
 SRCS =  main.c \
 		utils/free.c \
 		utils/errors.c \
+		utils/ft_strcmp.c \
 		tokens/path.c \
 		tokens/quotes.c \
 		tokens/tokenize.c \
@@ -21,7 +22,21 @@ SRCS =  main.c \
 		tokens/tokenize_2.0.c \
 		ast/build_ast.c \
 		ast/build_ast_utils.c \
-		ast/execute_ast.c
+		ast/execute_ast.c \
+		exec/execute_pipe.c \
+		exec/error_pipe.c \
+		exec/exec_logic_node.c \
+		exec/exec_simple_command.c \
+		builtin/echo.c \
+		builtin/cd.c \
+		builtin/pwd.c \
+		builtin/export.c \
+		builtin/unset.c \
+		builtin/env.c \
+		builtin/exit.c \
+		exec/execute_cmd_extern.c \
+		exec/set_env_cd.c \
+		exec/redirection_setup.c 
 CC = gcc
 CCFLAG = -Wall -Werror -Wextra
 LIB = -C ./libft/

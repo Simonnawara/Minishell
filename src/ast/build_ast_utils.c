@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:27:29 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/05 21:56:23 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:40:23 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_command_table	*init_command_table(void)
 	return (cmd);
 }
 
-int	execute_command(t_ast_node *cmd_node, char **env)
+/* int	execute_command(t_ast_node *cmd_node, char **env)
 {
 	t_command_table	*cmd;
 	pid_t			pid;
@@ -50,9 +50,9 @@ int	execute_command(t_ast_node *cmd_node, char **env)
 	waitpid(pid, &status, 0);
 	free_command_table(cmd);
 	return (WEXITSTATUS(status));
-}
+} */
 
-int	execute_pipe(t_ast_node *left, t_ast_node *right, char **env)
+/* int	execute_pipe(t_ast_node *left, t_ast_node *right, char **env)
 {
 	int		pipefd[2];
 	pid_t	pid1;
@@ -81,7 +81,7 @@ int	execute_pipe(t_ast_node *left, t_ast_node *right, char **env)
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
 	return (0);
-}
+} */
 
 /* Conversion Functions */
 
@@ -103,8 +103,6 @@ t_command_table	*convert_node_to_command(t_ast_node *node)
 	}
 	return (cmd);
 }
-
-/* Utility Functions */
 
 char	**copy_string_array(char **arr)
 {

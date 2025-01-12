@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/07 16:31:35 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:22:22 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int count_words(const char *str)
 
     count = 0;
     i = 0;
-
     while (str[i])
     {
         while (str[i] && isspace(str[i])) // Skip whitespace
@@ -70,7 +69,6 @@ int count_words(const char *str)
 			i += get_operator_len(str + i);
 			continue;
 		}
-
         while (str[i] && !isspace(str[i]) && str[i] != '"' && str[i] != '\'' && !is_operator(str[i]))
             i++;
     }

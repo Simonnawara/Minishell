@@ -17,7 +17,7 @@
 # include "../libft/include/get_next_line.h"
 # include "../libft/include/libft.h"
 # include <fcntl.h>
-# include <limits.h>
+# include <linux/limits.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -26,8 +26,10 @@
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <errno.h>
 
 typedef struct s_path
 {
@@ -49,7 +51,8 @@ typedef enum e_token_type
     T_OR,           // ||
     T_SEMICOLON,    // ;
     T_PAREN_L,      // (
-    T_PAREN_R       // )
+    T_PAREN_R,       // )
+	T_BUILTIN
 } t_token_type;
 
 typedef struct s_token
@@ -78,6 +81,16 @@ typedef struct s_ast_node
 	struct s_ast_node *right;
 }	t_ast_node;
 
+typedef struct s_exec
+{
+	t_ast_node *ast; //avoir argument commande + type
+	t_path *path_info; //info sur chemin cmd
+	int last_status; // Dernier code de retour
+	int pipe_read; // Descripteur lecture pipe
+	int pipe_write; // Descripteur ecriture pipe
+	char **env; //Environnement
+}	t_exec;
+
 
 // main.c //
 char *get_command(char *word, int quote_count, char quote_type);
@@ -96,6 +109,12 @@ void	free_command_table(t_command_table *cmd);
 void	file_error(char *filename);
 int	is_command_found(char *word, char **env);
 int verify_forbidden_tokens(char *prompt);
+int ft_strcmp(const char *s1, const char *s2);
+
+//error_pipe.c
+int pipe_error(void);
+void close_pipe(int pipe_fd[2]);
+int fork_error(void);
 
 // path.c //
 char	*get_path(char **env);
@@ -115,7 +134,6 @@ t_token_type	get_operator_type(char *token);
 t_token_type	classify_token(char *token, char **env);
 int check_pipe(t_token_type type, char **res, int i);
 int check_redirect(t_token_type type, char **res, int i);
-int check_parenth(char **res);
 
 // build_ast_utils.c //
 t_command_table	*init_command_table(void);
@@ -132,9 +150,37 @@ t_ast_node	*build_ast(t_token **tokens);
 void print_ast(t_ast_node *root);
 void print_full_ast(t_ast_node *root);
 
-
 // execute_ast.c //
-void	execute_ast(t_ast_node *root, char **env);
+int execute_ast(t_ast_node *ast, t_exec *exec);
+
+//execute_pipe.c
+int execute_pipe_node(t_ast_node *ast, t_exec *exec);
+
+//execute_logical_operator
+int execute_logical_node(t_ast_node *node, t_exec *exec);
+
+//exec_simple_command.c
+int execute_simple_command(t_ast_node *node, t_exec *exec);
+int is_builtin(char *cmd);
+
+//Builtin *.c
+int ft_echo(char **args);
+int ft_cd(char **args, char **env);
+int	ft_pwd();
+int	ft_export(char **args, t_exec *exec);
+int	ft_unset(char **args, t_exec *exec);
+int	ft_env(t_exec *exec, char **args);
+int	ft_exit(t_ast_node *node, t_exec *exec);
+
+//redirection_input
+int setup_redirection(t_command_table *cmd);
+//set_env_cd.c
+int	set_env_value(char **env, const char *key, const char *value);
+//external command .c
+int	execute_external_command(t_command_table *cmd, t_exec *exec);
+//extern_cmd_path
+char	*find_command_path(char *cmd, t_path *path_info);
+char	*search_in_path(t_path *path_info, char *cmd);
 
 // tokenize_2.0.c //
 //t_token	*tokenize_input(char *input);
