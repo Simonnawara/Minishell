@@ -6,13 +6,13 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 11:45:48 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/11 11:55:03 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/13 11:05:41 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	is_valid_identifier(char *str)
+static int	is_valid_id(char *str)
 {
 	int	i;
 
@@ -116,7 +116,7 @@ int	ft_export(char **args, t_exec *exec)
 	i = 1;
 	while (args[i])
 	{
-		if (!is_valid_identifier(args[i]))
+		if (!is_valid_id(args[i]))
 		{
 			ft_printf("minishell: export: `%s': not a valid identifier\n",
 				args[i]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/07 12:42:21 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/13 11:01:52 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@ void	free_array(char **array)
 {
 	int	i;
 
-	i = 0;
 	if (!array)
 		return ;
+	i = 0;
 	while (array[i])
 	{
 		free(array[i]);
-		array[i] = NULL;
 		i++;
 	}
 	free(array);
-	array = NULL;
 }
 
 void	*free_and_return(char **array, void *return_value)

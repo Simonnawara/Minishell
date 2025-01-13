@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/11 15:16:30 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/13 11:16:45 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 	if (!ft_strcmp(cmd->cmd, "export"))
 		return (ft_export(cmd->args, exec));
 	if (!ft_strcmp(cmd->cmd, "unset"))
-		return (ft_unset(cmd->args, exec));
+		return (ft_unset(exec, cmd->args));
 	if (!ft_strcmp(cmd->cmd, "env"))
 		return (ft_env(exec, cmd->args));
 	if (!ft_strcmp(cmd->cmd, "exit"))

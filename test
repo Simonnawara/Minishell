@@ -4,11 +4,7 @@ Makefile
 minishell
 obj
 src
-test.txt
-includes
-libft
-Makefile
-minishell
-obj
-src
+test
+test1.txt
+testtt
 test.txt
