@@ -127,7 +127,7 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-		//print_token_info(new_token);
+		print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;

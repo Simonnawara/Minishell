@@ -1,3 +1,0 @@
-hc
-fcntlc
-charc

@@ -138,8 +138,8 @@ int check_redirect(t_token_type type, char **res, int i);
 // build_ast_utils.c //
 t_command_table	*init_command_table(void);
 int	add_argument_to_command(t_ast_node *cmd_node, char *arg);
-int	execute_command(t_ast_node *cmd_node, char **env);
-int	execute_pipe(t_ast_node *left, t_ast_node *right, char **env);
+//int	execute_command(t_ast_node *cmd_node, char **env);
+//int	execute_pipe(t_ast_node *left, t_ast_node *right, char **env);
 t_command_table	*convert_node_to_command(t_ast_node *node);
 char	**copy_string_array(char **arr);
 
@@ -168,7 +168,7 @@ int ft_echo(char **args);
 int ft_cd(char **args, char **env);
 int	ft_pwd();
 int	ft_export(char **args, t_exec *exec);
-int	ft_unset(char **args, t_exec *exec);
+int	ft_unset(t_exec *exec, char **args);
 int	ft_env(t_exec *exec, char **args);
 int	ft_exit(t_ast_node *node, t_exec *exec);
 
