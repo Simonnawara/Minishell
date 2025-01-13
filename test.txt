@@ -1,3 +1,14 @@
-hc
-fcntlc
-charc
+includes
+libft
+Makefile
+minishell
+obj
+src
+test.txt
+includes
+libft
+Makefile
+minishell
+obj
+src
+test.txt

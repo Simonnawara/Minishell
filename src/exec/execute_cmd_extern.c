@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 15:08:41 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/11 15:41:19 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/11 15:54:23 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static void	execute_child_process(char *cmd_path, t_command_table *cmd,
 		free(cmd_path);
 		exit(1);
 	}
-	printf("cmd path : %s\n", cmd_path);
 	if (execve(cmd_path, cmd->args, exec->env) == -1)
 		handle_child_error(cmd_path, cmd->cmd, errno);
 }
