@@ -90,6 +90,7 @@ typedef struct s_exec
 	int pipe_write; // Descripteur ecriture pipe
 	char **env; //Environnement
 	int *env_allocated;//checker var alloue moi meme
+	int compteur_pipe;
 }	t_exec;
 
 
@@ -155,7 +156,7 @@ void print_full_ast(t_ast_node *root);
 int execute_ast(t_ast_node *ast, t_exec *exec);
 
 //execute_pipe.c
-int execute_pipe_node(t_ast_node *ast, t_exec *exec);
+int execute_pipe_node(t_ast_node *node, t_exec *exec);
 
 //execute_logical_operator
 int execute_logical_node(t_ast_node *node, t_exec *exec);

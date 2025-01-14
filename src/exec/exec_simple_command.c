@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/14 11:34:54 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:16:47 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int execute_simple_command(t_ast_node *node, t_exec *exec)
 	ft_memset(&cmd, 0, sizeof(t_command_table));
 	cmd.cmd = node->value;
 	cmd.args = node->args;
+	printf("comd node->args : %s\n", cmd.args[1]);
 	cmd.infile = NULL;
 	cmd.outfile = NULL;
 	cmd.append = 0;
