@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/13 14:41:41 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:32:13 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,6 @@ int execute_ast(t_ast_node *ast, t_exec *exec)
     {
         printf("la");
         status = execute_pipe_node(ast, exec);
-        uptdate_last_status(exec, status);
-        return (status);
-    }
-    if (ast->type == T_AND || ast->type == T_OR)
-    {
-        status = execute_logical_node(ast, exec);
         uptdate_last_status(exec, status);
         return (status);
     }
