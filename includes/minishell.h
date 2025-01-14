@@ -89,6 +89,7 @@ typedef struct s_exec
 	int pipe_read; // Descripteur lecture pipe
 	int pipe_write; // Descripteur ecriture pipe
 	char **env; //Environnement
+	int *env_allocated;//checker var alloue moi meme
 }	t_exec;
 
 
@@ -165,7 +166,7 @@ int is_builtin(char *cmd);
 
 //Builtin *.c
 int ft_echo(char **args);
-int ft_cd(char **args, char **env);
+int	ft_cd(t_exec *exec, char **args);
 int	ft_pwd();
 int	ft_export(char **args, t_exec *exec);
 int	ft_unset(t_exec *exec, char **args);
@@ -175,7 +176,7 @@ int	ft_exit(t_ast_node *node, t_exec *exec);
 //redirection_input
 int setup_redirection(t_command_table *cmd);
 //set_env_cd.c
-int	set_env_value(char **env, const char *key, const char *value);
+int	update_env_variable(char **env, char *key, char *value);
 //external command .c
 int	execute_external_command(t_command_table *cmd, t_exec *exec);
 //extern_cmd_path

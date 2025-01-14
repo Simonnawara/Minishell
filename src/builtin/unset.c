@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:05:36 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/13 11:33:03 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/14 11:24:49 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,24 @@ static int	is_valid_env_name(char *name)
 	return (1);
 }
 
-static void	free_env_var(char **env, int index)
+static void	shift_env_variables(t_exec *exec, int index)
 {
 	int	i;
 
-	if (!env[index])
-		return ;
-	free(env[index]);
 	i = index;
-	while (env[i + 1])
+	while (exec->env[i + 1])
 	{
-		env[i] = env[i + 1];
+		exec->env[i] = exec->env[i + 1];
 		i++;
 	}
-	env[i] = NULL;
+	exec->env[i] = NULL;
+}
+
+static void	remove_env_var(t_exec *exec, int index)
+{
+	if (!exec || !exec->env || index < 0 || !exec->env[index])
+		return ;
+	shift_env_variables(exec, index);
 }
 
 static int	get_env_index(char **env, char *name)
@@ -50,6 +54,8 @@ static int	get_env_index(char **env, char *name)
 	char	*equal_pos;
 	size_t	name_len;
 
+	if (!env || !name)
+		return (-1);
 	i = 0;
 	name_len = ft_strlen(name);
 	while (env[i])
@@ -72,8 +78,8 @@ int	ft_unset(t_exec *exec, char **args)
 	int	index;
 	int	status;
 
-	if (!args[1])
-		return (0);
+	if (!exec || !exec->env || !args)
+		return (1);
 	status = 0;
 	i = 0;
 	while (args[++i])
@@ -89,7 +95,7 @@ int	ft_unset(t_exec *exec, char **args)
 		{
 			index = get_env_index(exec->env, args[i]);
 			if (index != -1)
-				free_env_var(exec->env, index);
+				remove_env_var(exec, index);
 		}
 	}
 	return (status);
