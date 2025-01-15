@@ -12,7 +12,7 @@
 
 NAME = minishell
 SRCS =  main.c \
-		utils/free.c \
+		//utils/free.c \
 		utils/errors.c \
 		utils/ft_strcmp.c \
 		tokens/path.c \

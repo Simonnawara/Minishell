@@ -157,6 +157,7 @@ int execute_ast(t_ast_node *ast, t_exec *exec);
 
 //execute_pipe.c
 int execute_pipe_node(t_ast_node *node, t_exec *exec);
+//void	free_node(t_ast_node *node);
 
 //execute_logical_operator
 int execute_logical_node(t_ast_node *node, t_exec *exec);
