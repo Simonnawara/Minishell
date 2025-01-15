@@ -5,67 +5,47 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/10 10:37:07 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/11 09:51:40 by trouilla         ###   ########.fr       */
+/*   Created: 2025/01/15 10:28:32 by trouilla          #+#    #+#             */
+/*   Updated: 2025/01/15 10:28:37 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../../includes/minishell.h"
 
-static int is_n_flag(char *arg)
+static	int		nb_args(char **args)
 {
-    int i;
+	int		size;
 
-    if (!arg || arg[0] != '-' || arg[1] != 'n')
-        return (0);
-    i = 2;
-    while (arg[i])
-    {
-        if (arg[i] != 'n')
-            return (0);
-        i++;
-    }
-    return (1);
+	size = 0;
+	while (args[size])
+		size++;
+	return (size);
 }
 
-static int has_n_option(char **args, int *i)
+int				ft_echo(char **args)
 {
-    int n_flag;
+	int		i;
+	int		n_option;
 
-    n_flag = 0;
-    while (args[*i] && is_n_flag(args[*i]))
-    {
-        n_flag = 1;
-        (*i)++;
-    }
-    return (n_flag);
-}
-
-static void print_args(char **args, int i)
-{
-    while (args[i])
-    {
-        ft_putstr_fd(args[i], 1);
-        if (args[i + 1])
-            ft_putchar_fd(' ', 1);
-        i++;
-    }
-}
-
-int ft_echo(char **args)
-{
-    int i;
-    int n_flag;
-
-    i = 1;
-    if (!args[i])
-    {
-        ft_putchar_fd('\n', 1);
-        return (0);
-    }
-    n_flag = has_n_option(args, &i);
-    print_args(args, i);
-    if (!n_flag)
-        ft_putchar_fd('\n', 1);
-    return (0);
+	i = 1;
+	n_option = 0;
+	if (nb_args(args) > 1)
+	{
+		while (args[i] && ft_strcmp(args[i], "-n") == 0)
+		{
+			n_option = 1;
+			i++;
+		}
+		while (args[i])
+		{
+			ft_putstr_fd(args[i], 1);
+			if (args[i + 1] && args[i][0] != '\0')
+				write(1, " ", 1);
+			i++;
+		}
+	}
+	if (n_option == 0)
+		write(1, "\n", 1);
+	return (0);
 }

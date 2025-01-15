@@ -19,7 +19,7 @@ int validate_inputs(int argc)
 	return (0);
 }
 
-// Extracts a word between quotes.
+// Extracts a word between quotes, I think it needs some more frees()
 char *get_command(char *word, int quote_count, char quote_type)
 {
 	char *middle;
@@ -66,6 +66,7 @@ int parse_prompt(char *prompt, char **env)
 	tokens = NULL;
 	ft_memset(&exec, 0, sizeof(t_exec));
 	exec.env = env;
+	exec.compteur_pipe = 0;
 	res = tokenize(prompt);
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
@@ -92,6 +93,8 @@ int parse_prompt(char *prompt, char **env)
 				}
 				type = classify_token(cmd, env);
 				new_token = create_token(cmd, type);
+				if (type == T_PIPE)
+					exec.compteur_pipe++;
 				free(cmd);
 				if (!new_token)
 				{
@@ -108,6 +111,8 @@ int parse_prompt(char *prompt, char **env)
 		{
 			type = classify_token(res[i], env);
 			new_token = create_token(res[i], type);
+			if (type == T_PIPE)
+				exec.compteur_pipe++;
 			if (!new_token)
 			{
 				free_token_list(tokens);
@@ -138,7 +143,8 @@ int parse_prompt(char *prompt, char **env)
 		ft_putendl_fd("Error: Failed to build AST", 2);
 		free_token_list(tokens);
 		return (1);
-	}
+	} 
+	printf("conmpteur pipe : %d\n", exec.compteur_pipe);
 	execute_ast(ast, &exec);
 	free(ast);
 	free_token_list(tokens);

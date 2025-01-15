@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/11 15:41:14 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:13:02 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ t_ast_node	*build_ast(t_token **tokens)
 	if (current->type == T_PIPE || current->type == T_AND
 		|| current->type == T_OR)
 	{
+		printf("laAAAAAAAAAAAAA\n");
+		printf("current->type : %d\n", current->type);
 		root = create_ast_node(current->type, current->value);
 		if (!root)
 			return (NULL);
