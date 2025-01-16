@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 15:08:41 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/16 13:02:00 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:42:51 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	execute_child_process(char *cmd_path, t_command_table *cmd,
 {
 	if (setup_redirection(cmd) == -1)
 	{
+		printf("BROOOOOOOOOO\n");
 		free(cmd_path);
 		exit(1);
 	}

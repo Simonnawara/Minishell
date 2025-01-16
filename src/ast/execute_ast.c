@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 13:16:08 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:48:38 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,28 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 	
 	cmd.cmd = ast->value;
 	cmd.args = ast->args;
-	cmd.quote_type = ast->quote_type;
 	//printf("comd node->args : %s\n", cmd.args[1]);
 	cmd.infile = NULL;
 	cmd.outfile = NULL;
 	cmd.append = 0;
 	if (!ast)
 		return (0);
+	printf("ast->type = %d\n", ast->type);
 	if (ast->type == T_PIPE)
+	{
+		printf("Ronge MOIIIIIIIIIIIIIIIIII\n");
 		return (handle_pipe(ast, exec));
+	}
 	if (ast->type == T_REDIRECT_OUT || ast->type == T_REDIRECT_IN
 		|| ast->type == T_APPEND)
-		return (setup_redirection(&cmd));
+		{
+			printf("NON ESCORTE\n");
+			return (setup_redirection(&cmd));
+		}
 	if (ast->type == T_COMMAND)
+	{
+		printf("pute pute pute\n");
 		return (execute_simple_command(ast, exec, cmd));
+	}
 	return (ft_putendl_fd("Error: Unknown node type", 2), 1);
 }

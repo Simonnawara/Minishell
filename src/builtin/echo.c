@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 10:28:32 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/16 12:00:07 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:35:06 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,13 @@ static	int		nb_args(char **args)
 	return (size);
 }
 
-int				ft_echo(char **args, char quote_type)
+int				ft_echo(char **args)
 {
 	int		i;
 	int		n_option;
 
 	i = 1;
 	n_option = 0;
-	printf("Quote type : %c\n", quote_type);
 	if (nb_args(args) > 1)
 	{
 		while (args[i] && ft_strcmp(args[i], "-n") == 0)

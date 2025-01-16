@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 12:00:28 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:56:05 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ t_ast_node *build_ast(t_token **tokens)
     t_ast_node  *root;
     t_token     *current;
     t_token     *pipe_token = NULL;
+    t_token     *redir_token = NULL;
     t_token     *split_point = NULL;
     t_token     *left_tokens = NULL;
     t_token     *right_tokens = NULL;
@@ -65,7 +66,6 @@ t_ast_node *build_ast(t_token **tokens)
     current = *tokens;
     //printf("\n=== Starting build_ast ===\n");
     //printf("First token: %s (type: %d)\n", current ? current->value : "NULL", current ? current->type : -1);
-    
     if (!current)
         return (NULL);
 
@@ -134,11 +134,59 @@ t_ast_node *build_ast(t_token **tokens)
         return root;
     }
     
-    // If no pipe, build a command node
-    //printf("No pipe found, building command node\n");
-    root = build_command_node(tokens);
-    //printf("Built command node: %s\n", root ? root->value : "NULL");
-    return root;
+    current = *tokens;
+    while (current)
+    {
+        if (current->type == T_REDIRECT_IN || 
+            current->type == T_REDIRECT_OUT || 
+            current->type == T_APPEND)
+        {
+            redir_token = current;
+            break;
+        }
+        current = current->next;
+    }
+
+    // If we found a redirection, handle it
+    if (redir_token)
+    {
+        if (!redir_token->next || redir_token->next->type != T_WORD)
+            return (NULL);  // Redirection must be followed by a filename
+
+        root = create_ast_node(redir_token->type, redir_token->value);
+        if (!root)
+            return (NULL);
+
+        // Set up right child (filename)
+        root->right = create_ast_node(T_WORD, redir_token->next->value);
+        if (!root->right)
+        {
+            free_ast_node(root);
+            return (NULL);
+        }
+
+        // Set up left subtree (command or more redirections)
+        left_tokens = *tokens;
+        split_point = *tokens;
+        while (split_point && split_point->next != redir_token)
+            split_point = split_point->next;
+        
+        if (split_point)
+            split_point->next = NULL;
+
+        *tokens = redir_token->next->next;  // Skip past redirection and filename
+        root->left = build_ast(&left_tokens);
+        if (!root->left)
+        {
+            free_ast_node(root);
+            return (NULL);
+        }
+
+        return root;
+    }
+    
+    // If no pipe or redirection, build a command node
+    return build_command_node(tokens);
 }
 
 t_ast_node *build_command_node(t_token **tokens)
@@ -159,7 +207,6 @@ t_ast_node *build_command_node(t_token **tokens)
     cmd_node = create_ast_node(T_COMMAND, current->value);
     if (!cmd_node)
 		return (NULL);
-	cmd_node->quote_type = current->quote_type;
 
     // printf("Adding command as first argument\n");
     if (!add_argument_to_command(cmd_node, current->value))
