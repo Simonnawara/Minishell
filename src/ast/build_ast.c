@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 10:06:00 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:06:18 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,81 +52,6 @@ t_ast_node *create_ast_node(t_token_type type, char *value)
 	node->args = NULL;
 	return (node);
 }
-
-/* t_ast_node *build_command_node(t_token **tokens)
-{
-	t_ast_node *cmd_node;
-	t_token *current;
-
-	current = *tokens;
-	if (!current)
-		return (NULL);
-	cmd_node = create_ast_node(T_COMMAND, current->value);
-	if (!cmd_node)
-		return (NULL);
-	if (!add_argument_to_command(cmd_node, current->value))  // Add command itself as first argument
-    {
-        free_ast_node(cmd_node);
-        return NULL;
-    }
-	current = current->next; // Move to the next token after command
-	while(current && current->type == T_WORD)
-	{
-		if (!add_argument_to_command(cmd_node, current->value))
-			return (free_ast_node(cmd_node), NULL);
-		current = current->next;
-	}
-	*tokens = current;
-	//printf("cmd_node : %s\n", cmd_node->value);
-	return (cmd_node);
-} */
-
-/* t_ast_node	*build_ast(t_token **tokens)
-{
-	t_ast_node	*root;
-	t_token		*current;
-
-	current = *tokens;
-	printf("current->type : %d\n", current->type);
-	if (!current)
-		return (NULL);
-	if (current->type == T_COMMAND)
-		return (build_command_node(tokens));
-	if (current->type == T_PIPE || current->type == T_AND
-		|| current->type == T_OR)
-	{
-		printf("laAAAAAAAAAAAAA\n");
-		printf("current->type : %d\n", current->type);
-		root = create_ast_node(current->type, current->value);
-		if (!root)
-			return (NULL);
-		*tokens = current->next;
-		root->left = build_ast(tokens);
-		if (!root->left)
-			return (free_ast_node(root), NULL);
-		root->right = build_ast(tokens);
-		if (!root->right)
-			return (free_ast_node(root), NULL);
-		return (root);
-	}
-	if (current->type == T_REDIRECT_IN || current->type == T_REDIRECT_OUT ||
-    current->type == T_APPEND)
-	{
-		root = create_ast_node(current->type, current->value);
-		if (!root)
-			return (NULL);
-		*tokens = current->next;
-		if (!*tokens || (*tokens)->type != T_WORD) // Redirection needs a file name
-			return (free_ast_node(root), NULL);
-		root->right = create_ast_node(T_WORD, (*tokens)->value);
-		if (!root->right)
-			return (free_ast_node(root), NULL);
-		*tokens = (*tokens)->next;
-		root->left = build_ast(tokens);
-		return (root);
-	}
-	return (NULL);
-} */
 
 t_ast_node *build_ast(t_token **tokens)
 {

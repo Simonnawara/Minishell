@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 10:57:48 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:21:37 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	handle_file_error(char *filename)
 	return (-1);
 }
 
-static int	setup_redirection(t_ast_node *ast, int type)
+static int	setup_redirection2(t_ast_node *ast, int type)
 {
 	int	fd;
 
@@ -90,7 +90,7 @@ static int	handle_redirection(t_ast_node *ast, t_exec *exec)
 	current = ast;
 	while (current && current->type != T_COMMAND)
 	{
-		if (setup_redirection(current, current->type) == -1)
+		if (setup_redirection2(current, current->type) == -1)
 		{
 			restore_std_fds(saved_stdin, saved_stdout);
 			return (1);
