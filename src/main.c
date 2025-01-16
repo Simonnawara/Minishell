@@ -123,7 +123,7 @@ int parse_prompt(char *prompt, char **env)
 			if (!tokens)
 				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
 			if (check_pipe(new_token->type, res, i)
-			|| check_redirect(new_token->type, res, i))
+			 || check_redirect(new_token->type, res, i))
 			{
 				if (tokens)
 					free_token_list(tokens);
@@ -132,7 +132,7 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-		print_token_info(new_token);
+		//print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;
@@ -144,7 +144,7 @@ int parse_prompt(char *prompt, char **env)
 		free_token_list(tokens);
 		return (1);
 	} 
-	printf("conmpteur pipe : %d\n", exec.compteur_pipe);
+	//printf("conmpteur pipe : %d\n", exec.compteur_pipe);
 	execute_ast(ast, &exec);
 	free(ast);
 	free_token_list(tokens);

@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/15 12:13:02 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/16 10:06:00 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ t_ast_node *build_ast(t_token **tokens)
     t_token     *right_tokens = NULL;
 
     current = *tokens;
-    printf("\n=== Starting build_ast ===\n");
+    //printf("\n=== Starting build_ast ===\n");
     //printf("First token: %s (type: %d)\n", current ? current->value : "NULL", current ? current->type : -1);
     
     if (!current)
@@ -148,11 +148,11 @@ t_ast_node *build_ast(t_token **tokens)
     current = *tokens;
     while (current)
     {
-        printf("Scanning token: %s (type: %d)\n", current->value, current->type);
+        //printf("Scanning token: %s (type: %d)\n", current->value, current->type);
         if (current->type == T_PIPE)
         {
             pipe_token = current;
-            printf("Found pipe token at: %s\n", current->value);
+            //printf("Found pipe token at: %s\n", current->value);
             break;
         }
         current = current->next;
@@ -161,7 +161,7 @@ t_ast_node *build_ast(t_token **tokens)
     // If we found a pipe, split into left and right subtrees
     if (pipe_token)
     {
-        printf("Processing pipe operator\n");
+        //printf("Processing pipe operator\n");
         
         // Create new token lists for left and right sides
         left_tokens = *tokens;
@@ -174,45 +174,45 @@ t_ast_node *build_ast(t_token **tokens)
         
         if (split_point)
         {
-            printf("Splitting tokens at: %s\n", split_point->value);
+            //printf("Splitting tokens at: %s\n", split_point->value);
             split_point->next = NULL;  // Terminate left group
         }
 
-        printf("Left tokens start with: %s\n", left_tokens ? left_tokens->value : "NULL");
-        printf("Right tokens start with: %s\n", right_tokens ? right_tokens->value : "NULL");
+        // printf("Left tokens start with: %s\n", left_tokens ? left_tokens->value : "NULL");
+        // printf("Right tokens start with: %s\n", right_tokens ? right_tokens->value : "NULL");
 
         // Create pipe node
         root = create_ast_node(T_PIPE, "|");
         if (!root)
             return (NULL);
         
-        printf("Building left subtree...\n");
+       // printf("Building left subtree...\n");
         root->left = build_ast(&left_tokens);
         if (!root->left)
         {
-            printf("Failed to build left subtree\n");
+            //printf("Failed to build left subtree\n");
             free_ast_node(root);
             return (NULL);
         }
 
-        printf("Building right subtree...\n");
+       // printf("Building right subtree...\n");
         root->right = build_ast(&right_tokens);
         if (!root->right)
         {
-            printf("Failed to build right subtree\n");
+            //printf("Failed to build right subtree\n");
             free_ast_node(root);
             return (NULL);
         }
 
-        printf("Successfully built pipe node with both subtrees\n");
+        //printf("Successfully built pipe node with both subtrees\n");
         *tokens = NULL;  // Consume all tokens
         return root;
     }
     
     // If no pipe, build a command node
-    printf("No pipe found, building command node\n");
+    //printf("No pipe found, building command node\n");
     root = build_command_node(tokens);
-    printf("Built command node: %s\n", root ? root->value : "NULL");
+    //printf("Built command node: %s\n", root ? root->value : "NULL");
     return root;
 }
 
@@ -221,24 +221,24 @@ t_ast_node *build_command_node(t_token **tokens)
     t_ast_node *cmd_node;
     t_token *current;
 
-    printf("\n=== Starting build_command_node ===\n");
-	printf("Test pour git push\n");
+    // printf("\n=== Starting build_command_node ===\n");
+	// printf("Test pour git push\n");
     current = *tokens;
     if (!current)
     {
-        printf("No tokens to build command node\n");
+        //printf("No tokens to build command node\n");
         return (NULL);
     }
 
-    printf("Building command node for: %s\n", current->value);
+    //printf("Building command node for: %s\n", current->value);
     cmd_node = create_ast_node(T_COMMAND, current->value);
     if (!cmd_node)
         return (NULL);
 
-    printf("Adding command as first argument\n");
+    // printf("Adding command as first argument\n");
     if (!add_argument_to_command(cmd_node, current->value))
     {
-        printf("Failed to add command as argument\n");
+        // printf("Failed to add command as argument\n");
         free_ast_node(cmd_node);
         return NULL;
     }
@@ -246,10 +246,10 @@ t_ast_node *build_command_node(t_token **tokens)
     current = current->next; // Move to the next token after command
     while(current && current->type == T_WORD)
     {
-        printf("Adding argument: %s\n", current->value);
+        // printf("Adding argument: %s\n", current->value);
         if (!add_argument_to_command(cmd_node, current->value))
         {
-            printf("Failed to add argument\n");
+            // printf("Failed to add argument\n");
             free_ast_node(cmd_node);
             return NULL;
         }
@@ -257,6 +257,6 @@ t_ast_node *build_command_node(t_token **tokens)
     }
 
     *tokens = current;  // Update token pointer
-    printf("Command node built successfully with value: %s\n", cmd_node->value);
+    // printf("Command node built successfully with value: %s\n", cmd_node->value);
     return cmd_node;
 }
