@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 11:06:18 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:56:28 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,8 @@ t_ast_node *build_command_node(t_token **tokens)
     cmd_node = create_ast_node(T_COMMAND, current->value);
     if (!cmd_node)
         return (NULL);
+
+	cmd_node->quote_type = current->quote_type;
 
     // printf("Adding command as first argument\n");
     if (!add_argument_to_command(cmd_node, current->value))

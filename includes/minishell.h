@@ -58,6 +58,7 @@ typedef struct s_token
 {
     char        *value;
     t_token_type type;
+	char	quote_type;
     struct s_token *next;
 } t_token;
 
@@ -67,6 +68,7 @@ typedef struct s_command_table
 	char	**args;
 	char	*infile;
 	char	*outfile;
+	char quote_type;
 	int		append;
 	int		pipe_out;
 }	t_command_table;
@@ -76,6 +78,7 @@ typedef struct s_ast_node
 	t_token_type type;
 	char *value;
 	char **args;
+	char quote_type;
 	struct s_ast_node *left;
 	struct s_ast_node *right;
 }	t_ast_node;
