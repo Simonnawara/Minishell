@@ -165,7 +165,7 @@ int execute_pipe_node(t_ast_node *node, t_exec *exec);
 int execute_logical_node(t_ast_node *node, t_exec *exec);
 
 //exec_simple_command.c
-int execute_simple_command(t_ast_node *node, t_exec *exec);
+int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd);
 int is_builtin(char *cmd);
 
 //Builtin *.c

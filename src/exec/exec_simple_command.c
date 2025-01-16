@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/16 11:59:58 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:12:22 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/minishell.h"
+
 
 int is_builtin(char *cmd)
 {
@@ -48,35 +49,8 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 	}
 	return (1);
 }
-/* static int execute_extern_cmd(t_command_table *cmd, t_exec *exec)
+int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 {
-	char *cmd_path;
-	pid_t pid;
-	int status;
-
-	cmd_path = get_path(exec->env);
-	if (!cmd_path)
-	{
-		ft_putendl_fd("minishell: command not found: ", 2);
-		ft_putendl_fd(cmd->cmd,2);
-		return (127);
-	}
-	pid = fork();
-	if (pid == -1)
-		return (fork_error());
-	if (pid == 0)
-	{
-		setup_redirection(cmd);
-		execve(cmd_path, cmd->args, exec->env); //Proteger le execve avec un big_free
-		exit(126);
-	}
-	free(cmd_path);
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
-} */
-int execute_simple_command(t_ast_node *node, t_exec *exec)
-{
-	t_command_table cmd;
 	int ret;
 	
 	if (!node || !node->value)
