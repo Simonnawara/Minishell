@@ -94,7 +94,10 @@ int parse_prompt(char *prompt, char **env)
 				type = classify_token(cmd, env);
 				new_token = create_token(cmd, type);
 				if (new_token)
+				{
 					new_token->quote_type = quote_type;
+					printf("new_token->quote_type = %c\n", new_token->quote_type);
+				}
 				if (type == T_PIPE)
 					exec.compteur_pipe++;
 				free(cmd);
@@ -114,7 +117,10 @@ int parse_prompt(char *prompt, char **env)
 			type = classify_token(res[i], env);
 			new_token = create_token(res[i], type);
 			if (new_token)
+			{
 				new_token->quote_type = quote_type;
+				printf("new_token->quote_type = %c\n", new_token->quote_type);
+			}
 			if (type == T_PIPE)
 				exec.compteur_pipe++;
 			if (!new_token)

@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 10:28:32 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/16 11:52:29 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:00:07 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static	int		nb_args(char **args)
 	return (size);
 }
 
-int				ft_echo(char **args)
+int				ft_echo(char **args, char quote_type)
 {
 	int		i;
 	int		n_option;
 
 	i = 1;
 	n_option = 0;
-	//printf("Quote type : %c\n", quote_type);
+	printf("Quote type : %c\n", quote_type);
 	if (nb_args(args) > 1)
 	{
 		while (args[i] && ft_strcmp(args[i], "-n") == 0)
