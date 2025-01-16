@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 16:32:53 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/16 21:30:30 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,54 @@ static int	handle_pipe(t_ast_node *ast, t_exec *exec)
 }
 
 
+static int execute_redirection(t_ast_node *ast, t_exec *exec)
+{
+    t_command_table cmd = {0};
+    int status;
+
+    if (!ast->left || !ast->right)
+        return (ft_putendl_fd("Error: Invalid redirection syntax", 2), 1);
+
+    // Setup command table
+    cmd.cmd = ast->left->value;
+    cmd.args = ast->left->args;
+
+    // Set redirection based on type
+    if (ast->type == T_REDIRECT_OUT || ast->type == T_APPEND)
+    {
+        cmd.outfile = ast->right->value;
+        cmd.append = (ast->type == T_APPEND);
+    }
+    else if (ast->type == T_REDIRECT_IN)
+        cmd.infile = ast->right->value;
+
+    // Setup redirection
+    if (setup_redirection(&cmd) == -1)
+        return (1);
+
+    // Execute the command
+    status = execute_simple_command(ast->left, exec, cmd);
+
+    // Restore original file descriptors
+    if (cmd.saved_stdin != -1)
+    {
+        dup2(cmd.saved_stdin, STDIN_FILENO);
+        close(cmd.saved_stdin);
+    }
+    if (cmd.saved_stdout != -1)
+    {
+        dup2(cmd.saved_stdout, STDOUT_FILENO);
+        close(cmd.saved_stdout);
+    }
+
+    return status;
+}
+
+
 int	execute_ast(t_ast_node *ast, t_exec *exec)
 {
 	t_command_table cmd;
-	
+
 	cmd.cmd = ast->value;
 	cmd.args = ast->args;
 	//printf("comd node->args : %s\n", cmd.args[1]);
@@ -88,15 +132,14 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 	printf("ast->type = %d\n", ast->type);
 	if (ast->type == T_PIPE)
 	{
-		printf("Ronge MOIIIIIIIIIIIIIIIIII\n");
+		printf("We found a T_PIPE\n");
 		return (handle_pipe(ast, exec));
 	}
 	if (ast->type == T_REDIRECT_OUT || ast->type == T_REDIRECT_IN
 		|| ast->type == T_APPEND)
 		{
 			printf("NON ESCORTE\n");
-			return (setup_redirection(&cmd));
-			//return (execute_redirection_command(ast, exec)); le seul truc aue j'ai change avant de partir, rajouter tt ce aue claude a donne
+			return (execute_redirection(ast, exec));
 		}
 	if (ast->type == T_COMMAND)
 	{
