@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 15:48:38 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:32:53 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 		{
 			printf("NON ESCORTE\n");
 			return (setup_redirection(&cmd));
+			//return (execute_redirection_command(ast, exec)); le seul truc aue j'ai change avant de partir, rajouter tt ce aue claude a donne
 		}
 	if (ast->type == T_COMMAND)
 	{
