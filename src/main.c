@@ -81,7 +81,10 @@ int parse_prompt(char *prompt, char **env)
 		if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
 			if (ft_strlen(res[i]) == 2)
+		//	{
 				printf("Word between quotes is empty\n");
+			//	i++;
+			//}
 			else
 			{
 				cmd = get_command(res[i], total_quotes, quote_type);
@@ -93,6 +96,11 @@ int parse_prompt(char *prompt, char **env)
 				}
 				type = classify_token(cmd, env);
 				new_token = create_token(cmd, type);
+				if (new_token && new_token->value && !ft_strcmp(new_token->value, "echo"))
+				{
+					new_token->res = res;
+					new_token->echo_counter = i;
+				}
 				if (type == T_PIPE)
 					exec.compteur_pipe++;
 				free(cmd);
@@ -111,6 +119,11 @@ int parse_prompt(char *prompt, char **env)
 		{
 			type = classify_token(res[i], env);
 			new_token = create_token(res[i], type);
+			if (new_token && new_token->value && !ft_strcmp(new_token->value, "echo"))
+			{
+				new_token->res = res;
+				new_token->echo_counter = i;
+			}
 			if (type == T_PIPE)
 				exec.compteur_pipe++;
 			if (!new_token)
@@ -132,7 +145,12 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
+<<<<<<< HEAD
 		print_token_info(new_token);
+=======
+		//print_token_info(new_token);
+
+>>>>>>> refs/remotes/origin/main
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;
@@ -143,7 +161,7 @@ int parse_prompt(char *prompt, char **env)
 		ft_putendl_fd("Error: Failed to build AST", 2);
 		free_token_list(tokens);
 		return (1);
-	} 
+	}
 	//printf("conmpteur pipe : %d\n", exec.compteur_pipe);
 	execute_ast(ast, &exec);
 	free(ast);

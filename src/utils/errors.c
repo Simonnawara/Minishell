@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/14 14:09:24 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:14:11 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	is_command_found(char *word, char **env)
 	int				total_quotes;
 	char			quote_type;
 	char 			*cmd;
-	
+
 	quote_type = 0;
 	if (word[0] == word[ft_strlen(word) - 1] && (word[0] == 34 || word[0] == 39))
 		quote_type = word[0];
@@ -65,7 +65,7 @@ int	is_command_found(char *word, char **env)
 			free_word_and_return(word, 1);
 	}
 	type = classify_token(cmd, env);
-	if (type == T_WORD) 	//if (type == T_WORD && !is_builtin(cmd))	
+	if (type == T_WORD && ft_strlen(cmd) != 0) 	//if (type == T_WORD && !is_builtin(cmd))
 	{
 		write(2, cmd, ft_strlen(cmd));
 		ft_putendl_fd(" : command not found", 2);

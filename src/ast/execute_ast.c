@@ -6,7 +6,11 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/01/17 11:52:52 by trouilla         ###   ########.fr       */
+=======
+/*   Updated: 2025/01/17 13:33:13 by sinawara         ###   ########.fr       */
+>>>>>>> refs/remotes/origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,12 +128,17 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 	memset(&cmd, 0, sizeof(t_command_table));
 	cmd.cmd = ast->value;
 	cmd.args = ast->args;
+
 	//printf("comd node->args : %s\n", cmd.args[1]);
 	cmd.infile = NULL;
 	cmd.outfile = NULL;
 	cmd.append = 0;
 	if (!ast)
 		return (0);
+<<<<<<< HEAD
+=======
+	//printf("ast->type = %d\n", ast->type);
+>>>>>>> refs/remotes/origin/main
 	if (ast->type == T_PIPE)
 		return (handle_pipe(ast, exec));
 	if (ast->type == T_REDIRECT_OUT || ast->type == T_REDIRECT_IN
@@ -143,6 +152,11 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
         return (execute_heredoc(ast, exec));
     }
 	if (ast->type == T_COMMAND)
+<<<<<<< HEAD
+=======
+	{
+		//printf("pute pute pute\n");
+>>>>>>> refs/remotes/origin/main
 		return (execute_simple_command(ast, exec, cmd));
 	return (ft_putendl_fd("Error: Unknown node type", 2), 1);
 }
