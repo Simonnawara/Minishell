@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 21:30:30 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:33:13 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,13 +123,14 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 
 	cmd.cmd = ast->value;
 	cmd.args = ast->args;
+
 	//printf("comd node->args : %s\n", cmd.args[1]);
 	cmd.infile = NULL;
 	cmd.outfile = NULL;
 	cmd.append = 0;
 	if (!ast)
 		return (0);
-	printf("ast->type = %d\n", ast->type);
+	//printf("ast->type = %d\n", ast->type);
 	if (ast->type == T_PIPE)
 	{
 		printf("We found a T_PIPE\n");
@@ -143,7 +144,7 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 		}
 	if (ast->type == T_COMMAND)
 	{
-		printf("pute pute pute\n");
+		//printf("pute pute pute\n");
 		return (execute_simple_command(ast, exec, cmd));
 	}
 	return (ft_putendl_fd("Error: Unknown node type", 2), 1);

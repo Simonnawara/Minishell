@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 10:28:32 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/16 13:35:06 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:38:02 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,17 @@ static	int		nb_args(char **args)
 	return (size);
 }
 
-int				ft_echo(char **args)
+int				ft_echo(char **args, char **res, int echo_counter)
 {
 	int		i;
 	int		n_option;
 
+	if (!args)  // Add validation
+        return (1);
 	i = 1;
 	n_option = 0;
+	printf("echo counter in echo : %d\n" , echo_counter);
+	printf("res[echo_counter] in echo : %s\n", res[echo_counter + 1]);
 	if (nb_args(args) > 1)
 	{
 		while (args[i] && ft_strcmp(args[i], "-n") == 0)

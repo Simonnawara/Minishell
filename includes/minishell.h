@@ -57,6 +57,8 @@ typedef enum e_token_type
 typedef struct s_token
 {
     char        *value;
+	char		**res;
+	int			echo_counter;
     t_token_type type;
     struct s_token *next;
 } t_token;
@@ -69,6 +71,8 @@ typedef struct s_command_table
 	char	*outfile;
 	char *heredoc_content;
     char *delimiter;
+	char		**res;
+	int			echo_counter;
     int heredoc;
     int append;
     int saved_stdin;
@@ -81,6 +85,8 @@ typedef struct s_ast_node
 	t_token_type type;
 	char *value;
 	char **args;
+	char		**res;
+	int			echo_counter;
 	struct s_ast_node *left;
 	struct s_ast_node *right;
 }	t_ast_node;
@@ -171,7 +177,7 @@ int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd);
 int is_builtin(char *cmd);
 
 //Builtin *.c
-int ft_echo(char **args);
+int				ft_echo(char **args, char **res, int echo_counter);
 int	ft_pwd();
 int	ft_export(char **args, t_exec *exec);
 int	ft_unset(t_exec *exec, char **args);

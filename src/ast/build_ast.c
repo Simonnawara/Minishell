@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 15:56:05 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:35:48 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,16 @@ t_ast_node *build_ast(t_token **tokens)
     if (pipe_token)
     {
         //printf("Processing pipe operator\n");
-        
+
         // Create new token lists for left and right sides
         left_tokens = *tokens;
         right_tokens = pipe_token->next;
-        
+
         // Find the token before pipe to terminate left list
         split_point = *tokens;
         while (split_point && split_point->next != pipe_token)
             split_point = split_point->next;
-        
+
         if (split_point)
         {
             //printf("Splitting tokens at: %s\n", split_point->value);
@@ -110,7 +110,7 @@ t_ast_node *build_ast(t_token **tokens)
         root = create_ast_node(T_PIPE, "|");
         if (!root)
             return (NULL);
-        
+
        // printf("Building left subtree...\n");
         root->left = build_ast(&left_tokens);
         if (!root->left)
@@ -133,12 +133,12 @@ t_ast_node *build_ast(t_token **tokens)
         *tokens = NULL;  // Consume all tokens
         return root;
     }
-    
+
     current = *tokens;
     while (current)
     {
-        if (current->type == T_REDIRECT_IN || 
-            current->type == T_REDIRECT_OUT || 
+        if (current->type == T_REDIRECT_IN ||
+            current->type == T_REDIRECT_OUT ||
             current->type == T_APPEND)
         {
             redir_token = current;
@@ -170,7 +170,7 @@ t_ast_node *build_ast(t_token **tokens)
         split_point = *tokens;
         while (split_point && split_point->next != redir_token)
             split_point = split_point->next;
-        
+
         if (split_point)
             split_point->next = NULL;
 
@@ -184,7 +184,7 @@ t_ast_node *build_ast(t_token **tokens)
 
         return root;
     }
-    
+
     // If no pipe or redirection, build a command node
     return build_command_node(tokens);
 }
@@ -208,6 +208,9 @@ t_ast_node *build_command_node(t_token **tokens)
     if (!cmd_node)
 		return (NULL);
 
+    cmd_node->res = current->res;
+    cmd_node->echo_counter = current->echo_counter;
+    
     // printf("Adding command as first argument\n");
     if (!add_argument_to_command(cmd_node, current->value))
     {

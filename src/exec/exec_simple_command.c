@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/16 13:25:41 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:36:16 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 
 int is_builtin(char *cmd)
 {
-	return (!ft_strcmp(cmd, "echo") || 
+	return (!ft_strcmp(cmd, "echo") ||
 		!ft_strcmp(cmd, "cd") ||
-		!ft_strcmp(cmd, "pwd") || 
+		!ft_strcmp(cmd, "pwd") ||
 		!ft_strcmp(cmd, "export") ||
-		!ft_strcmp(cmd, "unset") || 
+		!ft_strcmp(cmd, "unset") ||
 		!ft_strcmp(cmd, "env") ||
 		!ft_strcmp(cmd, "exit"));
 }
@@ -28,9 +28,9 @@ int is_builtin(char *cmd)
 static int execute_builtin(t_command_table *cmd, t_exec *exec)
 {
 	t_ast_node temp_node;
-	
+
 	if (!strcmp(cmd->cmd, "echo"))
-		return (ft_echo(cmd->args));
+		return (ft_echo(cmd->args, cmd->res, cmd->echo_counter));
 	//if (!strcmp(cmd->cmd, "cd"))
 	 //	return (ft_cd(exec, cmd->args));
 	if (!strcmp(cmd->cmd, "pwd"))
@@ -52,13 +52,16 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 {
 	int ret;
-	
+
 	if (!node || !node->value)
 		return (1);
 	ft_memset(&cmd, 0, sizeof(t_command_table));
 	cmd.cmd = node->value;
 	cmd.args = node->args;
-	
+
+	cmd.echo_counter = node->echo_counter;
+	cmd.res = node->res;
+
 	//printf("comd node->args : %s\n", cmd.args[1]);
 	cmd.infile = NULL;
 	cmd.outfile = NULL;
