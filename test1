@@ -1,1 +1,9 @@
-laaaaaaaaaaaaaaaaaaaaa
+echo counter in echo : 0
+res[echo_counter] in echo : la
+la
+echo counter in echo : 0
+res[echo_counter] in echo : >>
+
+echo counter in echo : 0
+res[echo_counter] in echo : >>
+

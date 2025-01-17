@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:46:53 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/17 11:52:04 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:18:38 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	write_to_heredoc(int fd, char *delimiter)
 
 	while (1)
 	{
-		line = readline("> ");
+		line = readline("heredoc> ");
 		if (!line)
 		{
 			ft_putstr_fd("\nwarning: here-document delimited", 2);
