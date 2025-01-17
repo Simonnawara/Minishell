@@ -46,6 +46,7 @@ typedef enum e_token_type
     T_REDIRECT_OUT, // >
     T_APPEND,       // >>
     T_PIPE,         // |
+	T_HEREDOC,		// <<
     T_AND,          // &&
     T_OR,           // ||
     T_SEMICOLON,    // ;
@@ -67,7 +68,7 @@ typedef struct s_command_table
 	char	**args;
 	char	*infile;
 	char	*outfile;
-	char *heredoc_content;
+	char *heredoc_file;
     char *delimiter;
     int heredoc;
     int append;
@@ -75,6 +76,8 @@ typedef struct s_command_table
     int saved_stdout;
 	int		pipe_out;
 }	t_command_table;
+
+
 
 typedef struct s_ast_node
 {
@@ -188,6 +191,9 @@ int	execute_external_command(t_command_table *cmd, t_exec *exec);
 //extern_cmd_path
 char	*find_command_path(char *cmd, t_path *path_info);
 char	*search_in_path(t_path *path_info, char *cmd);
+
+//Heredoc.c
+int execute_heredoc(t_ast_node *ast, t_exec *exec);
 
 // tokenize_2.0.c //
 //t_token	*tokenize_input(char *input);

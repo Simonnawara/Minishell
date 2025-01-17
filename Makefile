@@ -34,7 +34,8 @@ SRCS =  main.c \
 		builtin/env.c \
 		builtin/exit.c \
 		exec/execute_cmd_extern.c \
-		exec/redirection_setup.c 
+		exec/redirection_setup.c \
+		exec/heredoc.c 
 CC = gcc
 CCFLAG = -Wall -Werror -Wextra
 LIB = -C ./libft/

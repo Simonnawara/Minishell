@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/16 21:30:30 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/17 11:52:52 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 {
 	t_command_table cmd;
 
+	memset(&cmd, 0, sizeof(t_command_table));
 	cmd.cmd = ast->value;
 	cmd.args = ast->args;
 	//printf("comd node->args : %s\n", cmd.args[1]);
@@ -129,22 +130,19 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 	cmd.append = 0;
 	if (!ast)
 		return (0);
-	printf("ast->type = %d\n", ast->type);
 	if (ast->type == T_PIPE)
-	{
-		printf("We found a T_PIPE\n");
 		return (handle_pipe(ast, exec));
-	}
 	if (ast->type == T_REDIRECT_OUT || ast->type == T_REDIRECT_IN
 		|| ast->type == T_APPEND)
-		{
-			printf("NON ESCORTE\n");
 			return (execute_redirection(ast, exec));
-		}
+	 if (ast->type == T_HEREDOC)
+    {
+		printf("heredoc\n");
+        if (!ast->right || !ast->right->value)
+            return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
+        return (execute_heredoc(ast, exec));
+    }
 	if (ast->type == T_COMMAND)
-	{
-		printf("pute pute pute\n");
 		return (execute_simple_command(ast, exec, cmd));
-	}
 	return (ft_putendl_fd("Error: Unknown node type", 2), 1);
 }
