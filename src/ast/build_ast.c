@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/17 13:55:05 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:30:58 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,71 @@ t_ast_node *create_ast_node(t_token_type type, char *value)
 	node->args = NULL;
 	return (node);
 }
+static t_ast_node *handle_heredoc_command(t_token **tokens, t_token *heredoc_token)
+{
+    t_ast_node  *root;
+    t_token     *left_tokens;
+    t_token     *split_point;
+    t_token     *next_tokens;
+
+    if (!heredoc_token->next || heredoc_token->next->type != T_WORD)
+        return (NULL);
+
+    root = create_ast_node(T_HEREDOC, heredoc_token->value);
+    if (!root)
+        return (NULL);
+
+    // Set up right child (delimiter)
+    root->right = create_ast_node(T_WORD, heredoc_token->next->value);
+    if (!root->right)
+    {
+        free_ast_node(root);
+        return (NULL);
+    }
+
+    // Save tokens after heredoc
+    next_tokens = heredoc_token->next->next;
+
+    // Handle tokens before heredoc
+    if (heredoc_token != *tokens)
+    {
+        left_tokens = *tokens;
+        split_point = *tokens;
+        while (split_point && split_point->next != heredoc_token)
+            split_point = split_point->next;
+        if (split_point)
+            split_point->next = NULL;
+        root->left = build_command_node(&left_tokens);
+        if (!root->left)
+        {
+            free_ast_node(root);
+            return (NULL);
+        }
+    }
+
+    // Check for additional heredocs
+    *tokens = next_tokens;
+    if (*tokens && (*tokens)->type == T_HEREDOC)
+    {
+        t_ast_node *next_heredoc = build_ast(tokens);
+        if (next_heredoc)
+        {
+            // If there's no left node yet, make the next heredoc the left node
+            if (!root->left)
+                root->left = next_heredoc;
+            else
+            {
+                // Chain heredocs through the left branch if there's already a command
+                t_ast_node *temp = root;
+                while (temp->left && temp->left->type != T_HEREDOC)
+                    temp = temp->left;
+                temp->left = next_heredoc;
+            }
+        }
+    }
+
+    return (root);
+}
 
 t_ast_node *build_ast(t_token **tokens)
 {
@@ -64,78 +129,11 @@ t_ast_node *build_ast(t_token **tokens)
     t_token     *left_tokens = NULL;
     t_token     *right_tokens = NULL;
 
-    current = *tokens;
-    //printf("\n=== Starting build_ast ===\n");
-    //printf("First token: %s (type: %d)\n", current ? current->value : "NULL", current ? current->type : -1);
+	current = *tokens;
     if (!current)
         return (NULL);
 
-    // First, look for a pipe operator at the top level
-    current = *tokens;
-    while (current)
-    {
-        //printf("Scanning token: %s (type: %d)\n", current->value, current->type);
-        if (current->type == T_PIPE)
-        {
-            pipe_token = current;
-            //printf("Found pipe token at: %s\n", current->value);
-            break;
-        }
-        current = current->next;
-    }
-
-    // If we found a pipe, split into left and right subtrees
-    if (pipe_token)
-    {
-        //printf("Processing pipe operator\n");
-
-        // Create new token lists for left and right sides
-        left_tokens = *tokens;
-        right_tokens = pipe_token->next;
-
-        // Find the token before pipe to terminate left list
-        split_point = *tokens;
-        while (split_point && split_point->next != pipe_token)
-            split_point = split_point->next;
-
-        if (split_point)
-        {
-            //printf("Splitting tokens at: %s\n", split_point->value);
-            split_point->next = NULL;  // Terminate left group
-        }
-
-        // printf("Left tokens start with: %s\n", left_tokens ? left_tokens->value : "NULL");
-        // printf("Right tokens start with: %s\n", right_tokens ? right_tokens->value : "NULL");
-
-        // Create pipe node
-        root = create_ast_node(T_PIPE, "|");
-        if (!root)
-            return (NULL);
-
-       // printf("Building left subtree...\n");
-        root->left = build_ast(&left_tokens);
-        if (!root->left)
-        {
-            //printf("Failed to build left subtree\n");
-            free_ast_node(root);
-            return (NULL);
-        }
-
-       // printf("Building right subtree...\n");
-        root->right = build_ast(&right_tokens);
-        if (!root->right)
-        {
-            //printf("Failed to build right subtree\n");
-            free_ast_node(root);
-            return (NULL);
-        }
-
-        //printf("Successfully built pipe node with both subtrees\n");
-        *tokens = NULL;  // Consume all tokens
-        return root;
-    }
-
-    current = *tokens;
+    // First, look for heredoc as it should be handled first
     while (current)
     {
         if (current->type == T_HEREDOC)
@@ -146,44 +144,127 @@ t_ast_node *build_ast(t_token **tokens)
         current = current->next;
     }
 
-    // Handle heredoc if found
     if (heredoc_token)
+        return (handle_heredoc_command(tokens, heredoc_token));
+
+    // Then look for pipe
+    current = *tokens;
+    while (current)
     {
-        if (!heredoc_token->next || heredoc_token->next->type != T_WORD)
-            return (NULL);  // Heredoc must be followed by a delimiter
-
-        root = create_ast_node(T_HEREDOC, heredoc_token->value);
-        if (!root)
-            return (NULL);
-
-        // Set up right child (delimiter)
-        root->right = create_ast_node(T_WORD, heredoc_token->next->value);
-        if (!root->right)
+        if (current->type == T_PIPE)
         {
-            free_ast_node(root);
-            return (NULL);
+            pipe_token = current;
+            break;
         }
+        current = current->next;
+    }
 
-        // Set up left subtree (command or more redirections)
+    // Handle pipe
+    if (pipe_token)
+    {
         left_tokens = *tokens;
+        right_tokens = pipe_token->next;
         split_point = *tokens;
-        while (split_point && split_point->next != heredoc_token)
+        while (split_point && split_point->next != pipe_token)
             split_point = split_point->next;
-        
         if (split_point)
             split_point->next = NULL;
-
-        *tokens = heredoc_token->next->next;  // Skip past heredoc and delimiter
+        root = create_ast_node(T_PIPE, "|");
+        if (!root)
+            return (NULL);
         root->left = build_ast(&left_tokens);
         if (!root->left)
         {
             free_ast_node(root);
             return (NULL);
         }
-
-        return root;
+        root->right = build_ast(&right_tokens);
+        if (!root->right)
+        {
+            free_ast_node(root);
+            return (NULL);
+        }
+        *tokens = NULL;
+        return (root);
     }
-    
+    // current = *tokens;
+    // if (!current)
+    //     return (NULL);
+    // current = *tokens;
+    // while (current)
+    // {
+    //     if (current->type == T_PIPE)
+    //     {
+    //         pipe_token = current;
+    //         break;
+    //     }
+    //     current = current->next;
+    // }
+    // if (pipe_token)
+    // {
+    //     left_tokens = *tokens;
+    //     right_tokens = pipe_token->next;
+    //     split_point = *tokens;
+    //     while (split_point && split_point->next != pipe_token)
+    //         split_point = split_point->next;
+    //     if (split_point)
+    //         split_point->next = NULL;
+    //     root = create_ast_node(T_PIPE, "|");
+    //     if (!root)
+    //         return (NULL);
+    //     root->left = build_ast(&left_tokens);
+    //     if (!root->left)
+    //     {
+    //         free_ast_node(root);
+    //         return (NULL);
+    //     }
+    //     root->right = build_ast(&right_tokens);
+    //     if (!root->right)
+    //     {
+    //         free_ast_node(root);
+    //         return (NULL);
+    //     }
+    //     *tokens = NULL;
+    //     return root;
+    // }
+    // current = *tokens;
+    // while (current)
+    // {
+    //     if (current->type == T_HEREDOC)
+    //     {
+    //         heredoc_token = current;
+    //         break;
+    //     }
+    //     current = current->next;
+    // }
+    // if (heredoc_token)
+    // {
+    //     if (!heredoc_token->next || heredoc_token->next->type != T_WORD)
+    //         return (NULL);
+    //     root = create_ast_node(T_HEREDOC, heredoc_token->value);
+    //     if (!root)
+    //         return (NULL);
+    //     root->right = create_ast_node(T_WORD, heredoc_token->next->value);
+    //     if (!root->right)
+    //     {
+    //         free_ast_node(root);
+    //         return (NULL);
+    //     }
+    //     left_tokens = *tokens;
+    //     split_point = *tokens;
+    //     while (split_point && split_point->next != heredoc_token)
+    //         split_point = split_point->next;
+    //     if (split_point)
+    //         split_point->next = NULL;
+    //     *tokens = heredoc_token->next->next;
+    //     root->left = build_ast(&left_tokens);
+    //     if (!root->left)
+    //     {
+    //         free_ast_node(root);
+    //         return (NULL);
+    //     }
+    //     return root;
+    // }
     current = *tokens;
     while (current)
     {
@@ -196,46 +277,34 @@ t_ast_node *build_ast(t_token **tokens)
         }
         current = current->next;
     }
-
-    // If we found a redirection, handle it
     if (redir_token)
     {
         if (!redir_token->next || redir_token->next->type != T_WORD)
-            return (NULL);  // Redirection must be followed by a filename
-
+            return (NULL);
         root = create_ast_node(redir_token->type, redir_token->value);
         if (!root)
             return (NULL);
-
-        // Set up right child (filename)
         root->right = create_ast_node(T_WORD, redir_token->next->value);
         if (!root->right)
         {
             free_ast_node(root);
             return (NULL);
         }
-
-        // Set up left subtree (command or more redirections)
         left_tokens = *tokens;
         split_point = *tokens;
         while (split_point && split_point->next != redir_token)
             split_point = split_point->next;
-
         if (split_point)
             split_point->next = NULL;
-
-        *tokens = redir_token->next->next;  // Skip past redirection and filename
+        *tokens = redir_token->next->next;
         root->left = build_ast(&left_tokens);
         if (!root->left)
         {
             free_ast_node(root);
             return (NULL);
         }
-
         return root;
     }
-
-    // If no pipe or redirection, build a command node
     return build_command_node(tokens);
 }
 
