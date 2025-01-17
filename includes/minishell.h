@@ -37,8 +37,6 @@ typedef enum e_token_type
     T_APPEND,       // >>
     T_PIPE,         // |
 	T_HEREDOC,		// <<
-    T_AND,          // &&
-    T_OR,           // ||
     T_SEMICOLON,    // ;
     T_PAREN_L,      // (
     T_PAREN_R,       // )

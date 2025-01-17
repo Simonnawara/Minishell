@@ -6,11 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/01/17 11:52:52 by trouilla         ###   ########.fr       */
-=======
-/*   Updated: 2025/01/17 13:33:13 by sinawara         ###   ########.fr       */
->>>>>>> refs/remotes/origin/main
+/*   Updated: 2025/01/17 14:10:41 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +80,8 @@ static int execute_redirection(t_ast_node *ast, t_exec *exec)
 
     if (!ast->left || !ast->right)
         return (ft_putendl_fd("Error: Invalid redirection syntax", 2), 1);
-
-    // Setup command table
     cmd.cmd = ast->left->value;
     cmd.args = ast->left->args;
-
-    // Set redirection based on type
     if (ast->type == T_REDIRECT_OUT || ast->type == T_APPEND)
     {
         cmd.outfile = ast->right->value;
@@ -97,15 +89,9 @@ static int execute_redirection(t_ast_node *ast, t_exec *exec)
     }
     else if (ast->type == T_REDIRECT_IN)
         cmd.infile = ast->right->value;
-
-    // Setup redirection
     if (setup_redirection(&cmd) == -1)
         return (1);
-
-    // Execute the command
     status = execute_simple_command(ast->left, exec, cmd);
-
-    // Restore original file descriptors
     if (cmd.saved_stdin != -1)
     {
         dup2(cmd.saved_stdin, STDIN_FILENO);
@@ -116,7 +102,6 @@ static int execute_redirection(t_ast_node *ast, t_exec *exec)
         dup2(cmd.saved_stdout, STDOUT_FILENO);
         close(cmd.saved_stdout);
     }
-
     return status;
 }
 
@@ -135,10 +120,6 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 	cmd.append = 0;
 	if (!ast)
 		return (0);
-<<<<<<< HEAD
-=======
-	//printf("ast->type = %d\n", ast->type);
->>>>>>> refs/remotes/origin/main
 	if (ast->type == T_PIPE)
 		return (handle_pipe(ast, exec));
 	if (ast->type == T_REDIRECT_OUT || ast->type == T_REDIRECT_IN
@@ -146,17 +127,11 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 			return (execute_redirection(ast, exec));
 	 if (ast->type == T_HEREDOC)
     {
-		printf("heredoc\n");
         if (!ast->right || !ast->right->value)
             return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
         return (execute_heredoc(ast, exec));
     }
 	if (ast->type == T_COMMAND)
-<<<<<<< HEAD
-=======
-	{
-		//printf("pute pute pute\n");
->>>>>>> refs/remotes/origin/main
 		return (execute_simple_command(ast, exec, cmd));
 	return (ft_putendl_fd("Error: Unknown node type", 2), 1);
 }

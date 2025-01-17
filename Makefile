@@ -25,7 +25,6 @@ SRCS =  main.c \
 		ast/execute_ast.c \
 		exec/execute_pipe.c \
 		exec/error_pipe.c \
-		exec/exec_logic_node.c \
 		exec/exec_simple_command.c \
 		builtin/echo.c \
 		builtin/pwd.c \
@@ -37,7 +36,7 @@ SRCS =  main.c \
 		exec/redirection_setup.c \
 		exec/heredoc.c 
 CC = gcc
-CCFLAG = -Wall -Werror -Wextra
+CCFLAG = -Wall -Werror -Wextra 
 LIB = -C ./libft/
 
 SUCCESS_COLOR = \033[32m

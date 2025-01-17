@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/01/17 10:56:50 by trouilla         ###   ########.fr       */
-=======
-/*   Updated: 2025/01/17 13:35:48 by sinawara         ###   ########.fr       */
->>>>>>> refs/remotes/origin/main
+/*   Updated: 2025/01/17 13:55:05 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +138,6 @@ t_ast_node *build_ast(t_token **tokens)
     current = *tokens;
     while (current)
     {
-<<<<<<< HEAD
         if (current->type == T_HEREDOC)
         {
             heredoc_token = current;
@@ -194,10 +189,6 @@ t_ast_node *build_ast(t_token **tokens)
     {
         if (current->type == T_REDIRECT_IN || 
             current->type == T_REDIRECT_OUT || 
-=======
-        if (current->type == T_REDIRECT_IN ||
-            current->type == T_REDIRECT_OUT ||
->>>>>>> refs/remotes/origin/main
             current->type == T_APPEND)
         {
             redir_token = current;

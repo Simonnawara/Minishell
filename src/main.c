@@ -145,12 +145,7 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-<<<<<<< HEAD
 		print_token_info(new_token);
-=======
-		//print_token_info(new_token);
-
->>>>>>> refs/remotes/origin/main
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;

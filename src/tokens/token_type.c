@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/17 11:53:54 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:07:40 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,16 @@
 
 t_token_type	get_operator_type(char *token)
 {
-	if (token[0] == '<')
+	if (token[0] == '<' && token[1] != '<')
 		return (T_REDIRECT_IN);
+	if (token[0] == '<' && token[1] == '<')
+		return (T_HEREDOC);
 	if (token[0] == '>' && token[1] != '>')
 		return (T_REDIRECT_OUT);
 	if (token[0] == '>' && token[1] == '>')
 		return (T_APPEND);
-	if (token[0] == '<' && token[1] == '<')
-		return (T_HEREDOC);
 	if (token[0] == '|' && token[1] != '|')
 		return (T_PIPE);
-	if (token[0] == '&' && token[1] == '&')
-		return (T_AND);
-	if (token[0] == '|' && token[1] == '|')
-		return (T_OR);
 	if (token[0] == ';')
 		return (T_SEMICOLON);
 	if (token[0] == '(')
