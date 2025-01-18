@@ -168,7 +168,8 @@ int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd);
 int is_builtin(char *cmd);
 
 //Builtin *.c
-int				ft_echo(char **args, char **res, int echo_counter);
+//int				ft_echo(char **args, char **res, int echo_counter);
+int				ft_echo(char **args, char **res, int echo_counter, t_exec *exec);
 int	ft_pwd();
 int	ft_export(char **args, t_exec *exec);
 int	ft_unset(t_exec *exec, char **args);

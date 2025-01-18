@@ -30,7 +30,8 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 	t_ast_node temp_node;
 
 	if (!strcmp(cmd->cmd, "echo"))
-		return (ft_echo(cmd->args, cmd->res, cmd->echo_counter));
+		return (ft_echo(cmd->args, cmd->res, cmd->echo_counter, exec));
+		//return (ft_echo(cmd->args, cmd->res, cmd->echo_counter));
 	//if (!strcmp(cmd->cmd, "cd"))
 	 //	return (ft_cd(exec, cmd->args));
 	if (!strcmp(cmd->cmd, "pwd"))
