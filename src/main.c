@@ -81,10 +81,7 @@ int parse_prompt(char *prompt, char **env)
 		if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 		{
 			if (ft_strlen(res[i]) == 2)
-		//	{
 				printf("Word between quotes is empty\n");
-			//	i++;
-			//}
 			else
 			{
 				cmd = get_command(res[i], total_quotes, quote_type);
