@@ -94,6 +94,12 @@ typedef struct s_exec
 	int compteur_pipe;
 }	t_exec;
 
+typedef struct s_heredoc
+{
+	char *filename;
+	int fd;
+} t_heredoc;
+
 
 // main.c //
 char *get_command(char *word, int quote_count, char quote_type);
@@ -113,6 +119,7 @@ void	file_error(char *filename);
 int	is_command_found(char *word, char **env);
 int verify_forbidden_tokens(char *prompt);
 int ft_strcmp(const char *s1, const char *s2);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 //error_pipe.c
 int pipe_error(void);

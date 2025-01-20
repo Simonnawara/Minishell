@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/17 14:18:03 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/20 09:33:31 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 			return (execute_redirection(ast, exec));
 	 if (ast->type == T_HEREDOC)
     {
-		printf("BROOOOOOOOOOOOOOOOOOOO\n");
         if (!ast->right || !ast->right->value)
             return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
         return (execute_heredoc(ast, exec));

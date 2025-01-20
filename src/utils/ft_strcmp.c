@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:30:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/11 15:22:06 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/20 09:32:48 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,23 @@ int ft_strcmp(const char *s1, const char *s2)
         s2++;
     }
     return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char	*s;
+	unsigned char	*d;
+
+	if (!dest && !src)
+		return (dest);
+	d = (unsigned char *)dest;
+	s = (unsigned char *)src;
+	while (n > 0)
+	{
+		*d = *s;
+		d++;
+		s++;
+		n--;
+	}
+	return (dest);
 }
