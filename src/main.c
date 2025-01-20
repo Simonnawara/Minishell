@@ -61,8 +61,8 @@ int parse_prompt(char *prompt, char **env)
 
 	if (!prompt || !*prompt)
 		return (1);
-	if (!ft_strncmp(prompt, "exit", 4))
-		exit (EXIT_SUCCESS);
+	//if (!ft_strncmp(prompt, "exit", 4))
+		//exit (EXIT_SUCCESS);
 	tokens = NULL;
 	ft_memset(&exec, 0, sizeof(t_exec));
 	exec.env = env;

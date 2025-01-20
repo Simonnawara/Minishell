@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:05:36 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/14 12:55:35 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:34:41 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ int	ft_unset(t_exec *exec, char **args)
 	{
 		if (!is_valid_env_name(args[i]))
 		{
-			ft_putstr_fd("minishell: unset: '", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putendl_fd("': not a valid identifier", 2);
+			//ft_putstr_fd("minishell: unset: '", 2);
+			//ft_putstr_fd(args[i], 2);
+			//ft_putendl_fd("': not a valid identifier", 2);
 			status = 1;
 		}
 		else
