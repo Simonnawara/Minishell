@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/17 14:07:40 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/20 13:04:56 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,28 @@ t_token_type	classify_token(char *token, char **env)
 
 int check_pipe(t_token_type type, char **res, int i)
 {
+	int j;
+
+	j = 0;
+	while (res[j])
+	{
+		// Check if current token is a pipe
+		if (res[j][0] == '|')
+		{
+			j++; // Move to next token
+			// Skip any empty tokens or spaces
+			while (res[j] && strlen(res[j]) == 0)
+				j++;
+			// Check if next non-empty token is also a pipe
+			if (res[j] && res[j][0] == '|')
+			{
+				ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+				return (1);
+			}
+			continue;
+		}
+		j++;
+	}
 	if (type == T_PIPE)
 	{
 		if (res[i + 1] == NULL)

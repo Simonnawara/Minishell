@@ -142,7 +142,7 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-		print_token_info(new_token);
+		//print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;
@@ -150,7 +150,7 @@ int parse_prompt(char *prompt, char **env)
 	ast = build_ast(&tokens);
 	if (!ast)
 	{
-		ft_putendl_fd("Error: Failed to build AST", 2);
+		//ft_putendl_fd("Error: Failed to build AST", 2);
 		free_token_list(tokens);
 		return (1);
 	}
