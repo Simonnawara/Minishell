@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/21 11:04:52 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:59:42 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,16 @@ int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 {
 	int ret;
 
+	printf("DEBUG: Executing command: '%s'\n", node->value);
+	if (node->args)
+	{
+		int i = 0;
+		while (node->args[i])
+		{
+			printf("DEBUG: arg[%d]: '%s'\n", i, node->args[i]);
+			i++;
+		}
+	}
 	if (!node || !node->value)
 		return (1);
 	ft_memset(&cmd, 0, sizeof(t_command_table));

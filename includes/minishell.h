@@ -117,6 +117,7 @@ typedef struct s_heredoc
 
 // main.c //
 char *get_command(char *word, int quote_count, char quote_type);
+char **init_env(char **original_env);
 
 // free.c //
 void	free_array(char **array);

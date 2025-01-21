@@ -142,13 +142,16 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-<<<<<<< HEAD
-		// print_token_info(new_token);
-=======
-		//print_token_info(new_token);
->>>>>>> origin/main
+		print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
+		i++;
+	}
+	printf("DEBUG: After tokenization:\n");
+	i = 0;
+	while (res && res[i])
+	{
+		printf("DEBUG: res[%d]: '%s'\n", i, res[i]);
 		i++;
 	}
 	ast = build_ast(&tokens);
@@ -165,16 +168,49 @@ int parse_prompt(char *prompt, char **env)
 	free_array(res);
 	return (0);
 }
+char **init_env(char **original_env)
+{
+    int i, size = 0;
+    char **new_env;
+    
+    // Count environment variables
+    while (original_env[size])
+        size++;
+        
+    // Allocate new environment array
+    new_env = (char **)malloc(sizeof(char *) * (size + 1));
+    if (!new_env)
+        return NULL;
+        
+    // Copy each environment string
+    for (i = 0; i < size; i++)
+    {
+        new_env[i] = ft_strdup(original_env[i]);
+        if (!new_env[i])
+        {
+            // Cleanup on error
+            while (--i >= 0)
+                free(new_env[i]);
+            free(new_env);
+            return NULL;
+        }
+    }
+    new_env[size] = NULL;
+    
+    return new_env;
+}
 
 
 int main(int argc, char **argv, char **env)
 {
 	char *prompt;
+	char **new_env;
 	(void)argv;
 
 	if (validate_inputs(argc))
 		return (EXIT_FAILURE);
 	using_history();
+	new_env = init_env(env);
 	while (1)
 	{
 		prompt = readline("> ");
@@ -190,7 +226,7 @@ int main(int argc, char **argv, char **env)
 			free(prompt);
 			continue ;
 		}
-		parse_prompt(prompt, env);
+		parse_prompt(prompt, new_env);
 		free(prompt);
 	}
 	clear_history();
