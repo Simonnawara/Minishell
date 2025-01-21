@@ -79,6 +79,8 @@ typedef struct s_command_table
     int saved_stdin;
     int saved_stdout;
 	int		pipe_out;
+	char    **all_outfiles; // Array of all output files in order
+    int     num_outfiles;   // Number of output files
 }	t_command_table;
 
 

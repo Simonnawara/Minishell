@@ -37,7 +37,7 @@ SRCS =  main.c \
 		exec/redirection_setup.c \
 		exec/heredoc.c 
 CC = gcc
-CCFLAG = -Wall -Werror -Wextra 
+CCFLAG = -Wall -Wextra -Werror
 LIB = -C ./libft/
 
 SUCCESS_COLOR = \033[32m

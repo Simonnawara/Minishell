@@ -61,8 +61,8 @@ int parse_prompt(char *prompt, char **env)
 
 	if (!prompt || !*prompt)
 		return (1);
-	if (!ft_strncmp(prompt, "exit", 4))
-		exit (EXIT_SUCCESS);
+	//if (!ft_strncmp(prompt, "exit", 4))
+		//exit (EXIT_SUCCESS);
 	tokens = NULL;
 	ft_memset(&exec, 0, sizeof(t_exec));
 	exec.env = env;
@@ -142,7 +142,11 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
+<<<<<<< HEAD
 		// print_token_info(new_token);
+=======
+		//print_token_info(new_token);
+>>>>>>> origin/main
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;
@@ -150,7 +154,7 @@ int parse_prompt(char *prompt, char **env)
 	ast = build_ast(&tokens);
 	if (!ast)
 	{
-		ft_putendl_fd("Error: Failed to build AST", 2);
+		//ft_putendl_fd("Error: Failed to build AST", 2);
 		free_token_list(tokens);
 		return (1);
 	}
