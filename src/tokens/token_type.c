@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 15:18:02 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:28:39 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,11 @@ int check_pipe(t_token_type type, char **res, int i)
 		}
 		j++;
 	}
+	if (res[0][0] == '|')
+	{
+		ft_putendl_fd("Minishell : syntax error near unexpected token `|'", 2);
+		return (1);
+	}
 	if (type == T_PIPE)
 	{
 		if (res[i + 1] == NULL)
@@ -118,11 +123,6 @@ int check_pipe(t_token_type type, char **res, int i)
 			ft_putendl_fd("Error: Pipe at the end of the command", 2);
 			return (1);
 		}
-	}
-	if (res[0][0] == '|')
-	{
-		ft_putendl_fd("Minishell : syntax error near unexpected token `|'", 2);
-		return (1);
 	}
 	return (0);
 }
