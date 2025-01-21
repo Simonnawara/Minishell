@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 15:01:18 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:29:17 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,6 +375,9 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
     int     res_index;
     int     prev_was_quote;
     char    *stripped_arg;
+	    int     total_quotes;
+    char    quote_type;
+    char    *processed_arg;
     
     if (!args || !res)
         return (1);
@@ -403,9 +406,24 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
         // Handle environment variables if present
         if (ft_strchr(stripped_arg, '$'))
         {
-            expanded_arg = expand_variables(stripped_arg, exec->env);
-            ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
-            free(expanded_arg);
+			quote_type = 0;
+			if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39))
+				quote_type = res[res_index][0];
+			total_quotes = count_quotes(res[res_index], quote_type);
+			processed_arg = get_command(res[res_index], total_quotes, quote_type);
+			if (processed_arg)
+			{
+				if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg, '$'))
+				{
+					expanded_arg = expand_variables(processed_arg, exec->env);
+					ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
+					free(expanded_arg);
+				}
+				else
+					ft_putstr_fd(processed_arg, 1);
+				
+				free(processed_arg);
+			}
         }
         else
             ft_putstr_fd(stripped_arg, 1);
