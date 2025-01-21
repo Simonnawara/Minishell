@@ -142,11 +142,12 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-<<<<<<< HEAD
-		// print_token_info(new_token);
-=======
+		if (!ft_strcmp(res[0], "\"|\"") || !ft_strcmp(res[0], "'|'"))
+		{
+			ft_putendl_fd("|: command not found", 2);
+			return (1);
+		}
 		//print_token_info(new_token);
->>>>>>> origin/main
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/17 12:14:11 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:52:02 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,39 @@ int	is_command_found(char *word, char **env)
 	t_token_type	type;
 	int				total_quotes;
 	char			quote_type;
-	char 			*cmd;
+	char    		*processed_arg;
+    char    		*expanded_arg;
 
 	quote_type = 0;
 	if (word[0] == word[ft_strlen(word) - 1] && (word[0] == 34 || word[0] == 39))
 		quote_type = word[0];
 	total_quotes = count_quotes(word, quote_type);
-	cmd = word;
+	
+	processed_arg = word;
+	
 	if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
 	{
-		cmd = get_command(word, total_quotes, quote_type);
-		if (!cmd)
+		processed_arg = get_command(word, total_quotes, quote_type);
+		if (!processed_arg)
 			free_word_and_return(word, 1);
 	}
-	type = classify_token(cmd, env);
-	if (type == T_WORD && ft_strlen(cmd) != 0) 	//if (type == T_WORD && !is_builtin(cmd))
+	type = classify_token(processed_arg, env);
+	
+	if (type == T_WORD && ft_strlen(processed_arg) != 0)
 	{
-		write(2, cmd, ft_strlen(cmd));
-		ft_putendl_fd(" : command not found", 2);
+		if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg, '$'))
+		{
+			expanded_arg = expand_variables(processed_arg, env);
+			write(2, expanded_arg, ft_strlen(expanded_arg));	
+			ft_putendl_fd(" : command not found", 2);
+			free(expanded_arg);
+		}
+		else
+		{
+			write(2, processed_arg, ft_strlen(processed_arg));
+			ft_putendl_fd(" : command not found", 2);
+			free(processed_arg);
+		}
 		return (1);
 	}
 	return (0);
