@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 15:28:39 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:39:25 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,51 +39,29 @@ t_token_type	classify_token(char *token, char **env)
 	struct stat path_stat;
 
 	if (!token || !*token)
-	{
-		printf("6\n");
 		return (T_WORD);
-	}
 	type = get_operator_type(token);
 	if (type != T_WORD)
-	{
-		printf("5\n");
 		return (type);
-	}
-	printf("SADSADLKASLDJASLDKJASLDJLASKDJD\n");
-	printf("path_stat.st_mode : %d\n", path_stat.st_mode);
-	if (S_ISDIR(path_stat.st_mode)) //check if it's a directory
+		
+	if (access(token, F_OK) == 0) // for absolute paths
 	{
-		printf("KAAAAAAAAAAAAAAAAAAAAAAA\n");
-		return (T_WORD);
+		  if (stat(token, &path_stat) == 0)
+        {
+            // Check if it's a directory
+            if (S_ISDIR(path_stat.st_mode))
+                return (T_WORD);
+            
+            // If it's not a directory and is executable, it's a command
+            if (access(token, X_OK) == 0)
+                return (T_COMMAND);
+        }
 	}
+	
 	if (is_builtin(token))
-	{
-		printf("4\n");
 		return (T_COMMAND);
-	}
 	if (build_path(token, env))
-	{
-
-		printf("3\n");
-		return (T_COMMAND);
-	} // for straightforward commands
-	if (access(token, X_OK) == 0) // for absolute paths
-	{
-		printf("2\n");
-		if (stat(token, &path_stat) != 0) //get file info
-		{
-			printf("1\n");
-			perror("stat"); //Handle error in retrieving file info
-			return (T_WORD);
-		}
-		if (S_ISDIR(path_stat.st_mode)) //check if it's a directory
-			return (T_WORD); //printf("Error : '%s' is a directory\n", token);
-		else if (access(token, X_OK) == 0) //check if it's an executable
-		{
-			printf("ISDIR\n");
-			return (T_COMMAND);
-		}
-	}
+		return (T_COMMAND); // for straightforward commands
 	return (T_WORD);
 }
 
