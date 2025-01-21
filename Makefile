@@ -32,6 +32,7 @@ SRCS =  main.c \
 		builtin/unset.c \
 		builtin/env.c \
 		builtin/exit.c \
+		builtin/cd.c \
 		exec/execute_cmd_extern.c \
 		exec/redirection_setup.c \
 		exec/heredoc.c 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/21 10:59:24 by trouilla          #+#    #+#             */
+/*   Updated: 2025/01/21 10:59:24 by trouilla         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 
 #ifndef MINISHELL_H
@@ -176,12 +188,13 @@ int is_builtin(char *cmd);
 
 //Builtin *.c
 //int				ft_echo(char **args, char **res, int echo_counter);
-int				ft_echo(char **args, char **res, int echo_counter, t_exec *exec);
+int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec);
 int	ft_pwd();
 int	ft_export(char **args, t_exec *exec);
 int	ft_unset(t_exec *exec, char **args);
 int	ft_env(t_exec *exec, char **args);
 int	ft_exit(t_ast_node *node, t_exec *exec);
+int ft_cd(char **args, t_exec *exec);
 
 //redirection_input
 int setup_redirection(t_command_table *cmd);

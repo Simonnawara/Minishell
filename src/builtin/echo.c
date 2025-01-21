@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/18 10:56:14 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:25:44 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 
 #include "../../includes/minishell.h"
@@ -124,7 +123,6 @@ int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 				&& (res[echo_counter + i][0] == 34 || res[echo_counter + i][0] == 39))
 			{
 				quote_type = res[echo_counter + i][0];
-				printf("quote_type : %c\n", quote_type);
 				total_quotes = count_quotes(res[echo_counter + i], quote_type);
 				processed_arg = get_command(res[echo_counter + i], total_quotes, quote_type);
 				if (quote_type == '"' && ft_strchr(processed_arg, '$'))

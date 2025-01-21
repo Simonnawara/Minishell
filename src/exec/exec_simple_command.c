@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/17 13:36:16 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:04:52 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 
 	if (!strcmp(cmd->cmd, "echo"))
 		return (ft_echo(cmd->args, cmd->res, cmd->echo_counter, exec));
-		//return (ft_echo(cmd->args, cmd->res, cmd->echo_counter));
-	//if (!strcmp(cmd->cmd, "cd"))
-	 //	return (ft_cd(exec, cmd->args));
+	if (!strcmp(cmd->cmd, "cd"))
+		return (ft_cd(cmd->args, exec));
 	if (!strcmp(cmd->cmd, "pwd"))
 		return (ft_pwd());
 	if (!ft_strcmp(cmd->cmd, "export"))
