@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/22 10:58:31 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/22 18:02:35 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ t_ast_node *create_ast_node(t_token_type type, char *value)
 static t_ast_node *handle_heredoc_command(t_token **tokens, t_token *heredoc_token)
 {
     t_ast_node  *root;
-    t_token     *left_tokens;
-    t_token     *split_point;
+    t_token     *command_tokens = NULL;
     t_token     *next_tokens;
+    t_ast_node  *command_node = NULL;
 
     if (!heredoc_token->next || heredoc_token->next->type != T_WORD)
         return (NULL);
@@ -77,46 +77,53 @@ static t_ast_node *handle_heredoc_command(t_token **tokens, t_token *heredoc_tok
     // Save tokens after heredoc
     next_tokens = heredoc_token->next->next;
 
-    // Handle tokens before heredoc
+    // Handle command tokens before heredoc
     if (heredoc_token != *tokens)
     {
-        left_tokens = *tokens;
-        split_point = *tokens;
-        while (split_point && split_point->next != heredoc_token)
-            split_point = split_point->next;
-        if (split_point)
-            split_point->next = NULL;
-        root->left = build_command_node(&left_tokens);
-        if (!root->left)
-        {
-            free_ast_node(root);
-            return (NULL);
-        }
+        command_tokens = *tokens;
+        t_token *prev = *tokens;
+        while (prev && prev->next != heredoc_token)
+            prev = prev->next;
+        if (prev)
+            prev->next = NULL;
+
+        // Build command node from tokens before heredoc
+        command_node = build_command_node(&command_tokens);
     }
 
-    // Check for additional heredocs
     *tokens = next_tokens;
+
+    // Check for additional heredocs
     if (*tokens && (*tokens)->type == T_HEREDOC)
     {
         t_ast_node *next_heredoc = build_ast(tokens);
         if (next_heredoc)
         {
-            // If there's no left node yet, make the next heredoc the left node
-            if (!root->left)
-                root->left = next_heredoc;
-            else
-            {
-                // Chain heredocs through the left branch if there's already a command
-                t_ast_node *temp = root;
-                while (temp->left && temp->left->type != T_HEREDOC)
-                    temp = temp->left;
-                temp->left = next_heredoc;
-            }
+            // Store the command node temporarily
+            t_ast_node *temp = command_node;
+
+            // Set next_heredoc as the left child of current root
+            root->left = next_heredoc;
+
+            // Find the leftmost heredoc node
+            t_ast_node *leftmost = root;
+            while (leftmost->left && leftmost->left->type == T_HEREDOC)
+                leftmost = leftmost->left;
+
+            // Set the command node as the left child of the leftmost heredoc
+            if (temp)
+                leftmost->left = temp;
         }
     }
+    else if (command_node)
+    {
+        // If no more heredocs, set command as left child
+        root->left = command_node;
+    }
 
-    return (root);
+    return root;
 }
+
 
 t_ast_node *build_ast(t_token **tokens)
 {
@@ -187,89 +194,11 @@ t_ast_node *build_ast(t_token **tokens)
         *tokens = NULL;
         return (root);
     }
-    // current = *tokens;
-    // if (!current)
-    //     return (NULL);
-    // current = *tokens;
-    // while (current)
-    // {
-    //     if (current->type == T_PIPE)
-    //     {
-    //         pipe_token = current;
-    //         break;
-    //     }
-    //     current = current->next;
-    // }
-    // if (pipe_token)
-    // {
-    //     left_tokens = *tokens;
-    //     right_tokens = pipe_token->next;
-    //     split_point = *tokens;
-    //     while (split_point && split_point->next != pipe_token)
-    //         split_point = split_point->next;
-    //     if (split_point)
-    //         split_point->next = NULL;
-    //     root = create_ast_node(T_PIPE, "|");
-    //     if (!root)
-    //         return (NULL);
-    //     root->left = build_ast(&left_tokens);
-    //     if (!root->left)
-    //     {
-    //         free_ast_node(root);
-    //         return (NULL);
-    //     }
-    //     root->right = build_ast(&right_tokens);
-    //     if (!root->right)
-    //     {
-    //         free_ast_node(root);
-    //         return (NULL);
-    //     }
-    //     *tokens = NULL;
-    //     return root;
-    // }
-    // current = *tokens;
-    // while (current)
-    // {
-    //     if (current->type == T_HEREDOC)
-    //     {
-    //         heredoc_token = current;
-    //         break;
-    //     }
-    //     current = current->next;
-    // }
-    // if (heredoc_token)
-    // {
-    //     if (!heredoc_token->next || heredoc_token->next->type != T_WORD)
-    //         return (NULL);
-    //     root = create_ast_node(T_HEREDOC, heredoc_token->value);
-    //     if (!root)
-    //         return (NULL);
-    //     root->right = create_ast_node(T_WORD, heredoc_token->next->value);
-    //     if (!root->right)
-    //     {
-    //         free_ast_node(root);
-    //         return (NULL);
-    //     }
-    //     left_tokens = *tokens;
-    //     split_point = *tokens;
-    //     while (split_point && split_point->next != heredoc_token)
-    //         split_point = split_point->next;
-    //     if (split_point)
-    //         split_point->next = NULL;
-    //     *tokens = heredoc_token->next->next;
-    //     root->left = build_ast(&left_tokens);
-    //     if (!root->left)
-    //     {
-    //         free_ast_node(root);
-    //         return (NULL);
-    //     }
-    //     return root;
-    // }
     current = *tokens;
     while (current)
     {
-        if (current->type == T_REDIRECT_IN || 
-            current->type == T_REDIRECT_OUT || 
+        if (current->type == T_REDIRECT_IN ||
+            current->type == T_REDIRECT_OUT ||
             current->type == T_APPEND)
         {
             redir_token = current;
@@ -333,7 +262,7 @@ t_ast_node *build_command_node(t_token **tokens)
 
     cmd_node->res = current->res;
     cmd_node->echo_counter = current->echo_counter;
-    
+
     // printf("Adding command as first argument\n");
     if (!add_argument_to_command(cmd_node, current->value))
     {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:46:53 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/20 11:11:26 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:58:36 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ static t_ast_node *get_command_node(t_ast_node *ast)
     current = ast;
     while (current && current->type == T_HEREDOC)
         current = current->left;
-    
+
     if (current && current->type != T_HEREDOC)
         return (current);
     return (NULL);
@@ -140,7 +140,7 @@ static int collect_heredocs(t_ast_node *ast, t_heredoc **hds)
     i = 0;
     while (current && current->type == T_HEREDOC && i < total)
     {
-		 printf("Debug: Processing heredoc %d with delimiter: %s\n", 
+		 printf("Debug: Processing heredoc %d with delimiter: %s\n",
                i, current->right->value);
         if (setup_heredoc(current->right->value, &new_hds[i]) != 0)
         {
@@ -183,18 +183,12 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
 
     heredocs = NULL;
     if (!ast || !ast->right || !ast->right->value)
-	{
         return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
-	}
-	printf("Debug: Node type: %d\n", ast->type);
-    if (ast->left)
-        printf("Debug: Left node type: %d\n", ast->left->type);
-    if (ast->right)
-        printf("Debug: Right node value: %s\n", ast->right->value);
-    // Get the command node first (if any)
+
+    // Get the command node (might be at the end of heredoc chain)
     cmd_node = get_command_node(ast);
 
-    // Collect ALL heredocs first before any execution
+    // Collect all heredocs first
     heredoc_count = collect_heredocs(ast, &heredocs);
     if (heredoc_count < 0)
         return (ft_putstr_fd("minishell: heredoc: error\n", 2), 1);
@@ -209,7 +203,7 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
         return (1);
     }
 
-    // Set input to last heredoc if we have a command, first otherwise
+    // If we have a command, use the last heredoc as input
     if (cmd_node)
     {
         if (dup2(heredocs[heredoc_count - 1].fd, STDIN_FILENO) == -1)
@@ -220,18 +214,11 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
         }
         status = execute_ast(cmd_node, exec);
     }
-    else if (heredoc_count > 0)
+    else
     {
-        if (dup2(heredocs[0].fd, STDIN_FILENO) == -1)
-        {
-            close(saved_stdin);
-            cleanup_all_heredocs(heredocs, heredoc_count);
-            return (1);
-        }
+        // If no command, just process the heredocs
         status = 0;
     }
-    else
-        status = 0;
 
     dup2(saved_stdin, STDIN_FILENO);
     close(saved_stdin);
