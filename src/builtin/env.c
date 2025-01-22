@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:19:51 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/22 12:02:30 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:01:15 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,23 @@ static void sort_env(char **env)
     }
 }
 
+static void update_underscore_var(char **env)
+{
+    int i;
+    
+    i = 0;
+    while (env[i])
+    {
+        if (ft_strncmp(env[i], "_=", 2) == 0)
+        {
+            free(env[i]);
+            env[i] = ft_strdup("_=/usr/bin/env");
+            break;
+        }
+        i++;
+    }
+}
+
 int ft_env(t_exec *exec, char **args)
 {
     int i;
@@ -64,7 +81,10 @@ int ft_env(t_exec *exec, char **args)
         return (1);
     }
 
-    // Sort the environment directly
+    // Update the underscore variable
+    update_underscore_var(exec->env);
+    
+    // Sort the environment
     sort_env(exec->env);
 
     // Print sorted environment
@@ -77,4 +97,3 @@ int ft_env(t_exec *exec, char **args)
 
     return (0);
 }
-
