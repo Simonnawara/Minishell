@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/21 14:59:42 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/22 10:57:14 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,11 @@ int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 {
 	int ret;
 
-	printf("DEBUG: Executing command: '%s'\n", node->value);
 	if (node->args)
 	{
 		int i = 0;
 		while (node->args[i])
 		{
-			printf("DEBUG: arg[%d]: '%s'\n", i, node->args[i]);
 			i++;
 		}
 	}

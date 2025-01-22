@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 14:58:44 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/22 10:58:31 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int add_argument_to_command(t_ast_node *cmd_node, char *arg)
 
 	i = 0;
 	j = -1;
-    printf("DEBUG: Adding argument: '%s'\n", arg);
     if (cmd_node->args)  // Count existing arguments
     {
         while (cmd_node->args[i])
@@ -316,10 +315,9 @@ t_ast_node *build_command_node(t_token **tokens)
 
     // printf("\n=== Starting build_command_node ===\n");
 	// printf("Test pour git push\n");
-    printf("DEBUG: Building command node:\n");
-    printf("DEBUG: First token value: '%s'\n", (*tokens)->value);
-    if ((*tokens)->next)
-    printf("DEBUG: Next token value: '%s'\n", (*tokens)->next->value);
+    //printf("DEBUG: First token value: '%s'\n", (*tokens)->value);
+    //if ((*tokens)->next)
+    	//printf("DEBUG: Next token value: '%s'\n", (*tokens)->next->value);
 
     current = *tokens;
     if (!current)

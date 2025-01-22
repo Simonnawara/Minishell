@@ -61,8 +61,6 @@ int parse_prompt(char *prompt, char **env)
 
 	if (!prompt || !*prompt)
 		return (1);
-	//if (!ft_strncmp(prompt, "exit", 4))
-		//exit (EXIT_SUCCESS);
 	tokens = NULL;
 	ft_memset(&exec, 0, sizeof(t_exec));
 	exec.env = env;
@@ -142,18 +140,14 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-		print_token_info(new_token);
+		//print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
 		i++;
 	}
-	printf("DEBUG: After tokenization:\n");
 	i = 0;
 	while (res && res[i])
-	{
-		printf("DEBUG: res[%d]: '%s'\n", i, res[i]);
 		i++;
-	}
 	ast = build_ast(&tokens);
 	if (!ast)
 	{
