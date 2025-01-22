@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/22 18:02:35 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/22 20:51:12 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,12 +241,6 @@ t_ast_node *build_command_node(t_token **tokens)
 {
     t_ast_node *cmd_node;
     t_token *current;
-
-    // printf("\n=== Starting build_command_node ===\n");
-	// printf("Test pour git push\n");
-    //printf("DEBUG: First token value: '%s'\n", (*tokens)->value);
-    //if ((*tokens)->next)
-    	//printf("DEBUG: Next token value: '%s'\n", (*tokens)->next->value);
 
     current = *tokens;
     if (!current)

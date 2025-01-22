@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:46:53 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/22 17:58:36 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/22 20:55:12 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,6 @@ static int collect_heredocs(t_ast_node *ast, t_heredoc **hds)
     i = 0;
     while (current && current->type == T_HEREDOC && i < total)
     {
-		 printf("Debug: Processing heredoc %d with delimiter: %s\n",
-               i, current->right->value);
         if (setup_heredoc(current->right->value, &new_hds[i]) != 0)
         {
             while (i > 0)
