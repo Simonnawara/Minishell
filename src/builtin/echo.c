@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 16:29:17 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:54:37 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@
 		size++;
 	return (size);
 } */
+
+static int is_valid_n_option(const char *str)
+{
+    int i;
+
+    if (!str || str[0] != '-' || str[1] != 'n')
+        return (0);
+    
+    i = 1;
+    while (str[i])
+    {
+        if (str[i] != 'n')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 
 static char *get_env_value(char *var_name, char **env)
 {
@@ -132,213 +150,6 @@ char *expand_variables(char *str, char **env)
     return (result);
 }
 
-/* int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
-{
-    int     i;
-    int     n_option;
-    int     total_quotes;
-    char    quote_type;
-    char    *processed_arg;
-    char    *expanded_arg;
-    int     res_index;
-
-    if (!args || !res)
-        return (1);
-
-    i = 1;
-    res_index = echo_counter + i;
-    n_option = 0;
-
-    if (nb_args(args) > 1)
-    {
-        // Handle -n option
-        while (args[i] && ft_strcmp(args[i], "-n") == 0)
-        {
-            n_option = 1;
-            i++;
-            res_index = echo_counter + i;
-        }
-
-        // Process arguments until we hit a redirection or end
-        while (res[res_index] && res[res_index][0] != '>' && res[res_index][0] != '<')
-        {
-			// Check if this token is part of a larger argument (contains quotes)
-            int is_part_of_larger_arg = 0;
-            if (i > 1 && args[i-1] && ft_strchr(args[i-1], '"'))
-                is_part_of_larger_arg = 1;
-				
-            quote_type = 0;
-            
-            // Handle quoted arguments
-            if (res[res_index][0] == res[res_index][ft_strlen(res[res_index]) - 1] 
-                && (res[res_index][0] == 34 || res[res_index][0] == 39))
-            {
-                quote_type = res[res_index][0];
-                total_quotes = count_quotes(res[res_index], quote_type);
-                processed_arg = get_command(res[res_index], total_quotes, quote_type);
-                
-                if (processed_arg)
-                {
-                    if (quote_type == '"' && ft_strchr(processed_arg, '$'))
-                    {
-                        expanded_arg = expand_variables(processed_arg, exec->env);
-                        ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
-                        free(expanded_arg);
-                    }
-                    else
-                        ft_putstr_fd(processed_arg, 1);
-                    
-                    free(processed_arg);
-                }
-            }
-            // Handle unquoted arguments with variables
-            else if (ft_strchr(args[i], '$'))
-            {
-                expanded_arg = expand_variables(args[i], exec->env);
-                ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
-                free(expanded_arg);
-            }
-            // Handle regular arguments
-            else if (args[i])
-                ft_putstr_fd(args[i], 1);
-
-            // Add space only if:
-            // 1. Next token exists
-            // 2. Next token isn't a redirection
-            // 3. Current token isn't part of a larger argument
-            // 4. Next token isn't a quoted continuation
-            if (res[res_index + 1] && 
-                res[res_index + 1][0] != '>' && 
-                res[res_index + 1][0] != '<' && 
-                !is_part_of_larger_arg &&
-                res[res_index + 1][0] != '"' &&
-				res[res_index - 1] [0] != '"'&&
-                res[res_index + 1][0] != '\'')
-            {
-                ft_putstr_fd(" ", 1);
-            }
-			
-            i++;
-            res_index = echo_counter + i;
-        }
-    }
-
-    if (n_option == 0)
-        write(1, "\n", 1);
-
-    return (0);
-} */
-
-
-/* int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
-{
-	(void)exec;
-    // Debug print to see what we're receiving
-    printf("Debug - Number of args: %d\n", nb_args(args));
-    for (int k = 0; k < nb_args(args); k++) {
-        printf("Debug - args[%d]: '%s'\n", k, args[k]);
-    }
-    printf("Debug - echo_counter: %d\n", echo_counter);
-    for (int k = 0; res[k] != NULL; k++) {
-        printf("Debug - res[%d]: '%s'\n", k, res[k]);
-    }
-
-    int i = 1;
-    int n_option = 0;
-
-    // Handle -n option
-    while (args[i] && ft_strcmp(args[i], "-n") == 0) {
-        n_option = 1;
-        i++;
-    }
-
-    // Print arguments
-    while (args[i]) {
-        // Print current argument
-        ft_putstr_fd(args[i], 1);
-        
-        // Check if there's a next argument that's not a redirection
-        if (args[i + 1] && args[i + 1][0] != '<' && args[i + 1][0] != '>') {
-            ft_putstr_fd(" ", 1);
-        }
-        i++;
-    }
-
-    if (!n_option)
-        ft_putstr_fd("\n", 1);
-
-    return 0;
-} */
-
-
-/* int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
-{
-    int     i;
-    int     n_option;
-    char    *expanded_arg;
-    int     res_index;
-    int     prev_was_quote;
-    
-    if (!args || !res)
-        return (1);
-
-    i = 1;
-    res_index = echo_counter + i;
-    n_option = 0;
-    prev_was_quote = 0;
-
-    // Handle -n option
-    while (args[i] && ft_strcmp(args[i], "-n") == 0)
-    {
-        n_option = 1;
-        i++;
-        res_index = echo_counter + i;
-    }
-
-    // Process arguments
-    while (res[res_index] && res[res_index][0] != '>' && res[res_index][0] != '<')
-    {
-        // Handle environment variables if present
-        if (ft_strchr(res[res_index], '$'))
-        {
-            expanded_arg = expand_variables(res[res_index], exec->env);
-            ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
-            free(expanded_arg);
-        }
-        else
-            ft_putstr_fd(res[res_index], 1);
-
-        // Check if the current or next token was originally part of a quoted string
-        int next_is_quote = (res[res_index + 1] && 
-            (res[res_index + 1][0] == '"' || res[res_index + 1][0] == '\''));
-        int curr_is_quote = (res[res_index][0] == '"' || res[res_index][0] == '\'');
-        
-        // Add space only if:
-        // 1. There's a next token
-        // 2. It's not a redirection
-        // 3. Current token wasn't part of a quoted string that continues
-        // 4. Next token is not part of the same quoted string
-        if (res[res_index + 1] && 
-            res[res_index + 1][0] != '>' && 
-            res[res_index + 1][0] != '<' && 
-            !prev_was_quote && 
-            !next_is_quote &&
-            !curr_is_quote)
-        {
-            ft_putstr_fd(" ", 1);
-        }
-
-        prev_was_quote = curr_is_quote || next_is_quote;
-        i++;
-        res_index = echo_counter + i;
-    }
-
-    if (!n_option)
-        write(1, "\n", 1);
-
-    return (0);
-} */
-
 
 static char *strip_quotes(const char *str)
 {
@@ -375,7 +186,7 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
     int     res_index;
     int     prev_was_quote;
     char    *stripped_arg;
-	    int     total_quotes;
+	int     total_quotes;
     char    quote_type;
     char    *processed_arg;
     
@@ -388,8 +199,8 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
     prev_was_quote = 0;
 
     // Handle -n option
-    while (args[i] && ft_strcmp(args[i], "-n") == 0)
-    {
+    while (args[i] && is_valid_n_option(args[i]))
+	{
         n_option = 1;
         i++;
         res_index = echo_counter + i;
