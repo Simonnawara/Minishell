@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:46:53 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/23 13:16:43 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:23:58 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ static void cleanup_all_heredocs(t_heredoc *hds, int count)
     }
     free(hds);
 }
-
 int execute_heredoc(t_ast_node *ast, t_exec *exec)
 {
     t_heredoc *heredocs;
@@ -179,6 +178,7 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
     t_ast_node *cmd_node;
     t_command_table cmd = {0};
     int saved_stdin;
+    int last_heredoc_fd = -1;
 
     if (!ast || !ast->right || !ast->right->value)
         return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
@@ -192,28 +192,38 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
     if (saved_stdin == -1 || heredoc_count == 0)
         return (cleanup_all_heredocs(heredocs, heredoc_count), 1);
 
+    // Get last heredoc's fd
+    if (heredoc_count > 0)
+        last_heredoc_fd = heredocs[heredoc_count - 1].fd;
+
     if (cmd_node)
     {
         t_ast_node *current = cmd_node;
-
-        // Set up command structure
         cmd.cmd = current->value;
         cmd.args = current->args;
 
-        // Handle file redirection if present
+        // Set up input from last heredoc if no file redirection
+        if (last_heredoc_fd != -1)
+        {
+            dup2(last_heredoc_fd, STDIN_FILENO);
+            close(last_heredoc_fd);
+        }
+
+        // Override with file input if present
         while (current && current->type == T_REDIRECT_IN)
         {
             cmd.infile = current->right->value;
             current = current->left;
         }
 
-        // Setup redirections using existing function
-        if (setup_redirection(&cmd) == -1)
+        if (cmd.infile)
         {
-            dup2(saved_stdin, STDIN_FILENO);
-            close(saved_stdin);
-            cleanup_all_heredocs(heredocs, heredoc_count);
-            return (1);
+            int fd = open(cmd.infile, O_RDONLY);
+            if (fd != -1)
+            {
+                dup2(fd, STDIN_FILENO);
+                close(fd);
+            }
         }
 
         status = execute_simple_command(current, exec, cmd);
@@ -227,3 +237,59 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
 
     return (status);
 }
+// int execute_heredoc(t_ast_node *ast, t_exec *exec)
+// {
+//     t_heredoc *heredocs;
+//     int heredoc_count;
+//     int status;
+//     t_ast_node *cmd_node;
+//     t_command_table cmd = {0};
+//     int saved_stdin;
+
+//     if (!ast || !ast->right || !ast->right->value)
+//         return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
+
+//     cmd_node = get_command_node(ast);
+//     heredoc_count = collect_heredocs(ast, &heredocs);
+//     if (heredoc_count < 0)
+//         return (ft_putstr_fd("minishell: heredoc: error\n", 2), 1);
+
+//     saved_stdin = dup(STDIN_FILENO);
+//     if (saved_stdin == -1 || heredoc_count == 0)
+//         return (cleanup_all_heredocs(heredocs, heredoc_count), 1);
+
+//     if (cmd_node)
+//     {
+//         t_ast_node *current = cmd_node;
+
+//         // Set up command structure
+//         cmd.cmd = current->value;
+//         cmd.args = current->args;
+
+//         // Handle file redirection if present
+//         while (current && current->type == T_REDIRECT_IN)
+//         {
+//             cmd.infile = current->right->value;
+//             current = current->left;
+//         }
+
+//         // Setup redirections using existing function
+//         if (setup_redirection(&cmd) == -1)
+//         {
+//             dup2(saved_stdin, STDIN_FILENO);
+//             close(saved_stdin);
+//             cleanup_all_heredocs(heredocs, heredoc_count);
+//             return (1);
+//         }
+
+//         status = execute_simple_command(current, exec, cmd);
+//     }
+//     else
+//         status = 0;
+
+//     dup2(saved_stdin, STDIN_FILENO);
+//     close(saved_stdin);
+//     cleanup_all_heredocs(heredocs, heredoc_count);
+
+//     return (status);
+// }
