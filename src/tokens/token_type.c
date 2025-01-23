@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 15:39:25 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/23 10:36:34 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,52 @@ t_token_type	classify_token(char *token, char **env)
 		return (T_COMMAND); // for straightforward commands
 	return (T_WORD);
 }
+
+
+t_token_type	classify_token_prev(char *token, char **env, t_token_type prev_type)
+{
+	t_token_type	type;
+	t_token_type 	op_type;
+	struct stat path_stat;
+
+	if (!token || !*token)
+		return (T_WORD);
+
+	 // If previous token was a command, this token is a word unless it's an operator
+    if (prev_type == T_COMMAND || prev_type == T_BUILTIN)
+    {
+        // Check if it's an operator first
+        op_type = get_operator_type(token);
+        if (op_type != T_WORD)  // If it's an operator, return that type
+            return op_type;
+        return T_WORD;  // Otherwise, it's a word (argument to the command)
+    }
+	
+	type = get_operator_type(token);
+	if (type != T_WORD)
+		return (type);
+		
+	if (access(token, F_OK) == 0) // for absolute paths
+	{
+		  if (stat(token, &path_stat) == 0)
+        {
+            // Check if it's a directory
+            if (S_ISDIR(path_stat.st_mode))
+                return (T_WORD);
+            
+            // If it's not a directory and is executable, it's a command
+            if (access(token, X_OK) == 0)
+                return (T_COMMAND);
+        }
+	}
+	
+	if (is_builtin(token))
+		return (T_COMMAND);
+	if (build_path(token, env))
+		return (T_COMMAND); // for straightforward commands
+	return (T_WORD);
+}
+
 
 int check_pipe(t_token_type type, char **res, int i)
 {

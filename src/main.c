@@ -53,11 +53,14 @@ int parse_prompt(char *prompt, char **env)
 	int				total_quotes;
 	char			quote_type;
 	char			*cmd;
+	char    		*processed_arg;
+    char    		*expanded_arg;
 	t_token_type	type;
 	t_token			*tokens;
 	t_token			*new_token;
 	t_ast_node		*ast;
 	t_exec			exec;
+	t_token_type prev_type = T_WORD;
 
 	if (!prompt || !*prompt)
 		return (1);
@@ -83,13 +86,19 @@ int parse_prompt(char *prompt, char **env)
 			else
 			{
 				cmd = get_command(res[i], total_quotes, quote_type);
+				processed_arg = cmd;
+				if (quote_type == 34 && ft_strchr(processed_arg, '$'))
+				{
+					expanded_arg = expand_variables(processed_arg, env);
+					cmd = expanded_arg;
+				}
 				if (!cmd)
 				{
 					free_token_list(tokens);
 					free_array(res);
 			        return (1);
 				}
-				type = classify_token(cmd, env);
+				type = classify_token_prev(cmd, env, prev_type);
 				new_token = create_token(cmd, type);
 				if (new_token && new_token->value && !ft_strcmp(new_token->value, "echo"))
 				{
@@ -112,8 +121,17 @@ int parse_prompt(char *prompt, char **env)
 		}
 		else
 		{
-			type = classify_token(res[i], env);
-			new_token = create_token(res[i], type);
+			//printf("On est dans le else\n");
+			cmd = res[i];
+			processed_arg = cmd;
+			if (quote_type == 0 && ft_strchr(processed_arg, '$'))
+			{
+				expanded_arg = expand_variables(processed_arg, env);
+				cmd = expanded_arg;
+				//free(processed_arg);
+			}
+			type = classify_token_prev(cmd, env, prev_type);
+			new_token = create_token(cmd, type);
 			if (new_token && new_token->value && !ft_strcmp(new_token->value, "echo"))
 			{
 				new_token->res = res;
@@ -140,9 +158,10 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-		//print_token_info(new_token);
+		print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
+		prev_type = type;
 		i++;
 	}
 	i = 0;

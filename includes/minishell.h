@@ -157,6 +157,7 @@ int move_past_quotes(const char *str, char quote_type, int *i);
 // token_type.c //
 t_token_type	get_operator_type(char *token);
 t_token_type	classify_token(char *token, char **env);
+t_token_type	classify_token_prev(char *token, char **env, t_token_type prev_type);
 int check_pipe(t_token_type type, char **res, int i);
 int check_redirect(t_token_type type, char **res, int i);
 
