@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:46:53 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/22 20:55:12 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:16:43 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,47 +176,50 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
     t_heredoc *heredocs;
     int heredoc_count;
     int status;
-    int saved_stdin;
     t_ast_node *cmd_node;
+    t_command_table cmd = {0};
+    int saved_stdin;
 
-    heredocs = NULL;
     if (!ast || !ast->right || !ast->right->value)
         return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
 
-    // Get the command node (might be at the end of heredoc chain)
     cmd_node = get_command_node(ast);
-
-    // Collect all heredocs first
     heredoc_count = collect_heredocs(ast, &heredocs);
     if (heredoc_count < 0)
         return (ft_putstr_fd("minishell: heredoc: error\n", 2), 1);
 
-    if (heredoc_count == 0)
-        return (0);
-
     saved_stdin = dup(STDIN_FILENO);
-    if (saved_stdin == -1)
-    {
-        cleanup_all_heredocs(heredocs, heredoc_count);
-        return (1);
-    }
+    if (saved_stdin == -1 || heredoc_count == 0)
+        return (cleanup_all_heredocs(heredocs, heredoc_count), 1);
 
-    // If we have a command, use the last heredoc as input
     if (cmd_node)
     {
-        if (dup2(heredocs[heredoc_count - 1].fd, STDIN_FILENO) == -1)
+        t_ast_node *current = cmd_node;
+
+        // Set up command structure
+        cmd.cmd = current->value;
+        cmd.args = current->args;
+
+        // Handle file redirection if present
+        while (current && current->type == T_REDIRECT_IN)
         {
+            cmd.infile = current->right->value;
+            current = current->left;
+        }
+
+        // Setup redirections using existing function
+        if (setup_redirection(&cmd) == -1)
+        {
+            dup2(saved_stdin, STDIN_FILENO);
             close(saved_stdin);
             cleanup_all_heredocs(heredocs, heredoc_count);
             return (1);
         }
-        status = execute_ast(cmd_node, exec);
+
+        status = execute_simple_command(current, exec, cmd);
     }
     else
-    {
-        // If no command, just process the heredocs
         status = 0;
-    }
 
     dup2(saved_stdin, STDIN_FILENO);
     close(saved_stdin);

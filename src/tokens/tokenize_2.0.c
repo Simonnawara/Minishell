@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_2.0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:13:53 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/06 13:41:13 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/23 13:21:55 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void print_token_info(t_token *token)
 {
     const char *type_str[] = {
         "WORD", "COMMAND", "REDIRECT_IN", "REDIRECT_OUT",
-        "APPEND", "PIPE", "AND", "OR", "SEMICOLON",
+        "APPEND", "PIPE", "HEREDOC", "OR", "SEMICOLON",
         "PAREN_L", "PAREN_R"
     };
 
