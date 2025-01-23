@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:35:50 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 15:14:34 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:46:23 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*build_path(char *cmd, char **env)
 		return (NULL);
 	i = -1;
 	while (path_struct.paths[++i])
-	{	
+	{
 		if ((access(cmd, F_OK | X_OK) == 0))
 			return (cmd);
 		path_struct.temp = ft_strjoin(path_struct.paths[i], "/");
@@ -52,7 +52,6 @@ char	*build_path(char *cmd, char **env)
 		if (access(path_struct.full_path, F_OK | X_OK) == 0)
 			return ((char *)free_and_return(path_struct.paths,
 					path_struct.full_path));
-		
 		free(path_struct.full_path);
 	}
 	return (free_and_return(path_struct.paths, NULL));
