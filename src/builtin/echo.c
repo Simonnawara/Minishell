@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 13:57:12 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:58:54 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 				{
                     if (strcmp(processed_arg, "$?") == 0)
                     {
-                        expanded_arg = get_exit_status();
+                        expanded_arg = get_exit_status(exec);
                         ft_putstr_fd(expanded_arg, 1);
                         free(expanded_arg);
                     }
