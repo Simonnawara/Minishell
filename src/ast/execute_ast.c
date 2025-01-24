@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 13:20:29 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 15:05:40 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,38 +69,6 @@ static int	handle_pipe(t_ast_node *ast, t_exec *exec)
 	return (WEXITSTATUS(status));
 }
 
-
-// static int execute_redirection(t_ast_node *ast, t_exec *exec)
-// {
-//     t_command_table cmd = {0};
-//     int status;
-
-//     if (!ast->left || !ast->right)
-//         return (ft_putendl_fd("Error: Invalid redirection syntax", 2), 1);
-//     cmd.cmd = ast->left->value;
-//     cmd.args = ast->left->args;
-//     if (ast->type == T_REDIRECT_OUT || ast->type == T_APPEND)
-//     {
-//         cmd.outfile = ast->right->value;
-//         cmd.append = (ast->type == T_APPEND);
-//     }
-//     else if (ast->type == T_REDIRECT_IN)
-//         cmd.infile = ast->right->value;
-//     if (setup_redirection(&cmd) == -1)
-//         return (1);
-//     status = execute_simple_command(ast->left, exec, cmd);
-//     if (cmd.saved_stdin != -1)
-//     {
-//         dup2(cmd.saved_stdin, STDIN_FILENO);
-//         close(cmd.saved_stdin);
-//     }
-//     if (cmd.saved_stdout != -1)
-//     {
-//         dup2(cmd.saved_stdout, STDOUT_FILENO);
-//         close(cmd.saved_stdout);
-//     }
-//     return status;
-// }
 int restore_io(t_command_table *cmd)
 {
     // Restore stdin if it was redirected

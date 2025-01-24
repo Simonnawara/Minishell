@@ -3,25 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 14:58:54 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 15:28:35 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../../includes/minishell.h"
-
-/* static	int		nb_args(char **args)
-{
-	int		size;
-
-	size = 0;
-	while (args[size])
-		size++;
-	return (size);
-} */
 
 static int is_valid_n_option(const char *str)
 {
@@ -45,7 +35,6 @@ static char *get_env_value(char *var_name, char **env)
 {
     int     i;
     int     var_len;
-    //char    *env_var;
 
     if (!var_name || !env)
         return (NULL);
@@ -60,6 +49,14 @@ static char *get_env_value(char *var_name, char **env)
     }
     return (NULL);
 }
+
+/* static void clean_expansion(char *result, char *var_name)
+{
+    if (var_name)
+        free(var_name);
+    if (result)
+        free(result);
+} */
 
 // Helper function to expand environment variables
 char *expand_variables(char *str, char **env)
@@ -82,13 +79,12 @@ char *expand_variables(char *str, char **env)
         if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ' && 
             str[i + 1] != '"' && str[i + 1] != '\'')
         {
-            i++; // Skip $
+            i++;
             var_len = 0;
             while (str[i + var_len] && (ft_isalnum(str[i + var_len]) || 
                   str[i + var_len] == '_'))
                 var_len++;
             
-            // Extract variable name
             var_name = ft_substr(str, i, var_len);
             if (!var_name)
                 return (NULL);
@@ -96,7 +92,6 @@ char *expand_variables(char *str, char **env)
             // Get variable value
             var_value = get_env_value(var_name, env);
             total_len += var_value ? ft_strlen(var_value) : 0;
-            
             free(var_name);
             i += var_len;
         }
@@ -178,6 +173,19 @@ static char *strip_quotes(const char *str)
     return (result);
 }
 
+
+
+static void cleanup_echo_resources(char *stripped_arg, char *processed_arg, char *expanded_arg)
+{
+    if (stripped_arg)
+        free(stripped_arg);
+    if (processed_arg)
+        free(processed_arg);
+    if (expanded_arg)
+        free(expanded_arg);
+}
+
+
 int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 {
     int     i;
@@ -214,6 +222,9 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
         if (!stripped_arg)
             return (1);
 
+		expanded_arg = NULL;
+        processed_arg = NULL;
+
         // Handle environment variables if present
         if (ft_strchr(stripped_arg, '$'))
         {
@@ -222,28 +233,41 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 				quote_type = res[res_index][0];
 			total_quotes = count_quotes(res[res_index], quote_type);
 			processed_arg = get_command(res[res_index], total_quotes, quote_type);
-			if (processed_arg)
+			if (!processed_arg)
 			{
-				if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg, '$'))
+				free(stripped_arg);
+				return (1);
+			}
+
+			if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg, '$'))
+			{
+				if (strcmp(processed_arg, "$?") == 0)
 				{
-                    if (strcmp(processed_arg, "$?") == 0)
-                    {
-                        expanded_arg = get_exit_status(exec);
-                        ft_putstr_fd(expanded_arg, 1);
-                        free(expanded_arg);
-                    }
-                    else
-                    {
-                        expanded_arg = expand_variables(processed_arg, exec->env);
-                        ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
-                        free(expanded_arg);
-                    }
+					expanded_arg = get_exit_status(exec);
+					if (!expanded_arg)
+					{
+						cleanup_echo_resources(stripped_arg, processed_arg, NULL);
+						return (1);
+					}
+					ft_putstr_fd(expanded_arg, 1);
+					free(expanded_arg);
 				}
 				else
-					ft_putstr_fd(processed_arg, 1);
-				
-				free(processed_arg);
+				{
+					expanded_arg = expand_variables(processed_arg, exec->env);
+					if (!expanded_arg)
+					{
+						cleanup_echo_resources(stripped_arg, processed_arg, NULL);
+						return (1);
+					}
+					ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
+					free(expanded_arg);
+				}
 			}
+			else
+				ft_putstr_fd(processed_arg, 1);
+			
+			free(processed_arg);	
         }
         else
             ft_putstr_fd(stripped_arg, 1);
