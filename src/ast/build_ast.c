@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/23 13:28:08 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:01:08 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_ast_node *create_ast_node(t_token_type type, char *value)
 	node->args = NULL;
 	return (node);
 }
-// static t_ast_node *handle_heredoc_command(t_token **tokens, t_token *heredoc_token)
+// static t_ast_node *handle_heredoc_command(t_token **tokens, t_token *heredoc_token) premiere version
 // {
 //     t_ast_node  *root;
 //     t_token     *command_tokens = NULL;
@@ -114,76 +114,250 @@ t_ast_node *create_ast_node(t_token_type type, char *value)
 //     return root;
 // }
 
-t_ast_node *build_ast(t_token **tokens)
+// t_ast_node *handle_heredoc_command(t_token **tokens, t_token *heredoc_token) deuxieme version
+// {
+// 	t_ast_node  *root;
+// 	t_token     *command_tokens = NULL;
+// 	t_token     *next_tokens;
+// 	t_ast_node  *command_node = NULL;
+// 	t_token     *current = *tokens;
+
+// 	// Set up heredoc node
+// 	root = create_ast_node(T_HEREDOC, heredoc_token->value);
+// 	if (!root)
+// 		return (NULL);
+
+// 	// Set delimiter
+// 	root->right = create_ast_node(T_WORD, heredoc_token->next->value);
+// 	if (!root->right)
+// 	{
+// 		free_ast_node(root);
+// 		return (NULL);
+// 	}
+
+// 	// Save tokens after heredoc
+// 	next_tokens = heredoc_token->next->next;
+
+// 	// Find redirection tokens before heredoc
+// 	while (current && current != heredoc_token)
+// 	{
+// 		if (current->type == T_REDIRECT_IN)
+// 		{
+// 			t_ast_node *redir = create_ast_node(T_REDIRECT_IN, current->value);
+// 			if (!redir)
+// 			{
+// 				free_ast_node(root);
+// 				return (NULL);
+// 			}
+// 			redir->right = create_ast_node(T_WORD, current->next->value);
+// 			redir->left = root;
+// 			root = redir;
+// 			break;
+// 		}
+// 		current = current->next;
+// 	}
+
+// 	// Handle command node
+// 	if (*tokens != heredoc_token)
+// 	{
+// 		command_tokens = *tokens;
+// 		command_node = build_command_node(&command_tokens);
+// 		if (command_node)
+// 		{
+// 			// Find leftmost node to attach command
+// 			t_ast_node *leftmost = root;
+// 			while (leftmost->left)
+// 				leftmost = leftmost->left;
+// 			leftmost->left = command_node;
+// 		}
+// 	}
+
+// 	*tokens = next_tokens;
+// 	return root;
+// }
+t_ast_node *handle_multiple_redirections(t_token **tokens)
 {
     t_ast_node *root = NULL;
+    t_ast_node *current_node = NULL;
     t_token *current = *tokens;
-    t_token *heredoc_token = NULL;
-    t_token *redir_token = NULL;
+    t_token *command_token = NULL;
 
-    if (!tokens || !*tokens)
-        return NULL;
+    // Find command token if it exists
+    t_token *temp = *tokens;
+    while (temp) {
+        if (temp->type == T_COMMAND) {
+            command_token = temp;
+            break;
+        }
+        temp = temp->next;
+    }
 
-    // First find command token
-    while (current && current->type != T_COMMAND)
-        current = current->next;
-    
-    if (!current)
-        return NULL;
-
-    // Create initial command node
-    root = create_ast_node(T_COMMAND, current->value);
-    if (!root || !add_argument_to_command(root, current->value))
-        return NULL;
-
-    // First handle file redirection
-    current = *tokens;
-    while (current)
-    {
-        if (current->type == T_REDIRECT_IN)
-        {
-            redir_token = current;
-            t_ast_node *redir = create_ast_node(T_REDIRECT_IN, redir_token->value);
+    while (current && current->next) {
+        if (current->type == T_REDIRECT_IN || 
+            current->type == T_REDIRECT_OUT || 
+            current->type == T_APPEND ||
+            current->type == T_HEREDOC) {
+            
+            if (!current->next || current->next->type != T_WORD)
+                return NULL;
+                
+            t_ast_node *redir = create_ast_node(current->type, current->value);
             if (!redir)
                 return NULL;
-            redir->right = create_ast_node(T_WORD, redir_token->next->value);
-            if (!redir->right)
-            {
+                
+            redir->right = create_ast_node(T_WORD, current->next->value);
+            if (!redir->right) {
                 free_ast_node(redir);
                 return NULL;
             }
-            redir->left = root;
-            root = redir;
-        }
-        current = current->next;
-    }
 
-    // Then handle heredoc
-    current = *tokens;
-    while (current)
-    {
-        if (current->type == T_HEREDOC)
-        {
-            heredoc_token = current;
-            t_ast_node *heredoc = create_ast_node(T_HEREDOC, heredoc_token->value);
-            if (!heredoc)
-                return NULL;
-            heredoc->right = create_ast_node(T_WORD, heredoc_token->next->value);
-            if (!heredoc->right)
-            {
-                free_ast_node(heredoc);
-                return NULL;
+            if (!root) {
+                root = redir;
+                current_node = root;
+            } else {
+                redir->left = current_node->left;
+                current_node->left = redir;
+                current_node = redir;
             }
-            heredoc->left = root;
-            root = heredoc;
+            
+            current = current->next->next;
+        } else {
+            current = current->next;
         }
-        current = current->next;
     }
 
-    *tokens = NULL;
+    // Handle command node if it exists
+    if (command_token) {
+        t_ast_node *cmd = build_command_node(&command_token);
+        if (!root)
+            return cmd;
+        
+        t_ast_node *leftmost = root;
+        while (leftmost->left)
+            leftmost = leftmost->left;
+        leftmost->left = cmd;
+    }
+
     return root;
 }
-// t_ast_node *build_ast(t_token **tokens)
+t_ast_node *build_ast(t_token **tokens)
+{
+    if (!tokens || !*tokens)
+        return NULL;
+
+    // Check for pipe first
+    t_token *pipe_token = *tokens;
+    while (pipe_token) {
+        if (pipe_token->type == T_PIPE) {
+            t_token *left_tokens = *tokens;
+            t_token *right_tokens = pipe_token->next;
+            t_token *split_point = *tokens;
+
+            while (split_point && split_point->next != pipe_token)
+                split_point = split_point->next;
+            if (split_point)
+                split_point->next = NULL;
+
+            t_ast_node *pipe_node = create_ast_node(T_PIPE, "|");
+            if (!pipe_node)
+                return NULL;
+
+            pipe_node->left = build_ast(&left_tokens);
+            pipe_node->right = build_ast(&right_tokens);
+
+            if (!pipe_node->left || !pipe_node->right) {
+                free_ast_node(pipe_node);
+                return NULL;
+            }
+
+            *tokens = NULL;
+            return pipe_node;
+        }
+        pipe_token = pipe_token->next;
+    }
+
+    return handle_multiple_redirections(tokens);
+}
+// t_ast_node *build_ast(t_token **tokens) //Redirection et << work
+// {
+//     t_ast_node *root = NULL;
+//     t_token *current = *tokens;
+//     t_token     *pipe_token = NULL;
+//     t_token     *heredoc_token = NULL;
+//     t_token     *redir_token = NULL;
+//     t_token     *split_point = NULL;
+//     t_token     *left_tokens = NULL;
+//     t_token     *right_tokens = NULL;
+
+//     if (!tokens || !*tokens || !current)
+//         return NULL;
+
+//     // First find command token
+//     while (current && current->type != T_COMMAND)
+//         current = current->next;
+    
+//     if (!current)
+//         return NULL;
+
+//     // Create initial command node
+//     root = create_ast_node(T_COMMAND, current->value);
+//     if (!root || !add_argument_to_command(root, current->value))
+//         return NULL;
+
+//     // First handle file redirection
+//     current = *tokens;
+// 	while (current && current->next) 
+// 	{
+//     	if (current->type == T_REDIRECT_IN || current->type == T_REDIRECT_OUT || current->type == T_APPEND) 
+// 		{
+//         	redir_token = current;
+//         	t_ast_node *redir = create_ast_node(current->type, current->value);
+//         	if (!redir)
+//             	return NULL;    
+//     	    if (!current->next || current->next->type != T_WORD)
+//         	    return NULL;
+            
+//         	redir->right = create_ast_node(T_WORD, current->next->value);
+//         	if (!redir->right) 
+// 			{
+//             	free_ast_node(redir);
+//             	return NULL;
+//         	}
+        
+//         	redir->left = root;
+//         	root = redir;
+//         	current = current->next->next;
+//     	} 
+// 		else 
+//         	current = current->next;
+// }
+
+//     // Then handle heredoc
+//     current = *tokens;
+//     while (current)
+//     {
+//         if (current->type == T_HEREDOC)
+//         {
+//             heredoc_token = current;
+//             t_ast_node *heredoc = create_ast_node(T_HEREDOC, heredoc_token->value);
+//             if (!heredoc)
+//                 return NULL;
+//             heredoc->right = create_ast_node(T_WORD, heredoc_token->next->value);
+//             if (!heredoc->right)
+//             {
+//                 free_ast_node(heredoc);
+//                 return NULL;
+//             }
+//             heredoc->left = root;
+//             root = heredoc;
+//         }
+//         current = current->next;
+//     }
+
+//     *tokens = NULL;
+//     return root;
+// }
+// t_ast_node *build_ast(t_token **tokens) //commande et pipe function avec lui
 // {
 //     t_ast_node  *root;
 //     t_token     *current;
@@ -193,6 +367,7 @@ t_ast_node *build_ast(t_token **tokens)
 //     t_token     *split_point = NULL;
 //     t_token     *left_tokens = NULL;
 //     t_token     *right_tokens = NULL;
+
 
 // 	current = *tokens;
 //     if (!current)
@@ -204,14 +379,13 @@ t_ast_node *build_ast(t_token **tokens)
 //         if (current->type == T_HEREDOC)
 //         {
 //             heredoc_token = current;
-//             break;
+// 			break;
 //         }
 //         current = current->next;
 //     }
 
-//     if (heredoc_token)
-//         return (handle_heredoc_command(tokens, heredoc_token));
-
+// 	if (heredoc_token)
+// 		return (handle_heredoc_command(tokens, heredoc_token));
 //     // Then look for pipe
 //     current = *tokens;
 //     while (current)
@@ -253,17 +427,44 @@ t_ast_node *build_ast(t_token **tokens)
 //         return (root);
 //     }
 //     current = *tokens;
-//     while (current)
-//     {
-//         if (current->type == T_REDIRECT_IN ||
-//             current->type == T_REDIRECT_OUT ||
-//             current->type == T_APPEND)
-//         {
-//             redir_token = current;
-//             break;
+// while (current && current->next) {
+//     if (current->type == T_REDIRECT_IN || 
+//         current->type == T_REDIRECT_OUT || 
+//         current->type == T_APPEND) {
+            
+//         if (!current->next || current->next->type != T_WORD)
+//             return (NULL);
+            
+//         t_ast_node *redir = create_ast_node(current->type, current->value);
+//         if (!redir)
+//             return NULL;
+            
+//         redir->right = create_ast_node(T_WORD, current->next->value);
+//         if (!redir->right) {
+//             free_ast_node(redir);
+//             return NULL;
 //         }
-//         current = current->next;
+        
+//         // Save and split tokens before redirection
+//         t_token *left_tokens = *tokens;
+//         t_token *split_point = *tokens;
+//         while (split_point && split_point->next != current)
+//             split_point = split_point->next;
+//         if (split_point)
+//             split_point->next = NULL;
+            
+//         *tokens = current->next->next;
+//         redir->left = build_ast(&left_tokens);
+        
+//         if (!redir->left) {
+//             free_ast_node(redir);
+//             return NULL;
+//         }
+//         return redir;
 //     }
+//     current = current->next;
+// }
+
 //     if (redir_token)
 //     {
 //         if (!redir_token->next || redir_token->next->type != T_WORD)

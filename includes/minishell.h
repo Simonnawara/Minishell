@@ -175,6 +175,8 @@ t_ast_node *build_command_node(t_token **tokens);
 t_ast_node	*build_ast(t_token **tokens);
 void print_ast(t_ast_node *root);
 void print_full_ast(t_ast_node *root);
+t_ast_node *handle_redirections(t_token **tokens);
+t_ast_node *handle_multiple_redirections(t_token **tokens);
 
 // execute_ast.c //
 int execute_ast(t_ast_node *ast, t_exec *exec);
