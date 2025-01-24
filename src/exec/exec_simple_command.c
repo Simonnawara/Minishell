@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/24 13:25:25 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:57:18 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,23 +74,24 @@ int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 	cmd.outfile = NULL;
 	cmd.append = 0;
 	int i = 0;
-    while (node->args && node->args[i])
-    {
-        if (ft_strcmp(node->args[i], "$?") == 0)
-        {
-            exit_str = get_exit_status();
-            if (!exit_str)
-                return (1);
-            free(node->args[i]);
-            node->args[i] = exit_str;
+
+    if (node->args) {
+        while (node->args[i]) {
+            if (ft_strcmp(node->args[i], "$?") == 0) {
+                exit_str = get_exit_status(exec);
+                if (!exit_str)
+                    return 1;
+                free(node->args[i]);
+                node->args[i] = exit_str;
+            }
+            i++;
         }
-        i++;
     }
 	if (is_builtin(cmd.cmd))
 		ret = execute_builtin(&cmd, exec);
 	else
 		ret = execute_external_command(&cmd, exec);
 	exec->last_status = ret;
-	update_exit_status(ret);
+
 	return (ret);
 }

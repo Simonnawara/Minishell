@@ -240,6 +240,6 @@ void    reset_signals(void);
 void    ignore_signals(void);
 
 void update_exit_status(int status);
-char *get_exit_status(void);
+char *get_exit_status(t_exec *exec);
 
 #endif
