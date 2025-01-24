@@ -34,6 +34,8 @@
 # include <signal.h>
 # include <termios.h>
 
+extern int g_exit_status;
+
 typedef struct s_path
 {
 	char		**paths;
@@ -54,7 +56,8 @@ typedef enum e_token_type
     T_SEMICOLON,    // ;
     T_PAREN_L,      // (
     T_PAREN_R,       // )
-	T_BUILTIN
+	T_BUILTIN,
+	T_EXIT_STATUS
 } t_token_type;
 
 typedef struct s_token
@@ -232,5 +235,8 @@ void print_token_info(t_token *token);
 void    setup_signals(void);
 void    reset_signals(void);
 void    ignore_signals(void);
+
+void update_exit_status(int status);
+char *get_exit_status(void);
 
 #endif

@@ -6,14 +6,11 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 11:26:49 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:20:29 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include "../../includes/globals.h"
-
-int g_exit_status = 0;
 
 void	update_last_status(t_exec *exec, int status)
 {
@@ -169,30 +166,30 @@ static int execute_redirection(t_ast_node *ast, t_exec *exec)
 
 int	execute_ast(t_ast_node *ast, t_exec *exec)
 {
+	int status;
 	t_command_table cmd;
 
 	memset(&cmd, 0, sizeof(t_command_table));
 	cmd.cmd = ast->value;
 	cmd.args = ast->args;
-
-	//printf("comd node->args : %s\n", cmd.args[1]);
-	cmd.infile = NULL;
-	cmd.outfile = NULL;
 	cmd.append = 0;
 	if (!ast)
 		return (0);
 	if (ast->type == T_PIPE)
-		return (handle_pipe(ast, exec));
-	if (ast->type == T_REDIRECT_OUT || ast->type == T_REDIRECT_IN
+		status = handle_pipe(ast, exec);
+	else if (ast->type == T_REDIRECT_OUT || ast->type == T_REDIRECT_IN
 		|| ast->type == T_APPEND)
-			return (execute_redirection(ast, exec));
-	 if (ast->type == T_HEREDOC)
+		status = execute_redirection(ast, exec);
+	else if (ast->type == T_HEREDOC)
     {
         if (!ast->right || !ast->right->value)
             return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
-        return (execute_heredoc(ast, exec));
+        status = execute_heredoc(ast, exec);
     }
-	if (ast->type == T_COMMAND)
-		return (execute_simple_command(ast, exec, cmd));
-	return (ft_putendl_fd("Error: Unknown node type", 2), 1);
+	else if (ast->type == T_COMMAND)
+		status = execute_simple_command(ast, exec, cmd);
+	else
+		status = 1;
+	g_exit_status = status;
+	return (status);
 }

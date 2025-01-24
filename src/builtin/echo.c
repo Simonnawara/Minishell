@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/22 12:54:37 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:57:12 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,9 +226,18 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 			{
 				if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg, '$'))
 				{
-					expanded_arg = expand_variables(processed_arg, exec->env);
-					ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
-					free(expanded_arg);
+                    if (strcmp(processed_arg, "$?") == 0)
+                    {
+                        expanded_arg = get_exit_status();
+                        ft_putstr_fd(expanded_arg, 1);
+                        free(expanded_arg);
+                    }
+                    else
+                    {
+                        expanded_arg = expand_variables(processed_arg, exec->env);
+                        ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
+                        free(expanded_arg);
+                    }
 				}
 				else
 					ft_putstr_fd(processed_arg, 1);

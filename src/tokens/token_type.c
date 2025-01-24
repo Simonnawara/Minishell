@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/23 12:57:39 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:03:05 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_token_type	get_operator_type(char *token)
 		return (T_APPEND);
 	if (token[0] == '|' && token[1] != '|')
 		return (T_PIPE);
-	if (token[0] == ';')
-		return (T_SEMICOLON);
+	if (token[0] == '$' && token[1] == '?')
+		return (T_EXIT_STATUS);
 	if (token[0] == '(')
 		return (T_PAREN_L);
 	if (token[0] == ')')
