@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/23 14:17:37 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:28:26 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,11 @@ char	**tokenize(char *prompt)
 {
 	char	**tokens;
 	int		word_count;
-	int		i;
 	int		pos;
 	int		token_idx;
+
+	if (!prompt)
+		return (NULL);
 
 	pos = 0;
 	while (prompt[pos] && isspace(prompt[pos]))
@@ -143,13 +145,7 @@ char	**tokenize(char *prompt)
 			break ;
 		tokens[token_idx] = get_word(prompt, &pos);
 		if (!tokens[token_idx])
-		{
-			i = -1;
-			while (++i < token_idx)
-				free(tokens[i]);
-			free(tokens);
-			return (NULL);
-		}
+			free_and_return(tokens, NULL);
 		token_idx++;
 	}
 	tokens[token_idx] = NULL;

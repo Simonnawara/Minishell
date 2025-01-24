@@ -205,18 +205,21 @@ int	ft_env(t_exec *exec, char **args);
 int	ft_exit(t_ast_node *node, t_exec *exec);
 int ft_cd(char **args, t_exec *exec);
 
-//redirection_input
+// redirection_input //
 int setup_redirection(t_command_table *cmd);
 int restore_io(t_command_table *cmd);
-//set_env_cd.c
+
+// set_env_cd.c //
 int	update_env_variable(char **env, char *key, char *value);
-//external command .c
+
+// external command .c //
 int	execute_external_command(t_command_table *cmd, t_exec *exec);
-//extern_cmd_path
+
+// extern_cmd_path //
 char	*find_command_path(char *cmd, t_path *path_info);
 char	*search_in_path(t_path *path_info, char *cmd);
 
-//Heredoc.c
+// Heredoc.c //
 int execute_heredoc(t_ast_node *ast, t_exec *exec);
 
 // tokenize_2.0.c //

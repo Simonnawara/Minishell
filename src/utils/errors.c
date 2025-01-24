@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/21 12:52:02 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:25:05 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ int	is_command_found(char *word, char **env)
 	char    		*processed_arg;
     char    		*expanded_arg;
 
+	if (!word || !env)
+		return (0);
+
 	quote_type = 0;
 	if (word[0] == word[ft_strlen(word) - 1] && (word[0] == 34 || word[0] == 39))
 		quote_type = word[0];
@@ -74,9 +77,12 @@ int	is_command_found(char *word, char **env)
 		if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg, '$'))
 		{
 			expanded_arg = expand_variables(processed_arg, env);
-			write(2, expanded_arg, ft_strlen(expanded_arg));	
-			ft_putendl_fd(" : command not found", 2);
-			free(expanded_arg);
+			if (expanded_arg)
+			{
+				write(2, expanded_arg, ft_strlen(expanded_arg));	
+				ft_putendl_fd(" : command not found", 2);
+				free(expanded_arg);
+			}			
 		}
 		else
 		{
@@ -86,5 +92,7 @@ int	is_command_found(char *word, char **env)
 		}
 		return (1);
 	}
+	if (quote_type)
+		free(processed_arg);
 	return (0);
 }

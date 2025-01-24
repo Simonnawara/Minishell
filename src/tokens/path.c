@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:35:50 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 11:24:40 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:20:02 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,38 +26,14 @@ char	*get_path(char **env)
 	return (NULL);
 }
 
-// char	*build_path(char *cmd, char **env)
-// {
-// 	int		i;
-// 	t_path	path_struct;
-
-// 	path_struct.path_var = get_path(env);
-// 	if (!path_struct.path_var)
-// 		return (NULL);
-// 	path_struct.paths = ft_split(path_struct.path_var, ':');
-// 	if (!path_struct.paths)
-// 		return (NULL);
-// 	i = -1;
-// 	while (path_struct.paths[++i])
-// 	{
-// 		if ((access(cmd, F_OK | X_OK) == 0))
-// 			return (cmd);
-// 		path_struct.temp = ft_strjoin(path_struct.paths[i], "/");
-// 		if (!path_struct.temp)
-// 			return ((char *)free_and_return(path_struct.paths, NULL));
-// 		path_struct.full_path = ft_strjoin(path_struct.temp, cmd);
-// 		free(path_struct.temp);
-// 		if (!path_struct.full_path)
-// 			return ((char *)free_and_return(path_struct.paths, NULL));
-// 		if (access(path_struct.full_path, F_OK | X_OK) == 0)
-// 			return ((char *)free_and_return(path_struct.paths,
-// 					path_struct.full_path));
-// 		free(path_struct.full_path);
-// 	}
-// 	return (free_and_return(path_struct.paths, NULL));
-// }
 char *build_path(char *cmd, char **env)
 {
+	t_path path_struct;
+    char *result;
+
+	if (!cmd || !env)
+		return (NULL);
+	
     // Handle absolute paths and current directory
     if (cmd[0] == '/' || cmd[0] == '.') {
         if (access(cmd, F_OK | X_OK) == 0)
@@ -65,7 +41,6 @@ char *build_path(char *cmd, char **env)
         return NULL;
     }
 
-    t_path path_struct;
     path_struct.path_var = get_path(env);
     if (!path_struct.path_var)
         return NULL;
@@ -74,9 +49,11 @@ char *build_path(char *cmd, char **env)
     if (!path_struct.paths)
         return NULL;
 
-    for (int i = 0; path_struct.paths[i]; i++) {
+    for (int i = 0; path_struct.paths[i]; i++)
+	{
         path_struct.temp = ft_strjoin(path_struct.paths[i], "/");
-        if (!path_struct.temp) {
+        if (!path_struct.temp)
+		{
             free_array(path_struct.paths);
             return NULL;
         }
@@ -90,7 +67,7 @@ char *build_path(char *cmd, char **env)
         }
 
         if (access(path_struct.full_path, F_OK | X_OK) == 0) {
-            char *result = ft_strdup(path_struct.full_path);
+            result = ft_strdup(path_struct.full_path);
             free(path_struct.full_path);
             free_array(path_struct.paths);
             return result;

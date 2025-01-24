@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/13 11:01:52 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:27:01 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,14 @@ void	free_command_table(t_command_table *cmd)
 	free(cmd->args);
 	free(cmd->infile);
 	free(cmd->outfile);
+	free(cmd->heredoc_file);
+	free(cmd->delimiter);
+	if (cmd->all_outfiles)
+    {
+        i = 0;
+        while (i < cmd->num_outfiles)
+            free(cmd->all_outfiles[i++]);
+        free(cmd->all_outfiles);
+    }
 	free(cmd);
 }
