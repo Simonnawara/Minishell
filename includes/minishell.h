@@ -27,10 +27,12 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <sys/signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
 # include <signal.h>
+# include <termios.h>
 
 typedef struct s_path
 {
@@ -225,5 +227,10 @@ t_token	*create_token(char *value, t_token_type type);
 void	add_token(t_token **list, t_token *new);
 char *extract_quoted_token(char *str, int *i, char quote);
 void print_token_info(t_token *token);
+
+// signals.c //
+void    setup_signals(void);
+void    reset_signals(void);
+void    ignore_signals(void);
 
 #endif

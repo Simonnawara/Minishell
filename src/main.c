@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+extern int g_exit_status;
 
 int validate_inputs(int argc)
 {
@@ -224,12 +225,13 @@ int main(int argc, char **argv, char **env)
 		return (EXIT_FAILURE);
 	using_history();
 	new_env = init_env(env);
+	setup_signals();
 	while (1)
 	{
 		prompt = readline("> ");
 		if (!prompt)
 		{
-			ft_printf("Exiting...\n");
+			ft_printf("exit\n");
 			break ;
 		}
 		if (ft_strlen(prompt) > 0)
@@ -239,8 +241,12 @@ int main(int argc, char **argv, char **env)
 			free(prompt);
 			continue ;
 		}
+		reset_signals();
 		parse_prompt(prompt, new_env);
+		setup_signals();
 		free(prompt);
 	}
 	clear_history();
+	free_array(new_env);
+	return (g_exit_status);
 }
