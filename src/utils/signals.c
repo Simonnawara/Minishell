@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:16:44 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 11:25:06 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:22:49 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include "../../includes/globals.h"
 
-extern int g_exit_status;
 
 static void	handle_sigint(int sig)
 {

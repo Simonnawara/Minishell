@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_simple_command.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/22 10:57:14 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:25:25 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static int execute_builtin(t_command_table *cmd, t_exec *exec)
 int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 {
 	int ret;
+	char *exit_str;
 
 	if (node->args)
 	{
@@ -69,15 +70,27 @@ int execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 
 	cmd.echo_counter = node->echo_counter;
 	cmd.res = node->res;
-
-	//printf("comd node->args : %s\n", cmd.args[1]);
 	cmd.infile = NULL;
 	cmd.outfile = NULL;
 	cmd.append = 0;
+	int i = 0;
+    while (node->args && node->args[i])
+    {
+        if (ft_strcmp(node->args[i], "$?") == 0)
+        {
+            exit_str = get_exit_status();
+            if (!exit_str)
+                return (1);
+            free(node->args[i]);
+            node->args[i] = exit_str;
+        }
+        i++;
+    }
 	if (is_builtin(cmd.cmd))
 		ret = execute_builtin(&cmd, exec);
 	else
 		ret = execute_external_command(&cmd, exec);
 	exec->last_status = ret;
+	update_exit_status(ret);
 	return (ret);
 }
