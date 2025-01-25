@@ -20,6 +20,14 @@ int validate_inputs(int argc)
 	return (0);
 }
 
+void	free_prompt_resources(t_token *tokens, char **res, char *expanded_arg)
+{
+    free_token_list(tokens);
+    free_array(res);
+    if (expanded_arg)
+        free(expanded_arg);
+}
+
 // Extracts a word between quotes, I think it needs some more frees()
 char * get_command(char *word, int quote_count, char quote_type)
 {
@@ -87,17 +95,20 @@ int parse_prompt(char *prompt, char **env)
 			else
 			{
 				cmd = get_command(res[i], total_quotes, quote_type);
+				if (!cmd)
+				{
+					// free_token_list(tokens);
+					// free_array(res);
+					free_prompt_resources(tokens, res, expanded_arg);
+			        return (1);
+				}
 				processed_arg = cmd;
 				if (quote_type == 34 && ft_strchr(processed_arg, '$'))
 				{
 					expanded_arg = expand_variables(processed_arg, env);
 					cmd = expanded_arg;
-				}
-				if (!cmd)
-				{
-					free_token_list(tokens);
-					free_array(res);
-			        return (1);
+					//free(expanded_arg);
+					free(processed_arg);
 				}
 				type = classify_token_prev(cmd, env, prev_type);
 				new_token = create_token(cmd, type);
@@ -122,7 +133,6 @@ int parse_prompt(char *prompt, char **env)
 		}
 		else
 		{
-			//printf("On est dans le else\n");
 			cmd = res[i];
 			processed_arg = cmd;
 			if (quote_type == 0 && ft_strchr(processed_arg, '$'))
@@ -130,6 +140,7 @@ int parse_prompt(char *prompt, char **env)
 				expanded_arg = expand_variables(processed_arg, env);
 				cmd = expanded_arg;
 				//free(processed_arg);
+				free(expanded_arg);
 			}
 			type = classify_token_prev(cmd, env, prev_type);
 			new_token = create_token(cmd, type);
