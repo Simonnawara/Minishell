@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 15:28:35 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:42:40 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 			{
 				if (strcmp(processed_arg, "$?") == 0)
 				{
-					expanded_arg = get_exit_status(exec);
+					printf("%d\n", g_exit_status);
 					if (!expanded_arg)
 					{
 						cleanup_echo_resources(stripped_arg, processed_arg, NULL);

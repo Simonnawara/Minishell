@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 15:05:40 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:40:22 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,6 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 		status = execute_simple_command(ast, exec, cmd);
 	else
 		status = 1;
-	g_exit_status = status;
+	g_exit_status = WEXITSTATUS(status);
 	return (status);
 }

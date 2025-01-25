@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd_extern.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 15:08:41 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/24 11:12:22 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:43:22 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	execute_external_command(t_command_table *cmd, t_exec *exec)
 	if (!cmd_path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
+		g_exit_status = 127;
 		ft_putendl_fd(cmd->cmd, 2);
 		return (127);
 	}

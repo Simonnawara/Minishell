@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 13:25:05 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:43:46 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	is_command_found(char *word, char **env)
 
 	if (!word || !env)
 		return (0);
-
 	quote_type = 0;
 	if (word[0] == word[ft_strlen(word) - 1] && (word[0] == 34 || word[0] == 39))
 		quote_type = word[0];
@@ -81,6 +80,7 @@ int	is_command_found(char *word, char **env)
 			{
 				write(2, expanded_arg, ft_strlen(expanded_arg));	
 				ft_putendl_fd(" : command not found", 2);
+				g_exit_status = 127;
 				free(expanded_arg);
 			}			
 		}
@@ -88,6 +88,7 @@ int	is_command_found(char *word, char **env)
 		{
 			write(2, processed_arg, ft_strlen(processed_arg));
 			ft_putendl_fd(" : command not found", 2);
+			g_exit_status = 127;
 			free(processed_arg);
 		}
 		return (1);

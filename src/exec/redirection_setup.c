@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_setup.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:02:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/23 11:08:37 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 14:46:44 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int setup_input(t_command_table *cmd)
 
     fd = open(cmd->infile, O_RDONLY);
     if (fd == -1)
-        return (handle_redirect_error(cmd->infile, "No such file or directory"));
+        return (handle_redirect_error(cmd->infile, "N"));
 
     if (dup2(fd, STDIN_FILENO) == -1)
     {
