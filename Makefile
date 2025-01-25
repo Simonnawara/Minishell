@@ -44,9 +44,6 @@ ifeq ($(DEBUG), 1)
     CCFLAG += -DDEBUG -fsanitize=address,undefined
 endif
 
-valgrind: re
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./$(NAME) 
-
 LIB = -C ./libft/
 
 SUCCESS_COLOR = \033[32m
@@ -105,5 +102,8 @@ fclean : clean
 	@echo "$(SUCCESS_COLOR)$(NAME) - FCleaned with Success"
 
 re : fclean all
+
+valgrind: re
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./$(NAME) 
 
 .PHONY: all clean fclean re bonus
