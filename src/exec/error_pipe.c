@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:33:14 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/16 10:03:16 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:22:47 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,6 @@ int fork_error(void)
 	msg = strerror(errno);
 	ft_putstr_fd("minishell: fork error: ", 2);
 	ft_putendl_fd(msg, 2);
+	g_exit_status = 1;
 	return (errno == EAGAIN ? 11 : 1);
 }

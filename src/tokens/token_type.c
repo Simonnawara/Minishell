@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 13:03:05 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:18:00 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int	check_pipe(t_token_type type, char **res, int i)
 			if (res[j] && res[j][0] == '|')
 			{
 				ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+				g_exit_status = 2;
 				return (1);
 			}
 			continue ;
@@ -119,6 +120,7 @@ int	check_pipe(t_token_type type, char **res, int i)
 	if (res[0][0] == '|')
 	{
 		ft_putendl_fd("Minishell : syntax error near unexpected token `|'", 2);
+		g_exit_status = 2;
 		return (1);
 	}
 	if (type == T_PIPE)
@@ -126,6 +128,7 @@ int	check_pipe(t_token_type type, char **res, int i)
 		if (res[i + 1] == NULL)
 		{
 			ft_putendl_fd("Error: Pipe at the end of the command", 2);
+			g_exit_status = 2;
 			return (1);
 		}
 	}
@@ -139,6 +142,7 @@ int	check_redirect(t_token_type type, char **res, int i)
 		if (res[i + 1] == NULL)
 		{
 			ft_putendl_fd("Minishell: syntax error near unexpected token `newline'", 2);
+			g_exit_status = 2;
 			return (1);
 		}
 		if (type == T_REDIRECT_OUT)
