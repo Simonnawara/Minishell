@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:35:50 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 13:20:02 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:55:27 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char *build_path(char *cmd, char **env)
 
 	if (!cmd || !env)
 		return (NULL);
-	
+
     // Handle absolute paths and current directory
     if (cmd[0] == '/' || cmd[0] == '.') {
         if (access(cmd, F_OK | X_OK) == 0)
@@ -60,13 +60,14 @@ char *build_path(char *cmd, char **env)
 
         path_struct.full_path = ft_strjoin(path_struct.temp, cmd);
         free(path_struct.temp);
-        
+
         if (!path_struct.full_path) {
             free_array(path_struct.paths);
             return NULL;
         }
 
-        if (access(path_struct.full_path, F_OK | X_OK) == 0) {
+        if (access(path_struct.full_path, F_OK | X_OK) == 0)
+		{
             result = ft_strdup(path_struct.full_path);
             free(path_struct.full_path);
             free_array(path_struct.paths);
@@ -74,7 +75,6 @@ char *build_path(char *cmd, char **env)
         }
         free(path_struct.full_path);
     }
-
     free_array(path_struct.paths);
     return NULL;
 }

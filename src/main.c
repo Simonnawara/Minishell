@@ -171,13 +171,13 @@ int parse_prompt(char *prompt, char **env)
 	ast = build_ast(&tokens);
 	if (!ast)
 	{
-		//ft_putendl_fd("Error: Failed to build AST", 2);
 		free_token_list(tokens);
+		free_array(res);
 		return (1);
 	}
 	//printf("conmpteur pipe : %d\n", exec.compteur_pipe);
 	execute_ast(ast, &exec);
-	free(ast);
+	free_ast(ast);
 	free_token_list(tokens);
 	free_array(res);
 	return (0);
@@ -186,16 +186,16 @@ char **init_env(char **original_env)
 {
     int i, size = 0;
     char **new_env;
-    
+
     // Count environment variables
     while (original_env[size])
         size++;
-        
+
     // Allocate new environment array
     new_env = (char **)malloc(sizeof(char *) * (size + 1));
     if (!new_env)
         return NULL;
-        
+
     // Copy each environment string
     for (i = 0; i < size; i++)
     {
@@ -210,7 +210,7 @@ char **init_env(char **original_env)
         }
     }
     new_env[size] = NULL;
-    
+
     return new_env;
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 15:18:00 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:53:52 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_token_type	classify_token(char *token, char **env)
 {
 	t_token_type	type;
 	struct stat		path_stat;
+	char *path;
 
 	if (!token || !*token)
 		return (T_WORD);
@@ -55,8 +56,12 @@ t_token_type	classify_token(char *token, char **env)
 	}
 	if (is_builtin(token))
 		return (T_COMMAND);
-	if (build_path(token, env))
+	path = build_path(token, env);
+	if (path)
+	{
+		free(path);
 		return (T_COMMAND);
+	}
 	return (T_WORD);
 }
 
@@ -65,6 +70,7 @@ t_token_type	classify_token_prev(char *token, char **env, t_token_type prev_type
 	t_token_type	type;
 	t_token_type	op_type;
 	struct stat		path_stat;
+	char			*path;
 
 	if (!token || !*token)
 		return (T_WORD);
@@ -90,8 +96,12 @@ t_token_type	classify_token_prev(char *token, char **env, t_token_type prev_type
 	}
 	if (is_builtin(token))
 		return (T_COMMAND);
-	if (build_path(token, env))
-		return (T_COMMAND);
+   	path = build_path(token, env);
+  	if (path)
+	{
+       free(path);
+       return T_COMMAND;
+   	}
 	return (T_WORD);
 }
 

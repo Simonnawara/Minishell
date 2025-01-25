@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 15:29:46 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:39:08 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,11 @@ t_ast_node	*handle_redirection_sequence(t_token **tokens)
 	while (current && current->type != T_COMMAND)
 		current = current->next;
 	if (current)
+	{
 		cmd_node = build_command_node(&current);
+		if (!cmd_node)
+			return (NULL);
+	}
 	// Reset to beginning for redirections
 	current = *tokens;
 	while (current)
@@ -94,16 +98,24 @@ t_ast_node	*handle_redirection_sequence(t_token **tokens)
 		{
 			redir = create_ast_node(current->type, current->value);
 			if (!redir)
+			{
 				return (NULL);
+				free_ast(root);
+				free_ast_node(cmd_node);
+			}
 			if (!current->next || current->next->type != T_WORD)
 			{
 				free_ast_node(redir);
+				free_ast(root);
+				free_ast_node(cmd_node);
 				return (NULL);
 			}
 			redir->right = create_ast_node(T_WORD, current->next->value);
 			if (!redir->right)
 			{
 				free_ast_node(redir);
+				free_ast(root);
+				free_ast_node(cmd_node);
 				return (NULL);
 			}
 			if (!root)
