@@ -37,9 +37,17 @@ SRCS =  main.c \
 		exec/execute_cmd_extern.c \
 		exec/redirection_setup.c \
 		exec/heredoc.c \
-		exec/exit_status.c 
-CC = gcc
+		exec/exit_status.c
+CC = gcc -g -O0
 CCFLAG = -Wall -Wextra -Werror
+DEBUG ?= 0
+ifeq ($(DEBUG), 1)
+    CCFLAG += -DDEBUG -fsanitize=address,undefined
+endif
+
+valgrind: re
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./$(NAME) 
+
 LIB = -C ./libft/
 
 SUCCESS_COLOR = \033[32m

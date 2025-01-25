@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 15:40:42 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:29:46 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,30 @@ int	add_argument_to_command(t_ast_node *cmd_node, char *arg)
 	i = 0;
 	j = -1;
 	if (cmd_node->args) // Count existing arguments
-	{
 		while (cmd_node->args[i])
 			i++;
-	}
 	new_args = malloc(sizeof(char *) * (i + 2));
-		// Allocate new array with space for one more argument
 	if (!new_args)
 		return (0);
 	while (++j < i) // Copy existing arguments
+	{
 		new_args[j] = ft_strdup(cmd_node->args[j]);
-	new_args[i] = ft_strdup(arg); // Add new argument
+		if (!new_args[j])
+		{
+			while (--j >= 0)
+				free(new_args[j]);
+            free(new_args);
+            return (0);
+		}
+	}
+	//new_args[i] = ft_strdup(arg); // Add new argument
+	if (!(new_args[i] = ft_strdup(arg)))
+    {
+        while (--j >= 0)
+            free(new_args[j]);
+        free(new_args);
+        return (0);
+    }
 	new_args[i + 1] = NULL;
 	if (cmd_node->args) // Free old arguments array
 		free_array(cmd_node->args);
