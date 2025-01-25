@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 14:43:46 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:15:12 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int verify_forbidden_tokens(char *prompt)
 			if (!move_past_quotes(prompt, quote_type, &i))
 			{
 				ft_putendl_fd("Error : Unclosed quote", 2);
+				g_exit_status = 2;
 				return (-1);
 			}
 			continue;
@@ -39,6 +40,7 @@ int verify_forbidden_tokens(char *prompt)
 		if (prompt[i] == ';' || prompt[i] == '(' || prompt[i] == ')')
 		{
 			ft_putendl_fd("Error : Unauthorized token(s)", 2);
+			g_exit_status = 2;
 			return (1);
 		}
 		i++;

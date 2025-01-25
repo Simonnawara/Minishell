@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:02:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/25 14:46:44 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:18:41 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int	handle_redirect_error(char *filename, char *error_msg)
 	ft_putstr_fd(filename, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(error_msg, 2);
+    g_exit_status = 1;
 	return (-1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 14:03:11 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:16:29 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ static char	*get_word(const char *str, int *pos)
 		else
 		{
 			ft_putendl_fd("Error: Unclosed quote", 2);
+			g_exit_status = 2;
 			return (NULL);
 		}
 	}

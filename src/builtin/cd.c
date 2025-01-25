@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:56:52 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/22 20:52:53 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:24:46 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void print_error(char **args)
     ft_putstr_fd(strerror(errno), 2);
     ft_putstr_fd(": ", 2);
     ft_putendl_fd(args[1], 2);
+    g_exit_status = 1;
 }
 
 static char *get_env_value(char **env, const char *var)
@@ -146,6 +147,7 @@ int ft_cd(char **args, t_exec *exec)
         {
             free(pwd);
             ft_putendl_fd("cd: HOME not set", 2);
+            g_exit_status = 1;
             return (1);
         }
     }
@@ -156,6 +158,7 @@ int ft_cd(char **args, t_exec *exec)
         {
             free(pwd);
             ft_putendl_fd("cd: OLDPWD not set", 2);
+            g_exit_status = 1;
             return (1);
         }
         ft_putendl_fd(target, 1);

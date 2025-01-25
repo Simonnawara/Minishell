@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:46:53 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/23 14:23:58 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:19:37 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,12 +181,17 @@ int execute_heredoc(t_ast_node *ast, t_exec *exec)
     int last_heredoc_fd = -1;
 
     if (!ast || !ast->right || !ast->right->value)
+    {
         return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
-
+        g_exit_status = 2;
+    }
     cmd_node = get_command_node(ast);
     heredoc_count = collect_heredocs(ast, &heredocs);
     if (heredoc_count < 0)
+    {
+        g_exit_status = 2;
         return (ft_putstr_fd("minishell: heredoc: error\n", 2), 1);
+    }
 
     saved_stdin = dup(STDIN_FILENO);
     if (saved_stdin == -1 || heredoc_count == 0)

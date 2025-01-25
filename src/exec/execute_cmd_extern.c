@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 15:08:41 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/25 14:43:22 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/25 15:13:12 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,20 @@ static void	handle_child_error(char *cmd_path, char *cmd, int error)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	if (error == EACCES)
+	{
 		ft_putendl_fd(": Permission denied", 2);
+		g_exit_status = 1;
+	}
 	else if (error == ENOEXEC)
+	{
 		ft_putendl_fd(": Exec format error", 2);
+		g_exit_status = 1;
+	}
 	else
+	{
 		ft_putendl_fd(": Error executing command", 2);
+		g_exit_status = 126;
+	}
 	free(cmd_path);
 	exit(126);
 }
@@ -32,6 +41,7 @@ static void	execute_child_process(char *cmd_path, t_command_table *cmd,
 	if (setup_redirection(cmd) == -1)
 	{
 		free(cmd_path);
+		g_exit_status = 1;
 		exit(1);
 	}
 	if (execve(cmd_path, cmd->args, exec->env) == -1)
@@ -47,7 +57,11 @@ static int	handle_parent_process(pid_t pid, char *cmd_path)
 	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == 131)
+		{
+			g_exit_status = 130;
 			ft_putendl_fd("Quit (core dumped)", 2);
+		}
+		g_exit_status = 128 + WTERMSIG(status);
 		return (128 + WTERMSIG(status));
 	}
 	return (WEXITSTATUS(status));
@@ -72,6 +86,7 @@ int	execute_external_command(t_command_table *cmd, t_exec *exec)
 	if (pid == -1)
 	{
 		free(cmd_path);
+		g_exit_status = 1;
 		return (fork_error());
 	}
 	if (pid == 0)
