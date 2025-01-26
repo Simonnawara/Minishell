@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 19:39:07 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/26 12:18:33 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char *expand_variables(char *str, char **env)
     result = malloc(sizeof(char) * (total_len + 1));
     if (!result)
 	{
-		free(var_name);
+		//free(var_name);
         return (NULL);
 	}
 
@@ -227,7 +227,8 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 			processed_arg = get_command(res[res_index], total_quotes, quote_type);
 			if (!processed_arg)
 			{
-    			cleanup_echo_resources(stripped_arg, NULL, NULL);
+    			//cleanup_echo_resources(stripped_arg, NULL, NULL);
+				free(stripped_arg);
 				return (1);
 			}
 
@@ -255,7 +256,10 @@ int ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 						return (1);
 					}
 					ft_putstr_fd(expanded_arg ? expanded_arg : "", 1);
-					cleanup_echo_resources(NULL, processed_arg, expanded_arg);
+					//cleanup_echo_resources(NULL, processed_arg, expanded_arg);
+					free(stripped_arg);
+    				free(processed_arg);
+    				free(expanded_arg);
 				}
 			}
 			else
