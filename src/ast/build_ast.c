@@ -170,6 +170,8 @@ t_ast_node	*build_ast(t_token **tokens)
 			pipe->right = build_ast(&right);
 			if (!pipe->left || !pipe->right)
 			{
+				free_ast_node(pipe->left);  // Add these lines
+        		free_ast_node(pipe->right);
 				free_ast_node(pipe);
 				return (NULL);
 			}

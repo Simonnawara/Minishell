@@ -48,7 +48,6 @@ int	free_word_and_return(char *word, int return_value)
 void	free_token_list(t_token *tokens)
 {
 	t_token	*tmp;
-
 	while (tokens)
 	{
 		tmp = tokens->next;
@@ -59,23 +58,50 @@ void	free_token_list(t_token *tokens)
 	}
 }
 
+void free_token(t_token *token)
+{
+    if (!token)
+        return;
+    free(token->value);
+    free(token);
+}
+
+
+/* void free_token_list(t_token *tokens)
+{
+    t_token *tmp;
+    while (tokens)
+    {
+        tmp = tokens->next;
+        free(tokens->value);
+        if (tokens->res)  // Add this check
+            free_array(tokens->res);
+        free(tokens);
+        tokens = tmp;
+    }
+} */
+
 void free_ast_node(t_ast_node *node)
 {
     if (!node)
         return;
-
+    
+    // Free children first
+    free_ast_node(node->left);
+    free_ast_node(node->right);
+    
+    // Then free node contents
     if (node->value)
         free(node->value);
-
+    
     if (node->args)
     {
         for (int i = 0; node->args[i]; i++)
             free(node->args[i]);
         free(node->args);
     }
-
-    free_ast_node(node->left);
-    free_ast_node(node->right);
+    
+    // Finally free the node itself
     free(node);
 }
 

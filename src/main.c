@@ -97,8 +97,6 @@ int parse_prompt(char *prompt, char **env)
 				cmd = get_command(res[i], total_quotes, quote_type);
 				if (!cmd)
 				{
-					// free_token_list(tokens);
-					// free_array(res);
 					free_prompt_resources(tokens, res, expanded_arg);
 			        return (1);
 				}
@@ -107,7 +105,6 @@ int parse_prompt(char *prompt, char **env)
 				{
 					expanded_arg = expand_variables(processed_arg, env);
 					cmd = expanded_arg;
-					//free(expanded_arg);
 					free(processed_arg);
 				}
 				type = classify_token_prev(cmd, env, prev_type);
@@ -139,7 +136,6 @@ int parse_prompt(char *prompt, char **env)
 			{
 				expanded_arg = expand_variables(processed_arg, env);
 				cmd = expanded_arg;
-				//free(processed_arg);
 				free(expanded_arg);
 			}
 			type = classify_token_prev(cmd, env, prev_type);
@@ -188,7 +184,14 @@ int parse_prompt(char *prompt, char **env)
 	}
 	//printf("conmpteur pipe : %d\n", exec.compteur_pipe);
 	execute_ast(ast, &exec);
-	free_ast(ast);
+	//free(ast); //114 leaks
+	//free_ast(ast) //0 leaks but segfault
+	//no free, but still 114 leaks
+	if (ast)
+	{
+		free_ast_node(ast);
+    	ast = NULL;
+	}
 	free_token_list(tokens);
 	free_array(res);
 	return (0);

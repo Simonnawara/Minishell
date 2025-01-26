@@ -41,20 +41,24 @@ t_token	*create_token(char *value, t_token_type type)
 	}
 	token->type = type;
 	token->next = NULL;
+	token->res = NULL;  // Initialize additional members
+    token->echo_counter = 0;
 	return (token);
 }
 
-void	add_token(t_token **list, t_token *new)
+void add_token(t_token **list, t_token *new)
 {
-	t_token	*current;
+    t_token *current;
 
-	if (!*list)
-		*list = new;
-	else
-	{
-		current = *list;
-		while (current->next)
-			current = current->next;
-		current->next = new;
-	}
+    if (!list || !new)
+        return;
+    if (!*list)
+        *list = new;
+    else
+    {
+        current = *list;
+        while (current->next)
+            current = current->next;
+        current->next = new;
+    }
 }

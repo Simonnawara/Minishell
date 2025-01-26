@@ -127,8 +127,13 @@ static int execute_redirection(t_ast_node *ast, t_exec *exec)
         return 1;
 
     status = execute_simple_command(cmd_node, exec, cmd);
-
     restore_io(&cmd);
+	if (cmd.all_outfiles)
+    {
+        for (int i = 0; i < cmd.num_outfiles; i++)
+            free(cmd.all_outfiles[i]);
+        free(cmd.all_outfiles);
+    }
     return status;
 }
 
