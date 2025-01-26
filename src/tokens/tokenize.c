@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 15:16:29 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/26 15:37:43 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,33 @@ int	move_past_quotes(const char *str, char quote_type, int *i)
 		return (1);
 	}
 	return (0);
+}
+
+int	handle_quoted_word(const char *str, int *len, int start)
+{
+	char	quote_type;
+
+	quote_type = str[start];
+	(*len)++;
+	while (str[start + *len] && str[start + *len] != quote_type)
+		(*len)++;
+	if (str[start + *len] == quote_type)
+	{
+		(*len)++;
+		return (1);
+	}
+	ft_putendl_fd("Error: Unclosed quote", 2);
+	g_exit_status = 2;
+	return (0);
+}
+
+int	handle_regular_word(const char *str, int *len, int start)
+{
+	while (str[start + *len] && !isspace(str[start + *len])
+		&& !is_operator(str[start + *len])
+		&& str[start + *len] != '"' && str[start + *len] != '\'')
+		(*len)++;
+	return (1);
 }
 
 int	count_words(const char *str)
@@ -75,39 +102,24 @@ int	count_words(const char *str)
 	return (count);
 }
 
+
 static char	*get_word(const char *str, int *pos)
 {
 	int		start;
 	int		len;
-	char	quote_type;
 	char	*word;
 
 	start = *pos;
 	len = 0;
 	if (str[start] == '"' || str[start] == '\'')
 	{
-		quote_type = str[start];
-		len++;
-		while (str[start + len] && str[start + len] != quote_type)
-			len++;
-		if (str[start + len] == quote_type)
-			len++;
-		else
-		{
-			ft_putendl_fd("Error: Unclosed quote", 2);
-			g_exit_status = 2;
+		if (!handle_quoted_word(str, &len, start))
 			return (NULL);
-		}
 	}
 	else if (is_operator(str[start]))
 		len = get_operator_len(str + start);
-	else
-	{
-		while (str[start + len] && !isspace(str[start + len])
-			&& !is_operator(str[start + len])
-			&& str[start + len] != '"' && str[start + len] != '\'')
-			len++;
-	}
+	else if (!handle_regular_word(str, &len, start))
+		return (NULL);
 	if (len == 0)
 		return (NULL);
 	word = malloc(sizeof(char) * (len + 1));
@@ -118,6 +130,7 @@ static char	*get_word(const char *str, int *pos)
 	return (word);
 }
 
+
 char	**tokenize(char *prompt)
 {
 	char	**tokens;
@@ -127,7 +140,6 @@ char	**tokenize(char *prompt)
 
 	if (!prompt)
 		return (NULL);
-
 	pos = 0;
 	while (prompt[pos] && isspace(prompt[pos]))
 		pos++;
