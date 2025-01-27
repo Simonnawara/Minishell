@@ -103,6 +103,14 @@ int	parse_prompt(char *prompt, char **env)
 				processed_arg = cmd;
 				if (quote_type == 34 && ft_strchr(processed_arg, '$'))
 				{
+					if (strcmp(processed_arg, "$?") == 0 && i == 0)
+					{
+						//write(2, g_exit_status, ft_strlen(g_exit_status));
+						printf("%d : command not found\n", g_exit_status);
+						g_exit_status = 127;
+						//free(processed_arg);
+						break ;
+					}
 					expanded_arg = expand_variables(processed_arg, env);
 					cmd = expanded_arg;
 					free(processed_arg);
@@ -134,6 +142,14 @@ int	parse_prompt(char *prompt, char **env)
 			processed_arg = cmd;
 			if (quote_type == 0 && ft_strchr(processed_arg, '$'))
 			{
+				if (strcmp(processed_arg, "$?") == 0 && i == 0)
+				{
+					//write(2, g_exit_status, ft_strlen(g_exit_status));
+					printf("%d : command not found\n", g_exit_status);
+					g_exit_status = 127;
+					//free(processed_arg);
+					break ;
+				}
 				expanded_arg = expand_variables(processed_arg, env);
 				cmd = expanded_arg;
 				free(expanded_arg);
@@ -167,7 +183,7 @@ int	parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-		// print_token_info(new_token);
+		//print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
 		prev_type = type;
@@ -192,6 +208,7 @@ int	parse_prompt(char *prompt, char **env)
 	free_array(res);
 	return (0);
 }
+
 char	**init_env(char **original_env)
 {
 	int i, size = 0;

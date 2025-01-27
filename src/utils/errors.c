@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 10:07:10 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:57:55 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	is_command_found(char *word, char **env)
 		if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg,
 				'$'))
 		{
+			printf("processed arg : %s\n", processed_arg);
 			expanded_arg = expand_variables(processed_arg, env);
 			if (expanded_arg)
 			{
