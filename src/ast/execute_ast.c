@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 14:40:22 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:01:31 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ void	update_last_status(t_exec *exec, int status)
 	exec->last_status = status;
 }
 
-
-static int	execute_pipe_child(t_ast_node *ast, t_exec *exec,
-	int *pipe_fds, int is_left)
+static int	execute_pipe_child(t_ast_node *ast, t_exec *exec, int *pipe_fds,
+		int is_left)
 {
 	int	status;
 
@@ -45,7 +44,8 @@ static int	handle_pipe(t_ast_node *ast, t_exec *exec)
 	int		pipe_fds[2];
 	pid_t	left_pid;
 	pid_t	right_pid;
-	int		status;
+	int		status_left;
+	int		status_right;
 
 	if (pipe(pipe_fds) == -1)
 		return (ft_putendl_fd("Error: Failed to create pipe", 2), 1);
@@ -56,91 +56,83 @@ static int	handle_pipe(t_ast_node *ast, t_exec *exec)
 		execute_pipe_child(ast, exec, pipe_fds, 1);
 	right_pid = fork();
 	if (right_pid == -1)
-		return (kill(left_pid, SIGKILL),
-			ft_putendl_fd("Error: Fork failed", 2), 1);
+		return (kill(left_pid, SIGKILL), ft_putendl_fd("Error: Fork failed", 2),
+			1);
 	if (right_pid == 0)
 		execute_pipe_child(ast, exec, pipe_fds, 0);
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
-	waitpid(left_pid, &status, 0);
-	waitpid(right_pid, &status, 0);
-	exec->compteur_pipe--;
-	update_last_status(exec, WEXITSTATUS(status));
-	return (WEXITSTATUS(status));
+	waitpid(left_pid, &status_left, 0);
+	waitpid(right_pid, &status_right, 0);
+	update_last_status(exec, WEXITSTATUS(status_right));
+	return (WEXITSTATUS(status_right));
 }
 
-int restore_io(t_command_table *cmd)
+int	restore_io(t_command_table *cmd)
 {
-    // Restore stdin if it was redirected
-    if (cmd->saved_stdin != -1)
-    {
-        if (dup2(cmd->saved_stdin, STDIN_FILENO) == -1)
-            return (ft_putendl_fd("Error: Failed to restore stdin", 2), -1);
-        close(cmd->saved_stdin);
-        cmd->saved_stdin = -1;
-    }
-
-    // Restore stdout if it was redirected
-    if (cmd->saved_stdout != -1)
-    {
-        if (dup2(cmd->saved_stdout, STDOUT_FILENO) == -1)
-            return (ft_putendl_fd("Error: Failed to restore stdout", 2), -1);
-        close(cmd->saved_stdout);
-        cmd->saved_stdout = -1;
-    }
-
-    return 0;
+	if (cmd->saved_stdin != -1)
+	{
+		if (dup2(cmd->saved_stdin, STDIN_FILENO) == -1)
+			return (ft_putendl_fd("Error: Failed to restore stdin", 2), -1);
+		close(cmd->saved_stdin);
+		cmd->saved_stdin = -1;
+	}
+	if (cmd->saved_stdout != -1)
+	{
+		if (dup2(cmd->saved_stdout, STDOUT_FILENO) == -1)
+			return (ft_putendl_fd("Error: Failed to restore stdout", 2), -1);
+		close(cmd->saved_stdout);
+		cmd->saved_stdout = -1;
+	}
+	return (0);
 }
-static int execute_redirection(t_ast_node *ast, t_exec *exec)
+static int	execute_redirection(t_ast_node *ast, t_exec *exec)
 {
-    t_command_table cmd = {0};
-    int status;
-    t_ast_node *cmd_node = ast;
+	t_command_table	cmd = {0};
+	int				status;
+	t_ast_node		*cmd_node;
+	t_ast_node		*redir;
 
-    // Find command node by traversing left until we reach a command
-    while (cmd_node && cmd_node->type != T_COMMAND && cmd_node->left)
-        cmd_node = cmd_node->left;
-
-    if (!cmd_node || cmd_node->type != T_COMMAND)
-        return (ft_putendl_fd("Error: No command found", 2), 1);
-
-    cmd.cmd = cmd_node->value;
-    cmd.args = cmd_node->args;
-
-    // Handle all redirections
-    t_ast_node *redir = ast;
-    while (redir && redir != cmd_node) {
-        if (!redir->right || !redir->right->value)
-            return (ft_putendl_fd("Error: Invalid redirection syntax", 2), 1);
-
-        if (redir->type == T_REDIRECT_OUT || redir->type == T_APPEND) {
-            cmd.outfile = redir->right->value;
-            cmd.append = (redir->type == T_APPEND);
-        }
-        else if (redir->type == T_REDIRECT_IN) {
-            cmd.infile = redir->right->value;
-        }
-        redir = redir->left;
-    }
-
-    if (setup_redirection(&cmd) == -1)
-        return 1;
-
-    status = execute_simple_command(cmd_node, exec, cmd);
-    restore_io(&cmd);
+	cmd_node = ast;
+	while (cmd_node && cmd_node->type != T_COMMAND && cmd_node->left)
+		cmd_node = cmd_node->left;
+	if (!cmd_node || cmd_node->type != T_COMMAND)
+		return (ft_putendl_fd("Error: No command found", 2), 1);
+	cmd.cmd = cmd_node->value;
+	cmd.args = cmd_node->args;
+	redir = ast;
+	while (redir && redir != cmd_node)
+	{
+		if (!redir->right || !redir->right->value)
+			return (ft_putendl_fd("Error: Invalid redirection syntax", 2), 1);
+		if (redir->type == T_REDIRECT_OUT || redir->type == T_APPEND)
+		{
+			cmd.outfile = redir->right->value;
+			cmd.append = (redir->type == T_APPEND);
+		}
+		else if (redir->type == T_REDIRECT_IN)
+		{
+			cmd.infile = redir->right->value;
+		}
+		redir = redir->left;
+	}
+	if (setup_redirection(&cmd) == -1)
+		return (1);
+	status = execute_simple_command(cmd_node, exec, cmd);
+	restore_io(&cmd);
 	if (cmd.all_outfiles)
-    {
-        for (int i = 0; i < cmd.num_outfiles; i++)
-            free(cmd.all_outfiles[i]);
-        free(cmd.all_outfiles);
-    }
-    return status;
+	{
+		for (int i = 0; i < cmd.num_outfiles; i++)
+			free(cmd.all_outfiles[i]);
+		free(cmd.all_outfiles);
+	}
+	return (status);
 }
 
 int	execute_ast(t_ast_node *ast, t_exec *exec)
 {
-	int status;
-	t_command_table cmd;
+	int				status;
+	t_command_table	cmd;
 
 	memset(&cmd, 0, sizeof(t_command_table));
 	cmd.cmd = ast->value;
@@ -154,15 +146,15 @@ int	execute_ast(t_ast_node *ast, t_exec *exec)
 		|| ast->type == T_APPEND)
 		status = execute_redirection(ast, exec);
 	else if (ast->type == T_HEREDOC)
-    {
-        if (!ast->right || !ast->right->value)
-            return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
-        status = execute_heredoc(ast, exec);
-    }
+	{
+		if (!ast->right || !ast->right->value)
+			return (ft_putstr_fd("minishell: syntax error\n", 2), 1);
+		status = execute_heredoc(ast, exec);
+	}
 	else if (ast->type == T_COMMAND)
 		status = execute_simple_command(ast, exec, cmd);
 	else
 		status = 1;
-	g_exit_status = WEXITSTATUS(status);
+	g_exit_status = status;
 	return (status);
 }

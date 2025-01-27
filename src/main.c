@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/23 11:54:45 by sinawara          #+#    #+#             */
-/*   Updated: 2024/12/23 13:26:52 by sinawara         ###   ########.fr       */
+/*   Created: 2025/01/27 10:09:23 by trouilla          #+#    #+#             */
+/*   Updated: 2025/01/27 10:09:23 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+
 extern int g_exit_status;
 
-int validate_inputs(int argc)
+int	validate_inputs(int argc)
 {
 	if (argc < 1)
 		return (ft_putendl_fd("Error : argument number invalid", 2), 1);
@@ -22,14 +24,13 @@ int validate_inputs(int argc)
 
 void	free_prompt_resources(t_token *tokens, char **res, char *expanded_arg)
 {
-    free_token_list(tokens);
-    free_array(res);
-    if (expanded_arg)
-        free(expanded_arg);
+	free_token_list(tokens);
+	free_array(res);
+	if (expanded_arg)
+		free(expanded_arg);
 }
 
-// Extracts a word between quotes, I think it needs some more frees()
-char * get_command(char *word, int quote_count, char quote_type)
+char	*get_command(char *word, int quote_count, char quote_type)
 {
 	char *middle;
 	int len;
@@ -38,7 +39,7 @@ char * get_command(char *word, int quote_count, char quote_type)
 
 	len = ft_strlen(word);
 	if (len == 2 && word[0] == quote_type && word[1] == quote_type)
-        return (ft_strdup(""));
+		return (ft_strdup(""));
 	middle = malloc(sizeof(char) * (len - quote_count + 1));
 	if (!middle)
 		return (NULL);
@@ -54,21 +55,20 @@ char * get_command(char *word, int quote_count, char quote_type)
 	return (middle);
 }
 
-
-int parse_prompt(char *prompt, char **env)
+int	parse_prompt(char *prompt, char **env)
 {
-	char			**res;
-	int				i;
-	int				total_quotes;
-	char			quote_type;
-	char			*cmd;
-	char    		*processed_arg;
-    char    		*expanded_arg;
-	t_token_type	type;
-	t_token			*tokens;
-	t_token			*new_token;
-	t_ast_node		*ast;
-	t_exec			exec;
+	char **res;
+	int i;
+	int total_quotes;
+	char quote_type;
+	char *cmd;
+	char *processed_arg;
+	char *expanded_arg;
+	t_token_type type;
+	t_token *tokens;
+	t_token *new_token;
+	t_ast_node *ast;
+	t_exec exec;
 	t_token_type prev_type = T_WORD;
 
 	if (!prompt || !*prompt)
@@ -81,14 +81,14 @@ int parse_prompt(char *prompt, char **env)
 	if (!res)
 		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
 	i = 0;
-
 	while (res[i])
 	{
 		quote_type = 0;
-		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34 || res[i][0] == 39))
+		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34
+				|| res[i][0] == 39))
 			quote_type = res[i][0];
 		total_quotes = count_quotes(res[i], quote_type);
-		if (quote_type && total_quotes % 2 == 0) //checks if we have an even number of quotes
+		if (quote_type && total_quotes % 2 == 0)
 		{
 			if (ft_strlen(res[i]) == 2)
 				printf("Word between quotes is empty\n");
@@ -98,7 +98,7 @@ int parse_prompt(char *prompt, char **env)
 				if (!cmd)
 				{
 					free_prompt_resources(tokens, res, expanded_arg);
-			        return (1);
+					return (1);
 				}
 				processed_arg = cmd;
 				if (quote_type == 34 && ft_strchr(processed_arg, '$'))
@@ -109,23 +109,23 @@ int parse_prompt(char *prompt, char **env)
 				}
 				type = classify_token_prev(cmd, env, prev_type);
 				new_token = create_token(cmd, type);
-				if (new_token && new_token->value && !ft_strcmp(new_token->value, "echo"))
+				if (new_token && new_token->value
+					&& !ft_strcmp(new_token->value, "echo"))
 				{
 					new_token->res = res;
 					new_token->echo_counter = i;
 				}
-				if (type == T_PIPE)
-					exec.compteur_pipe++;
 				free(cmd);
 				if (!new_token)
 				{
 					free_token_list(tokens);
 					free_array(res);
-			        return (1);
+					return (1);
 				}
 				add_token(&tokens, new_token);
 				if (!tokens)
-    				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
+					ft_putendl_fd("Error: Tokens list is NULL after add_token",
+						2);
 			}
 		}
 		else
@@ -140,7 +140,8 @@ int parse_prompt(char *prompt, char **env)
 			}
 			type = classify_token_prev(cmd, env, prev_type);
 			new_token = create_token(cmd, type);
-			if (new_token && new_token->value && !ft_strcmp(new_token->value, "echo"))
+			if (new_token && new_token->value && !ft_strcmp(new_token->value,
+					"echo"))
 			{
 				new_token->res = res;
 				new_token->echo_counter = i;
@@ -151,13 +152,13 @@ int parse_prompt(char *prompt, char **env)
 			{
 				free_token_list(tokens);
 				free_array(res);
-		        return (1);
+				return (1);
 			}
 			add_token(&tokens, new_token);
 			if (!tokens)
 				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
 			if (check_pipe(new_token->type, res, i)
-			 || check_redirect(new_token->type, res, i))
+				|| check_redirect(new_token->type, res, i))
 			{
 				if (tokens)
 					free_token_list(tokens);
@@ -166,7 +167,7 @@ int parse_prompt(char *prompt, char **env)
 				return (1);
 			}
 		}
-		//print_token_info(new_token);
+		// print_token_info(new_token);
 		if (is_command_found(res[0], env))
 			return (0);
 		prev_type = type;
@@ -182,54 +183,42 @@ int parse_prompt(char *prompt, char **env)
 		free_array(res);
 		return (1);
 	}
-	//printf("conmpteur pipe : %d\n", exec.compteur_pipe);
 	execute_ast(ast, &exec);
-	//free(ast); //114 leaks
-	//free_ast(ast) //0 leaks but segfault
-	//no free, but still 114 leaks
 	if (ast)
 	{
 		free_ast_node(ast);
-    	ast = NULL;
+		ast = NULL;
 	}
-	free_token_list(tokens);
 	free_array(res);
 	return (0);
 }
-char **init_env(char **original_env)
+char	**init_env(char **original_env)
 {
-    int i, size = 0;
-    char **new_env;
+	int i, size = 0;
+	char **new_env;
 
-    // Count environment variables
-    while (original_env[size])
-        size++;
+	while (original_env[size])
+		size++;
+	new_env = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!new_env)
+		return (NULL);
+	for (i = 0; i < size; i++)
+	{
+		new_env[i] = ft_strdup(original_env[i]);
+		if (!new_env[i])
+		{
+			while (--i >= 0)
+				free(new_env[i]);
+			free(new_env);
+			return (NULL);
+		}
+	}
+	new_env[size] = NULL;
 
-    // Allocate new environment array
-    new_env = (char **)malloc(sizeof(char *) * (size + 1));
-    if (!new_env)
-        return NULL;
-
-    // Copy each environment string
-    for (i = 0; i < size; i++)
-    {
-        new_env[i] = ft_strdup(original_env[i]);
-        if (!new_env[i])
-        {
-            // Cleanup on error
-            while (--i >= 0)
-                free(new_env[i]);
-            free(new_env);
-            return NULL;
-        }
-    }
-    new_env[size] = NULL;
-
-    return new_env;
+	return (new_env);
 }
 
-
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	char *prompt;
 	char **new_env;

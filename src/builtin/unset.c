@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:05:36 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/25 15:23:43 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/27 10:04:30 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,7 @@ int	ft_unset(t_exec *exec, char **args)
 	while (args[++i])
 	{
 		if (!is_valid_env_name(args[i]))
-		{
-			//ft_putstr_fd("minishell: unset: '", 2);
-			//ft_putstr_fd(args[i], 2);
-			//ft_putendl_fd("': not a valid identifier", 2);
 			status = 1;
-		}
 		else
 		{
 			index = get_env_index(exec->env, args[i]);

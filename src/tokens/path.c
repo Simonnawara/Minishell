@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:35:50 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 15:55:27 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/27 10:06:39 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,55 +26,49 @@ char	*get_path(char **env)
 	return (NULL);
 }
 
-char *build_path(char *cmd, char **env)
+char	*build_path(char *cmd, char **env)
 {
-	t_path path_struct;
-    char *result;
+	t_path	path_struct;
+	char	*result;
 
 	if (!cmd || !env)
 		return (NULL);
-
-    // Handle absolute paths and current directory
-    if (cmd[0] == '/' || cmd[0] == '.') {
-        if (access(cmd, F_OK | X_OK) == 0)
-            return ft_strdup(cmd);
-        return NULL;
-    }
-
-    path_struct.path_var = get_path(env);
-    if (!path_struct.path_var)
-        return NULL;
-
-    path_struct.paths = ft_split(path_struct.path_var, ':');
-    if (!path_struct.paths)
-        return NULL;
-
-    for (int i = 0; path_struct.paths[i]; i++)
+	if (cmd[0] == '/' || cmd[0] == '.')
 	{
-        path_struct.temp = ft_strjoin(path_struct.paths[i], "/");
-        if (!path_struct.temp)
+		if (access(cmd, F_OK | X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	path_struct.path_var = get_path(env);
+	if (!path_struct.path_var)
+		return (NULL);
+	path_struct.paths = ft_split(path_struct.path_var, ':');
+	if (!path_struct.paths)
+		return (NULL);
+	for (int i = 0; path_struct.paths[i]; i++)
+	{
+		path_struct.temp = ft_strjoin(path_struct.paths[i], "/");
+		if (!path_struct.temp)
 		{
-            free_array(path_struct.paths);
-            return NULL;
-        }
-
-        path_struct.full_path = ft_strjoin(path_struct.temp, cmd);
-        free(path_struct.temp);
-
-        if (!path_struct.full_path) {
-            free_array(path_struct.paths);
-            return NULL;
-        }
-
-        if (access(path_struct.full_path, F_OK | X_OK) == 0)
+			free_array(path_struct.paths);
+			return (NULL);
+		}
+		path_struct.full_path = ft_strjoin(path_struct.temp, cmd);
+		free(path_struct.temp);
+		if (!path_struct.full_path)
 		{
-            result = ft_strdup(path_struct.full_path);
-            free(path_struct.full_path);
-            free_array(path_struct.paths);
-            return result;
-        }
-        free(path_struct.full_path);
-    }
-    free_array(path_struct.paths);
-    return NULL;
+			free_array(path_struct.paths);
+			return (NULL);
+		}
+		if (access(path_struct.full_path, F_OK | X_OK) == 0)
+		{
+			result = ft_strdup(path_struct.full_path);
+			free(path_struct.full_path);
+			free_array(path_struct.paths);
+			return (result);
+		}
+		free(path_struct.full_path);
+	}
+	free_array(path_struct.paths);
+	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/25 15:53:52 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/27 10:06:49 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_token_type	classify_token(char *token, char **env)
 {
 	t_token_type	type;
 	struct stat		path_stat;
-	char *path;
+	char			*path;
 
 	if (!token || !*token)
 		return (T_WORD);
@@ -65,7 +65,8 @@ t_token_type	classify_token(char *token, char **env)
 	return (T_WORD);
 }
 
-t_token_type	classify_token_prev(char *token, char **env, t_token_type prev_type)
+t_token_type	classify_token_prev(char *token, char **env,
+		t_token_type prev_type)
 {
 	t_token_type	type;
 	t_token_type	op_type;
@@ -84,7 +85,7 @@ t_token_type	classify_token_prev(char *token, char **env, t_token_type prev_type
 	type = get_operator_type(token);
 	if (type != T_WORD)
 		return (type);
-	if (access(token, F_OK) == 0) // for absolute paths
+	if (access(token, F_OK) == 0)
 	{
 		if (stat(token, &path_stat) == 0)
 		{
@@ -96,12 +97,12 @@ t_token_type	classify_token_prev(char *token, char **env, t_token_type prev_type
 	}
 	if (is_builtin(token))
 		return (T_COMMAND);
-   	path = build_path(token, env);
-  	if (path)
+	path = build_path(token, env);
+	if (path)
 	{
-       free(path);
-       return T_COMMAND;
-   	}
+		free(path);
+		return (T_COMMAND);
+	}
 	return (T_WORD);
 }
 
@@ -119,7 +120,8 @@ int	check_pipe(t_token_type type, char **res, int i)
 				j++;
 			if (res[j] && res[j][0] == '|')
 			{
-				ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+				ft_putendl_fd("minishell: syntax error near unexpected token `|'",
+					2);
 				g_exit_status = 2;
 				return (1);
 			}
@@ -151,7 +153,8 @@ int	check_redirect(t_token_type type, char **res, int i)
 	{
 		if (res[i + 1] == NULL)
 		{
-			ft_putendl_fd("Minishell: syntax error near unexpected token `newline'", 2);
+			ft_putendl_fd("Minishell: syntax error near unexpected token `newline'",
+				2);
 			g_exit_status = 2;
 			return (1);
 		}

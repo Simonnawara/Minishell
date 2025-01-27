@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/26 15:37:43 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/27 09:48:00 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 
 static int	is_operator(char c)
 {
-	return (c == '>' || c == '<' || c == '|' || c == ';'
-		|| c == '&' || c == '(' || c == ')');
+	return (c == '>' || c == '<' || c == '|' || c == ';' || c == '&' || c == '('
+		|| c == ')');
 }
 
 static int	get_operator_len(const char *str)
 {
-	if ((str[0] == '>' && str[1] == '>')
-		|| (str[0] == '<' && str[1] == '<')
-		|| (str[0] == '&' && str[1] == '&')
-		|| (str[0] == '|' && str[1] == '|'))
+	if ((str[0] == '>' && str[1] == '>') || (str[0] == '<' && str[1] == '<')
+		|| (str[0] == '&' && str[1] == '&') || (str[0] == '|' && str[1] == '|'))
 		return (2);
 	return (1);
 }
@@ -62,8 +60,8 @@ int	handle_quoted_word(const char *str, int *len, int start)
 int	handle_regular_word(const char *str, int *len, int start)
 {
 	while (str[start + *len] && !isspace(str[start + *len])
-		&& !is_operator(str[start + *len])
-		&& str[start + *len] != '"' && str[start + *len] != '\'')
+		&& !is_operator(str[start + *len]) && str[start + *len] != '"'
+		&& str[start + *len] != '\'')
 		(*len)++;
 	return (1);
 }
@@ -102,7 +100,6 @@ int	count_words(const char *str)
 	return (count);
 }
 
-
 static char	*get_word(const char *str, int *pos)
 {
 	int		start;
@@ -129,7 +126,6 @@ static char	*get_word(const char *str, int *pos)
 	*pos += len;
 	return (word);
 }
-
 
 char	**tokenize(char *prompt)
 {

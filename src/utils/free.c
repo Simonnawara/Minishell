@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 13:27:01 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:05:29 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,93 +48,17 @@ int	free_word_and_return(char *word, int return_value)
 void	free_token_list(t_token *tokens)
 {
 	t_token	*tmp;
+
+	if (!tokens)
+		return ;
 	while (tokens)
 	{
 		tmp = tokens->next;
-		if(tokens->value)
+		if (tokens->value)
 			free(tokens->value);
+		if (tokens->res)
+			free_array(tokens->res);
 		free(tokens);
 		tokens = tmp;
 	}
-}
-
-void free_token(t_token *token)
-{
-    if (!token)
-        return;
-    free(token->value);
-    free(token);
-}
-
-
-/* void free_token_list(t_token *tokens)
-{
-    t_token *tmp;
-    while (tokens)
-    {
-        tmp = tokens->next;
-        free(tokens->value);
-        if (tokens->res)  // Add this check
-            free_array(tokens->res);
-        free(tokens);
-        tokens = tmp;
-    }
-} */
-
-void free_ast_node(t_ast_node *node)
-{
-    if (!node)
-        return;
-    
-    // Free children first
-    free_ast_node(node->left);
-    free_ast_node(node->right);
-    
-    // Then free node contents
-    if (node->value)
-        free(node->value);
-    
-    if (node->args)
-    {
-        for (int i = 0; node->args[i]; i++)
-            free(node->args[i]);
-        free(node->args);
-    }
-    
-    // Finally free the node itself
-    free(node);
-}
-
-void	free_ast(t_ast_node *root)
-{
-	if (!root)
-		return ;
-	free_ast(root->left);
-	free_ast(root->right);
-	free_ast_node(root);
-}
-
-void	free_command_table(t_command_table *cmd)
-{
-	int	i;
-
-	if (!cmd)
-		return ;
-	free(cmd->cmd);
-	i = 0;
-	while (cmd->args && cmd->args[i])
-		free(cmd->args[i++]);
-	free(cmd->args);
-	free(cmd->infile);
-	free(cmd->outfile);
-	free(cmd->heredoc_file);
-	free(cmd->delimiter);
-	if (cmd->all_outfiles)
-    {
-        i = 0;
-        while (i < cmd->num_outfiles)
-            free(cmd->all_outfiles[i++]);
-        free(cmd->all_outfiles);
-    }
-	free(cmd);
 }
