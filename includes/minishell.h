@@ -220,6 +220,21 @@ char			*search_in_path(t_path *path_info, char *cmd);
 
 // Heredoc.c //
 int				execute_heredoc(t_ast_node *ast, t_exec *exec);
+int	collect_heredocs(t_ast_node *ast, t_heredoc **hds);
+int	handle_heredoc_error(t_heredoc *new_hds, int i);
+int	execute_command_node(t_ast_node *cmd_node, t_exec *exec,
+		int last_heredoc_fd);
+int	setup_input_redirection(t_command_table *cmd, t_ast_node *current,
+		t_exec *exec);
+		int	handle_heredoc_error_2(t_heredoc *heredocs, int heredoc_count);
+
+//heredoc_util.c //
+char	*get_heredoc_filename(void);
+int	write_to_heredoc(int fd, char *delimiter);
+void	cleanup_heredoc(t_heredoc *hd);
+int	setup_heredoc(char *delimiter, t_heredoc *hd);
+int	count_heredocs(t_ast_node *ast);
+void	cleanup_all_heredocs(t_heredoc *hds, int count);
 
 // tokenize_2.0.c //
 t_token			*tokenize_input(char *input, char **env);

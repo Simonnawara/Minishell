@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 11:42:37 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:39:15 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	execute_builtin(t_command_table *cmd, t_exec *exec)
 	}
 	return (1);
 }
+
 int	execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 {
 	int	ret;
@@ -52,9 +53,7 @@ int	execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 	{
 		i = 0;
 		while (node->args[i])
-		{
 			i++;
-		}
 	}
 	if (!node || !node->value)
 		return (1);
