@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:23:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 13:57:55 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:40:29 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int	is_command_found(char *word, char **env)
 		if ((quote_type == '"' || quote_type == 0) && ft_strchr(processed_arg,
 				'$'))
 		{
-			printf("processed arg : %s\n", processed_arg);
 			expanded_arg = expand_variables(processed_arg, env);
 			if (expanded_arg)
 			{
@@ -98,4 +97,49 @@ int	is_command_found(char *word, char **env)
 	if (quote_type)
 		free(processed_arg);
 	return (0);
+}
+
+
+char    *check_and_replace_exit_status(const char *str, int exit_status)
+{
+    char    *dollar_pos;
+    char    *result;
+    char    *exit_str;
+    int     len;
+
+    // First check if $? exists
+    if (!check_exit_status(str))
+        return (strdup(str));
+
+    // Find position of $?
+    dollar_pos = strstr(str, "$?");
+    
+    // Convert exit status to string
+    exit_str = ft_itoa(exit_status);
+    if (!exit_str)
+        return (NULL);
+    
+    // Calculate new length
+    len = strlen(str) - 2 + strlen(exit_str);
+    
+    // Allocate memory for result
+    result = (char *)malloc(sizeof(char) * (len + 1));
+    if (!result)
+    {
+        free(exit_str);
+        return (NULL);
+    }
+    
+    // Copy parts before $?
+    strncpy(result, str, dollar_pos - str);
+    result[dollar_pos - str] = '\0';
+    
+    // Add exit status
+    strcat(result, exit_str);
+    
+    // Add remaining string after $?
+    strcat(result, dollar_pos + 2);
+    
+    free(exit_str);
+    return (result);
 }
