@@ -176,7 +176,37 @@ int	parse_prompt(char *prompt, char **env)
 			}
 			if (quote_type == 0 && res[i][0] == '~')
 			{
+				char *home_value = get_env_value("HOME", env);
+				if (!home_value)
+				{
+					// Fallback to constructing path using USER if HOME isn't set
+					char *user = get_env_value("USER", env);
+					if (!user)
+						return (1);
+						
+					home_value = ft_strjoin("/home/", user);
+				}
 				
+				// If there's more path after ~, append it
+				if (strlen(res[i]) > 1)
+				{
+					char *full_path = ft_strjoin(home_value, res[i] + 1);
+					if (!full_path)
+						return (1);
+					
+					cmd = full_path;
+					free(res[i]);
+					res[i] = full_path;
+				}
+				else
+				{
+					cmd = ft_strdup(home_value);
+					if (!cmd)
+						return (1);
+					
+					free(res[i]);
+					res[i] = cmd;
+				}
 			}
 			type = classify_token_prev(cmd, env, prev_type);
 			new_token = create_token(cmd, type); 

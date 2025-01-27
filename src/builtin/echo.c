@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 15:59:41 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:20:45 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_valid_n_option(const char *str)
 	return (1);
 }
 
-static char	*get_env_value(char *var_name, char **env)
+char	*get_env_value(char *var_name, char **env)
 {
 	int	i;
 	int	var_len;
