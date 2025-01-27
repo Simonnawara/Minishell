@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 13:00:00 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:42:52 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,8 +231,8 @@ int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 					cleanup_echo_resources(NULL, processed_arg,
 						expanded_arg);
 					free(stripped_arg);
-					free(processed_arg);
-					free(expanded_arg);
+					//free(processed_arg);
+					//free(expanded_arg);
 				}
 			}
 			else
