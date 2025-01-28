@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 10:06:49 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:51:38 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,7 @@ t_token_type	classify_token(char *token, char **env)
 		return (T_COMMAND);
 	path = build_path(token, env);
 	if (path)
-	{
-		free(path);
-		return (T_COMMAND);
-	}
+		free_word_and_return(path, T_COMMAND);
 	return (T_WORD);
 }
 

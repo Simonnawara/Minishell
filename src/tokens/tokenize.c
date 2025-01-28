@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:32 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 14:23:13 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:38:37 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,49 +127,44 @@ static char	*get_word(const char *str, int *pos)
 	return (word);
 }
 
-char **tokenize(char *prompt)
+char	**tokenize(char *prompt)
 {
-    char **tokens;
-    int word_count;
-    int pos;
-    int token_idx;
+	char	**tokens;
+	int		word_count;
+	int		pos;
+	int		token_idx;
 
-    if (!prompt)
-        return (NULL);
-
-    pos = 0;
-    while (prompt[pos] && isspace(prompt[pos]))
-        pos++;
-
-    word_count = count_words(prompt);
-    if (word_count < 0)
-    {
-        ft_printf("Error: Unclosed quote\n");
-        return (NULL);
-    }
-
-    tokens = malloc(sizeof(char *) * (word_count + 1));
-    if (!tokens)
-        return (NULL);
-
-    token_idx = 0;
-    while (prompt[pos])
-    {
-        while (prompt[pos] && isspace(prompt[pos]))
-            pos++;
-        if (!prompt[pos])
-            break;
-
-        tokens[token_idx] = get_word(prompt, &pos);
-        if (!tokens[token_idx])
-        {
-            while (--token_idx >= 0)
-                free(tokens[token_idx]);
-            free(tokens);
-            return (NULL);
-        }
-        token_idx++;
-    }
-    tokens[token_idx] = NULL;
-    return (tokens);
+	if (!prompt)
+		return (NULL);
+	pos = 0;
+	while (prompt[pos] && isspace(prompt[pos]))
+		pos++;
+	word_count = count_words(prompt);
+	if (word_count < 0)
+	{
+		ft_printf("Error: Unclosed quote\n");
+		return (NULL);
+	}
+	tokens = malloc(sizeof(char *) * (word_count + 1));
+	if (!tokens)
+		return (NULL);
+	token_idx = 0;
+	while (prompt[pos])
+	{
+		while (prompt[pos] && isspace(prompt[pos]))
+			pos++;
+		if (!prompt[pos])
+			break ;
+		tokens[token_idx] = get_word(prompt, &pos);
+		if (!tokens[token_idx])
+		{
+			while (--token_idx >= 0)
+				free(tokens[token_idx]);
+			free(tokens);
+			return (NULL);
+		}
+		token_idx++;
+	}
+	tokens[token_idx] = NULL;
+	return (tokens);
 }

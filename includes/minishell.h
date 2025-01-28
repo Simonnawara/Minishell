@@ -217,7 +217,7 @@ int				execute_external_command(t_command_table *cmd, t_exec *exec);
 
 // extern_cmd_path //
 char			*find_command_path(char *cmd, t_path *path_info);
-char			*search_in_path(t_path *path_info, char *cmd);
+//char			*search_in_path(t_path *path_info, char *cmd);
 
 // Heredoc.c //
 int				execute_heredoc(t_ast_node *ast, t_exec *exec);

@@ -17,7 +17,7 @@ extern int g_exit_status;
 
 int	validate_inputs(int argc)
 {
-	if (argc < 1)
+	if (argc > 1)
 		return (ft_putendl_fd("Error : argument number invalid", 2), 1);
 	return (0);
 }
