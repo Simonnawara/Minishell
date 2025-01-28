@@ -127,6 +127,8 @@ int	parse_prompt(char *prompt, char **env)
 				}
 			}
 			type = classify_token_prev(cmd, env, prev_type);
+			if (strcmp(cmd, "|") == 0)
+				type = T_WORD;
 			new_token = create_token(cmd, type);
 			if (new_token && new_token->value
 				&& !ft_strcmp(new_token->value, "echo"))
