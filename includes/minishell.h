@@ -249,4 +249,6 @@ void			ignore_signals(void);
 void			update_exit_status(int status);
 char			*get_exit_status(t_exec *exec);
 
+int	init_command_check(char *word, char **env, char *quote_type);
+
 #endif

@@ -14,6 +14,7 @@ Error: MISALIGNED_FUNC_DECL (line: 232, col:   9):	Misaligned function declarati
 Error: MISALIGNED_FUNC_DECL (line: 233, col:   5):	Misaligned function declaration
 Error: MISALIGNED_FUNC_DECL (line: 234, col:   5):	Misaligned function declaration
 Error: MISALIGNED_FUNC_DECL (line: 235, col:   9):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 252, col:   5):	Misaligned function declaration
 libft/include/ft_printf.h: OK!
 libft/include/get_next_line.h: OK!
 libft/include/libft.h: OK!
@@ -113,23 +114,25 @@ Error: TOO_MANY_VARS_FUNC   (line:  72, col:   1):	Too many variables declaratio
 Error: SPACE_REPLACE_TAB    (line:  72, col:  17):	Found space when expecting tab
 Error: MISALIGNED_VAR_DECL  (line:  72, col:  18):	Misaligned variable declaration
 Error: DECL_ASSIGN_LINE     (line:  72, col:  28):	Declaration and assignation on a single line
-Error: WRONG_SCOPE_COMMENT  (line: 170, col:   9):	Comment is invalid in this scope
-Error: TOO_MANY_LINES       (line: 194, col:   1):	Function has more than 25 lines
-Error: NEWLINE_PRECEDES_FUNC (line: 195, col:   1):	Functions must be separated by a newline
-Error: SPACE_REPLACE_TAB    (line: 197, col:   8):	Found space when expecting tab
-Error: MULT_DECL_LINE       (line: 197, col:  10):	Multiple declarations on a single line
-Error: DECL_ASSIGN_LINE     (line: 197, col:  17):	Declaration and assignation on a single line
-Error: SPACE_REPLACE_TAB    (line: 198, col:   9):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line: 198, col:  10):	Misaligned variable declaration
-Error: FORBIDDEN_CS         (line: 205, col:   5):	Forbidden control structure
-Error: EMPTY_LINE_FUNCTION  (line: 217, col:   1):	Empty line in function
-Error: TOO_MANY_FUNCS       (line: 221, col:   1):	Too many functions in file
-Error: SPACE_REPLACE_TAB    (line: 223, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 224, col:   9):	Found space when expecting tab
-Error: NL_AFTER_VAR_DECL    (line: 225, col:   1):	Variable declarations must be followed by a newline
-Error: EMPTY_LINE_FUNCTION  (line: 226, col:   1):	Empty line in function
-Error: BRACE_SHOULD_EOL     (line: 255, col:   1):	Expected newline after brace
-Error: TOO_MANY_LINES       (line: 255, col:   1):	Function has more than 25 lines
+Error: WRONG_SCOPE_COMMENT  (line: 108, col:  25):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line: 111, col:  25):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line: 147, col:  21):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line: 150, col:  21):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line: 186, col:   9):	Comment is invalid in this scope
+Error: TOO_MANY_LINES       (line: 210, col:   1):	Function has more than 25 lines
+Error: SPACE_REPLACE_TAB    (line: 214, col:   8):	Found space when expecting tab
+Error: MULT_DECL_LINE       (line: 214, col:  10):	Multiple declarations on a single line
+Error: DECL_ASSIGN_LINE     (line: 214, col:  17):	Declaration and assignation on a single line
+Error: SPACE_REPLACE_TAB    (line: 215, col:   9):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line: 215, col:  10):	Misaligned variable declaration
+Error: FORBIDDEN_CS         (line: 222, col:   5):	Forbidden control structure
+Error: EMPTY_LINE_FUNCTION  (line: 234, col:   1):	Empty line in function
+Error: TOO_MANY_FUNCS       (line: 238, col:   1):	Too many functions in file
+Error: SPACE_REPLACE_TAB    (line: 240, col:   9):	Found space when expecting tab
+Error: SPACE_REPLACE_TAB    (line: 241, col:   9):	Found space when expecting tab
+Error: NL_AFTER_VAR_DECL    (line: 242, col:   1):	Variable declarations must be followed by a newline
+Error: EMPTY_LINE_FUNCTION  (line: 243, col:   1):	Empty line in function
+Error: TOO_MANY_LINES       (line: 272, col:   1):	Function has more than 25 lines
 src/ast/build_ast_utils.c: OK!
 src/ast/build_ast.c: Error!
 Error: ASSIGN_IN_CONTROL    (line:  40, col:  23):	Assignment in control structure
@@ -728,8 +731,6 @@ Notice: GLOBAL_VAR_DETECTED  (line:  15, col:   1):	Global variable present in f
 src/exec/heredoc_util.c: OK!
 src/utils/ft_strcmp.c: OK!
 src/utils/signals.c: OK!
-src/utils/errors.c: Error!
-Error: TOO_MANY_LINES       (line:  49, col:   1):	Function has more than 25 lines
-Error: TOO_MANY_LINES       (line: 100, col:   1):	Function has more than 25 lines
 src/utils/free.c: OK!
 src/utils/free_2.c: OK!
+src/utils/errors.c: OK!

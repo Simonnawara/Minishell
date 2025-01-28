@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 10:21:06 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 11:55:14 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:22:28 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,10 @@ void	free_ast(t_ast_node *root)
 	free_ast(root->left);
 	free_ast(root->right);
 	free_ast_node(root);
+}
+
+void	file_error(char *filename)
+{
+	write(2, filename, ft_strlen(filename));
+	perror(" ");
 }

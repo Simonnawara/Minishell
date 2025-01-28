@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:30:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 10:20:28 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 11:34:48 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,15 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 		n--;
 	}
 	return (dest);
+}
+
+int	init_command_check(char *word, char **env, char *quote_type)
+{
+	if (!word || !env)
+		return (1);
+	*quote_type = 0;
+	if (word[0] == word[ft_strlen(word) - 1] && (word[0] == 34
+			|| word[0] == 39))
+		*quote_type = word[0];
+	return (0);
 }
