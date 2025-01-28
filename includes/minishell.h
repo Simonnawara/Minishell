@@ -214,6 +214,19 @@ int	update_env_var(t_exec *exec, const char *name, const char *value);
 int	init_export_args(char **args, const char *name,
 		const char *value, char **var);
 
+// export_utils.c && export_utils_more.c //
+char *find_env_var(char **env, char *name);
+int is_append_operation(char *var);
+char *create_new_value(char *name, char *old_value, char *new_value,
+		int is_append);
+char	*get_existing_value(char **env, char *name, int is_append);
+int	update_existing_var(char **env, char *name, char *new_value,
+		int is_append);
+char *get_var_value(char *var);
+char *get_var_name(char *var);
+int is_valid_id(char *str);
+char	*append_values(char *name, char *old_value, char *new_value);
+
 // redirection_input //
 int				setup_redirection(t_command_table *cmd);
 int				restore_io(t_command_table *cmd);
