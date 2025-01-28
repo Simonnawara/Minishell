@@ -2,21 +2,28 @@ includes/minishell.h: Error!
 Notice: GLOBAL_VAR_DETECTED  (line:  35, col:   1):	Global variable present in file. Make sure it is a reasonable choice.
 Error: LINE_TOO_LONG        (line: 138, col:  82):	line too long
 Error: MISALIGNED_FUNC_DECL (line: 200, col:  10):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 224, col:   5):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 225, col:   5):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 226, col:   5):	Misaligned function declaration
-Error: TOO_FEW_TAB          (line: 227, col:   1):	Missing tabs for indent level
-Error: MISALIGNED_FUNC_DECL (line: 228, col:   5):	Misaligned function declaration
-Error: TOO_FEW_TAB          (line: 229, col:   1):	Missing tabs for indent level
-Error: TOO_MANY_TAB         (line: 230, col:   1):	Extra tabs for indent level
-Error: MISALIGNED_FUNC_DECL (line: 230, col:  13):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 233, col:  10):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 209, col:   9):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 210, col:  10):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 211, col:   5):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 212, col:  10):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 213, col:   5):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 214, col:   5):	Misaligned function declaration
+Error: TOO_FEW_TAB          (line: 215, col:   1):	Missing tabs for indent level
+Error: MISALIGNED_FUNC_DECL (line: 233, col:   5):	Misaligned function declaration
 Error: MISALIGNED_FUNC_DECL (line: 234, col:   5):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 235, col:   9):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 236, col:   5):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 235, col:   5):	Misaligned function declaration
+Error: TOO_FEW_TAB          (line: 236, col:   1):	Missing tabs for indent level
 Error: MISALIGNED_FUNC_DECL (line: 237, col:   5):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 238, col:   9):	Misaligned function declaration
-Error: MISALIGNED_FUNC_DECL (line: 255, col:   5):	Misaligned function declaration
+Error: TOO_FEW_TAB          (line: 238, col:   1):	Missing tabs for indent level
+Error: TOO_MANY_TAB         (line: 239, col:   1):	Extra tabs for indent level
+Error: MISALIGNED_FUNC_DECL (line: 239, col:  13):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 242, col:  10):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 243, col:   5):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 244, col:   9):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 245, col:   5):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 246, col:   5):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 247, col:   9):	Misaligned function declaration
+Error: MISALIGNED_FUNC_DECL (line: 264, col:   5):	Misaligned function declaration
 libft/include/ft_printf.h: OK!
 libft/include/get_next_line.h: OK!
 libft/include/libft.h: OK!
@@ -719,20 +726,7 @@ Error: LINE_TOO_LONG        (line: 343, col:   1):	line too long
 Error: LINE_TOO_LONG        (line: 343, col:  84):	line too long
 Error: SPACE_EMPTY_LINE     (line: 388, col:   1):	Space on empty line
 Error: CONSECUTIVE_NEWLINES (line: 395, col:   1):	Consecutive newlines
-src/builtin/cd.c: Error!
-Error: TOO_MANY_LINES       (line:  75, col:   1):	Function has more than 25 lines
-Error: NEWLINE_PRECEDES_FUNC (line:  76, col:   1):	Functions must be separated by a newline
-Error: TOO_MANY_FUNCS       (line: 119, col:   1):	Too many functions in file
-Error: SPACE_REPLACE_TAB    (line: 121, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 122, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 123, col:   8):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line: 123, col:   9):	Misaligned variable declaration
-Error: EMPTY_LINE_FUNCTION  (line: 127, col:   1):	Empty line in function
-Error: EMPTY_LINE_FUNCTION  (line: 163, col:   1):	Empty line in function
-Error: EMPTY_LINE_FUNCTION  (line: 165, col:   1):	Empty line in function
-Error: EMPTY_LINE_FUNCTION  (line: 173, col:   1):	Empty line in function
-Error: BRACE_SHOULD_EOL     (line: 177, col:   1):	Expected newline after brace
-Error: TOO_MANY_LINES       (line: 177, col:   1):	Function has more than 25 lines
+src/builtin/cd.c: OK!
 src/builtin/echo.c: Error!
 Error: TOO_MANY_VARS_FUNC   (line:  57, col:   1):	Too many variables declarations in a function
 Error: TOO_MANY_VARS_FUNC   (line:  58, col:   1):	Too many variables declarations in a function
@@ -755,9 +749,8 @@ Error: TERNARY_FBIDDEN      (line: 231, col:  47):	Ternaries are forbidden
 Error: WRONG_SCOPE_COMMENT  (line: 235, col:  21):	Comment is invalid in this scope
 Error: WRONG_SCOPE_COMMENT  (line: 236, col:  21):	Comment is invalid in this scope
 Error: TOO_MANY_LINES       (line: 264, col:   1):	Function has more than 25 lines
-src/exec/error_pipe.c: Error!
-Error: NEWLINE_PRECEDES_FUNC (line:  30, col:   1):	Functions must be separated by a newline
-Error: BRACE_SHOULD_EOL     (line:  88, col:   1):	Expected newline after brace
+src/builtin/cd_utils.c: OK!
+src/exec/error_pipe.c: OK!
 src/exec/exec_simple_command.c: OK!
 src/exec/redirection_setup.c: OK!
 src/exec/heredoc.c: OK!

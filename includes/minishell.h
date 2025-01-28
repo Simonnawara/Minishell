@@ -205,6 +205,15 @@ int				ft_env(t_exec *exec, char **args);
 int				ft_exit(t_ast_node *node, t_exec *exec);
 int				ft_cd(char **args, t_exec *exec);
 
+// cd_utils.c //
+void	print_error(char **args);
+char	*get_env_value1(char **env, const char *var);
+int	update_pwd_vars(t_exec *exec, const char *new_path);
+char	*get_absolute_path(char *base, char *arg);
+int	update_env_var(t_exec *exec, const char *name, const char *value);
+int	init_export_args(char **args, const char *name,
+		const char *value, char **var);
+
 // redirection_input //
 int				setup_redirection(t_command_table *cmd);
 int				restore_io(t_command_table *cmd);

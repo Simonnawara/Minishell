@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 11:33:14 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 16:05:10 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:37:37 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	fork_error(void)
 		exit_code = 1;
 	return (exit_code);
 }
+
 int	handle_heredoc_error(t_heredoc *new_hds, int i)
 {
 	while (i > 0)
