@@ -100,56 +100,51 @@ int	parse_prompt(char *prompt, char **env)
 		total_quotes = count_quotes(res[i], quote_type);
 		if (quote_type && total_quotes % 2 == 0)
 		{
-			if (ft_strlen(res[i]) == 2)
-				printf("Word between quotes is empty\n");
-			else
+			cmd = get_command(res[i], total_quotes, quote_type);
+			if (!cmd)
 			{
-				cmd = get_command(res[i], total_quotes, quote_type);
-				if (!cmd)
-				{
-					free_prompt_resources(tokens, res, expanded_arg);
-					return (1);
-				}
-				processed_arg = cmd;
-				if (quote_type == 34 && ft_strchr(processed_arg, '$'))
-				{
-					if (check_exit_status(processed_arg))
-					{
-						expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
-						if (i == 0)
-						{
-							printf("%s : command not found\n", expanded_arg);
-							g_exit_status = 127;
-							break ;
-						}
-					}
-					else
-					{	
-						expanded_arg = expand_variables(processed_arg, env);
-						cmd = expanded_arg;
-						free(processed_arg);
-					}
-				}
-				type = classify_token_prev(cmd, env, prev_type);
-				new_token = create_token(cmd, type);
-				if (new_token && new_token->value
-					&& !ft_strcmp(new_token->value, "echo"))
-				{
-					new_token->res = res;
-					new_token->echo_counter = i;
-				}
-				free(cmd);
-				if (!new_token)
-				{
-					free_token_list(tokens);
-					free_array(res);
-					return (1);
-				}
-				add_token(&tokens, new_token);
-				if (!tokens)
-					ft_putendl_fd("Error: Tokens list is NULL after add_token",
-						2);
+				free_prompt_resources(tokens, res, expanded_arg);
+				return (1);
 			}
+			processed_arg = cmd;
+			if (quote_type == 34 && ft_strchr(processed_arg, '$'))
+			{
+				if (check_exit_status(processed_arg))
+				{
+					expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
+					if (i == 0)
+					{
+						printf("%s : command not found\n", expanded_arg);
+						g_exit_status = 127;
+						break ;
+					}
+				}
+				else
+				{	
+					expanded_arg = expand_variables(processed_arg, env);
+					cmd = expanded_arg;
+					free(processed_arg);
+				}
+			}
+			type = classify_token_prev(cmd, env, prev_type);
+			new_token = create_token(cmd, type);
+			if (new_token && new_token->value
+				&& !ft_strcmp(new_token->value, "echo"))
+			{
+				new_token->res = res;
+				new_token->echo_counter = i;
+			}
+			free(cmd);
+			if (!new_token)
+			{
+				free_token_list(tokens);
+				free_array(res);
+				return (1);
+			}
+			add_token(&tokens, new_token);
+			if (!tokens)
+				ft_putendl_fd("Error: Tokens list is NULL after add_token",
+					2);
 		}
 		else
 		{
@@ -232,8 +227,8 @@ int	parse_prompt(char *prompt, char **env)
 			{
 				if (tokens)
 					free_token_list(tokens);
-				if (res)
-					free_array(res);
+				//if (res)
+					//free_array(res);
 				return (1);
 			}
 		}

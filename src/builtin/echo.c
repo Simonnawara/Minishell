@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 16:20:45 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:09:50 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,8 +184,8 @@ int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 		i++;
 		res_index = echo_counter + i;
 	}
-	while (res[res_index] && res[res_index][0] != '>'
-		&& res[res_index][0] != '<')
+	while (res[res_index] && res[res_index][0] != '>' 
+    && res[res_index][0] != '<' && res[res_index][0] != '|')
 	{
 		stripped_arg = strip_quotes(res[res_index]);
 		if (!stripped_arg)
@@ -232,8 +232,6 @@ int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 					cleanup_echo_resources(NULL, processed_arg,
 						expanded_arg);
 					free(stripped_arg);
-					//free(processed_arg);
-					//free(expanded_arg);
 				}
 			}
 			else
