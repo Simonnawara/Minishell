@@ -141,7 +141,8 @@ int				is_command_found(char *word, char **env);
 int				verify_forbidden_tokens(char *prompt);
 int				ft_strcmp(const char *s1, const char *s2);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
-char			*check_and_replace_exit_status(const char *str, int exit_status);
+char			*check_and_replace_exit_status(const char *str,
+					int exit_status);
 int				check_exit_status(const char *str);
 
 // error_pipe.c //
@@ -170,7 +171,7 @@ int				handle_regular_word(const char *str, int *len, int start);
 int				process_word_for_count(const char *str, int *i);
 
 // tokenize_utils2.c //
-char	**handle_tokenize_error(char **tokens, int token_idx);
+char			**handle_tokenize_error(char **tokens, int token_idx);
 
 // token_type.c //
 t_token_type	get_operator_type(char *token);
@@ -204,6 +205,7 @@ t_ast_node		*handle_multiple_redirections(t_token **tokens);
 t_ast_node		*handle_pipe_creation(t_token **tokens,
 					t_token *current, t_token *split);
 t_ast_node		*handle_redirection_sequence(t_token **tokens);
+<<<<<<< HEAD
 // t_ast_node	*create_redirection_node(t_token *current,
 // 					t_ast_node **root, t_ast_node *cmd_node);
 // void	handle_root_assignment(t_ast_node **root, t_ast_node *redir,
@@ -211,15 +213,30 @@ t_ast_node		*handle_redirection_sequence(t_token **tokens);
 // void	handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
 // 				t_ast_node *cmd_node);
 
+=======
+t_ast_node		*create_redirection_node(t_token *current,
+					t_ast_node **root, t_ast_node *cmd_node);
+void			handle_root_assignment(t_ast_node **root, t_ast_node *redir,
+					t_ast_node *cmd_node);
+void			handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
+					t_ast_node *cmd_node);
+>>>>>>> origin/main
 
 // execute_ast.c && utils//
 int				execute_ast(t_ast_node *ast, t_exec *exec);
 int				execute_pipe_child(t_ast_node *ast, t_exec *exec, int *pipe_fds,
+<<<<<<< HEAD
 				int is_left);
 int				handle_pipe(t_ast_node *ast, t_exec *exec);
 void	cleanup_nodes(t_ast_node *root, t_ast_node *cmd_node,
 		t_ast_node *redir);
 
+=======
+					int is_left);
+int				handle_pipe(t_ast_node *ast, t_exec *exec);
+void			cleanup_nodes(t_ast_node *root, t_ast_node *cmd_node,
+					t_ast_node *redir);
+>>>>>>> origin/main
 
 // execute_pipe.c //
 int				execute_pipe_node(t_ast_node *node, t_exec *exec);
@@ -249,18 +266,32 @@ void			print_error(char **args);
 char			*get_env_value1(char **env, const char *var);
 int				update_pwd_vars(t_exec *exec, const char *new_path);
 char			*get_absolute_path(char *base, char *arg);
+<<<<<<< HEAD
 int				update_env_var(t_exec *exec, const char *name, const char *value);
 int				init_export_args(char **args, const char *name,
 		const char *value, char **var);
+=======
+int				update_env_var(t_exec *exec, const char *name,
+					const char *value);
+int				init_export_args(char **args, const char *name,
+					const char *value, char **var);
+>>>>>>> origin/main
 
 // export_utils.c && export_utils_more.c //
 char			*find_env_var(char **env, char *name);
 int				is_append_operation(char *var);
 char			*create_new_value(char *name, char *old_value, char *new_value,
+<<<<<<< HEAD
 				int is_append);
 char			*get_existing_value(char **env, char *name, int is_append);
 int				update_existing_var(char **env, char *name, char *new_value,
 				int is_append);
+=======
+					int is_append);
+char			*get_existing_value(char **env, char *name, int is_append);
+int				update_existing_var(char **env, char *name, char *new_value,
+					int is_append);
+>>>>>>> origin/main
 char			*get_var_value(char *var);
 char			*get_var_name(char *var);
 int				is_valid_id(char *str);
@@ -285,9 +316,15 @@ int				execute_heredoc(t_ast_node *ast, t_exec *exec);
 int				collect_heredocs(t_ast_node *ast, t_heredoc **hds);
 int				handle_heredoc_error(t_heredoc *new_hds, int i);
 int				execute_command_node(t_ast_node *cmd_node, t_exec *exec,
+<<<<<<< HEAD
 				int last_heredoc_fd);
 int				setup_input_redirection(t_command_table *cmd, t_ast_node *current,
 				t_exec *exec);
+=======
+					int last_heredoc_fd);
+int				setup_input_redirection(t_command_table *cmd,
+					t_ast_node *current, t_exec *exec);
+>>>>>>> origin/main
 int				handle_heredoc_error_2(t_heredoc *heredocs, int heredoc_count);
 
 //heredoc_util.c //
@@ -312,6 +349,10 @@ void			reset_signals(void);
 void			ignore_signals(void);
 void			update_exit_status(int status);
 char			*get_exit_status(t_exec *exec);
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
 int				init_command_check(char *word, char **env, char *quote_type);
 
 #endif

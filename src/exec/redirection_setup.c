@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_setup.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:02:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/28 14:33:35 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:49:57 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ static int	setup_input(t_command_table *cmd)
 		return (0);
 	cmd->saved_stdin = dup(STDIN_FILENO);
 	if (cmd->saved_stdin == -1)
-		return (handle_redirect_error1(cmd->infile, "Failed to backup stdin"));
+		return (handle_redirect_error1(cmd->infile, "Failed backup stdin"));
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd == -1)
 		return (handle_redirect_error1(cmd->infile, "N"));
 	if (dup2(fd, STDIN_FILENO) == -1)
 	{
 		close(fd);
-		return (handle_redirect_error1(cmd->infile, "Failed to redirect input"));
+		return (handle_redirect_error1(cmd->infile, "Failed redirect input"));
 	}
 	close(fd);
 	return (0);
@@ -52,7 +52,7 @@ static int	setup_output(t_command_table *cmd)
 		return (0);
 	cmd->saved_stdout = dup(STDOUT_FILENO);
 	if (cmd->saved_stdout == -1)
-		return (handle_redirect_error1(cmd->outfile, "Failed to backup stdout"));
+		return (handle_redirect_error1(cmd->outfile, "Failed backup stdout"));
 	flags = O_WRONLY | O_CREAT;
 	if (cmd->append)
 		flags |= O_APPEND;
