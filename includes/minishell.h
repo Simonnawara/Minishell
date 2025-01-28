@@ -156,6 +156,16 @@ char			**tokenize(char *prompt);
 int				count_words(const char *str);
 int				move_past_quotes(const char *str, char quote_type, int *i);
 
+// tokenize_utils.c //
+int	is_operator(char c);
+int	get_operator_len(const char *str);
+int	handle_quoted_word(const char *str, int *len, int start);
+int	handle_regular_word(const char *str, int *len, int start);
+int	process_word_for_count(const char *str, int *i);
+
+// tokenize_utils2.c //
+char	**handle_tokenize_error(char **tokens, int token_idx);
+
 // token_type.c //
 t_token_type	get_operator_type(char *token);
 t_token_type	classify_token(char *token, char **env);
@@ -163,6 +173,13 @@ t_token_type	classify_token_prev(char *token, char **env,
 					t_token_type prev_type);
 int				check_pipe(t_token_type type, char **res, int i);
 int				check_redirect(t_token_type type, char **res, int i);
+
+// token_type_utils.c //
+t_token_type	check_executable(char *token);
+int				check_consecutive_pipes(char **res);
+int				check_pipe_position(char **res, int i, t_token_type type);
+int				handle_redirect_error(char **res, int i);
+int				open_redirect_file(char **res, int i, int type);
 
 // build_ast_utils.c //
 t_command_table	*init_command_table(void);

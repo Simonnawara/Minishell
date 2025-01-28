@@ -20,7 +20,10 @@ SRCS =  main.c \
 		tokens/path.c \
 		tokens/quotes.c \
 		tokens/tokenize.c \
+		tokens/tokenize_utils.c \
+		tokens/tokenize_utils2.c \
 		tokens/token_type.c \
+		tokens/token_type_utils.c \
 		tokens/tokenize_2.0.c \
 		ast/build_ast.c \
 		ast/build_ast_utils.c \
