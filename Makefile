@@ -27,7 +27,11 @@ SRCS =  main.c \
 		tokens/tokenize_2.0.c \
 		ast/build_ast.c \
 		ast/build_ast_utils.c \
+		ast/build_command_node.c \
+		ast/arg_to_cmd.c \
+		ast/handle_redir.c \
 		ast/execute_ast.c \
+		ast/execute_ast_utils.c \
 		exec/error_pipe.c \
 		exec/exec_simple_command.c \
 		builtin/echo.c \

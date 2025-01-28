@@ -6,64 +6,56 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 10:01:01 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:18:34 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	add_argument_to_command(t_ast_node *cmd_node, char *arg)
+static t_ast_node	*create_redirection_node(t_token *current,
+					t_ast_node **root, t_ast_node *cmd_node)
 {
-	int		i;
-	int		j;
-	char	**new_args;
+	t_ast_node	*redir;
 
-	i = 0;
-	j = -1;
-	if (cmd_node->args)
-		while (cmd_node->args[i])
-			i++;
-	new_args = malloc(sizeof(char *) * (i + 2));
-	if (!new_args)
-		return (0);
-	while (++j < i)
+	redir = create_ast_node(current->type, current->value);
+	if (!redir)
 	{
-		new_args[j] = ft_strdup(cmd_node->args[j]);
-		if (!new_args[j])
-		{
-			while (--j >= 0)
-				free(new_args[j]);
-			free(new_args);
-			return (0);
-		}
+		free_ast(*root);
+		free_ast_node(cmd_node);
+		return (NULL);
 	}
-	if (!(new_args[i] = ft_strdup(arg)))
+	if (!current->next || current->next->type != T_WORD)
 	{
-		while (--j >= 0)
-			free(new_args[j]);
-		free(new_args);
-		return (0);
+		free_ast_node(redir);
+		free_ast(*root);
+		free_ast_node(cmd_node);
+		return (NULL);
 	}
-	new_args[i + 1] = NULL;
-	if (cmd_node->args)
-		free_array(cmd_node->args);
-	cmd_node->args = new_args;
-	return (1);
+	redir->right = create_ast_node(T_WORD, current->next->value);
+	if (!redir->right)
+	{
+		free_ast_node(redir);
+		free_ast(*root);
+		free_ast_node(cmd_node);
+		return (NULL);
+	}
+	return (redir);
 }
 
-t_ast_node	*create_ast_node(t_token_type type, char *value)
+static void	handle_root_assignment(t_ast_node **root, t_ast_node *redir,
+				t_ast_node *cmd_node)
 {
-	t_ast_node	*node;
+	*root = redir;
+	if (cmd_node)
+		(*root)->left = cmd_node;
+}
 
-	node = malloc(sizeof(t_ast_node));
-	if (!node)
-		return (NULL);
-	node->type = type;
-	node->value = ft_strdup(value);
-	node->left = NULL;
-	node->right = NULL;
-	node->args = NULL;
-	return (node);
+static void	handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
+				t_ast_node *cmd_node)
+{
+	prev_redir->left = redir;
+	if (cmd_node && !redir->left)
+		redir->left = cmd_node;
 }
 
 t_ast_node	*handle_redirection_sequence(t_token **tokens)
@@ -93,55 +85,28 @@ t_ast_node	*handle_redirection_sequence(t_token **tokens)
 				|| current->type == T_APPEND || current->type == T_HEREDOC)
 			&& current->next)
 		{
-			redir = create_ast_node(current->type, current->value);
+			redir = create_redirection_node(current, &root, cmd_node);
 			if (!redir)
-			{
 				return (NULL);
-				free_ast(root);
-				free_ast_node(cmd_node);
-			}
-			if (!current->next || current->next->type != T_WORD)
-			{
-				free_ast_node(redir);
-				free_ast(root);
-				free_ast_node(cmd_node);
-				return (NULL);
-			}
-			redir->right = create_ast_node(T_WORD, current->next->value);
-			if (!redir->right)
-			{
-				free_ast_node(redir);
-				free_ast(root);
-				free_ast_node(cmd_node);
-				return (NULL);
-			}
 			if (!root)
-			{
-				root = redir;
-				if (cmd_node)
-					root->left = cmd_node;
-			}
+				handle_root_assignment(&root, redir, cmd_node);
 			else if (prev_redir)
-			{
-				prev_redir->left = redir;
-				if (cmd_node && !redir->left)
-					redir->left = cmd_node;
-			}
+				handle_prev_redir(prev_redir, redir, cmd_node);
 			prev_redir = redir;
 			current = current->next->next;
 		}
 		else
 			current = current->next;
 	}
-	return (root ? root : cmd_node);
+	if (root)
+		return (root);
+	return (cmd_node);
 }
+
 
 t_ast_node	*build_ast(t_token **tokens)
 {
 	t_token		*current;
-	t_ast_node	*pipe;
-	t_token		*left;
-	t_token		*right;
 	t_token		*split;
 
 	if (!tokens || !*tokens)
@@ -151,61 +116,13 @@ t_ast_node	*build_ast(t_token **tokens)
 	{
 		if (current->type == T_PIPE)
 		{
-			pipe = create_ast_node(T_PIPE, "|");
-			if (!pipe)
-				return (NULL);
-			left = *tokens;
-			right = current->next;
 			split = *tokens;
 			while (split && split->next != current)
 				split = split->next;
-			if (split)
-				split->next = NULL;
-			pipe->left = build_ast(&left);
-			pipe->right = build_ast(&right);
-			if (!pipe->left || !pipe->right)
-			{
-				free_ast_node(pipe->left);
-				free_ast_node(pipe->right);
-				free_ast_node(pipe);
-				return (NULL);
-			}
-			*tokens = NULL;
-			return (pipe);
+			return (handle_pipe_creation(tokens, current, split));
 		}
 		current = current->next;
 	}
 	return (handle_redirection_sequence(tokens));
 }
 
-t_ast_node	*build_command_node(t_token **tokens)
-{
-	t_ast_node	*cmd_node;
-	t_token		*current;
-
-	current = *tokens;
-	if (!current)
-		return (NULL);
-	cmd_node = create_ast_node(T_COMMAND, current->value);
-	if (!cmd_node)
-		return (NULL);
-	cmd_node->res = current->res;
-	cmd_node->echo_counter = current->echo_counter;
-	if (!add_argument_to_command(cmd_node, current->value))
-	{
-		free_ast_node(cmd_node);
-		return (NULL);
-	}
-	current = current->next;
-	while (current && current->type == T_WORD)
-	{
-		if (!add_argument_to_command(cmd_node, current->value))
-		{
-			free_ast_node(cmd_node);
-			return (NULL);
-		}
-		current = current->next;
-	}
-	*tokens = current;
-	return (cmd_node);
-}

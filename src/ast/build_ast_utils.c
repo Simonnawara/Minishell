@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:27:29 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/24 12:49:04 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:31:26 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,19 @@ char	**copy_string_array(char **arr)
 	}
 	new[i] = NULL;
 	return (new);
+}
+
+t_ast_node	*create_ast_node(t_token_type type, char *value)
+{
+	t_ast_node	*node;
+
+	node = malloc(sizeof(t_ast_node));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	node->value = ft_strdup(value);
+	node->left = NULL;
+	node->right = NULL;
+	node->args = NULL;
+	return (node);
 }
