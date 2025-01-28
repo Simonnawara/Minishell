@@ -198,12 +198,12 @@ t_ast_node		*handle_multiple_redirections(t_token **tokens);
 t_ast_node	*handle_pipe_creation(t_token **tokens,
 					t_token *current, t_token *split);
 t_ast_node	*handle_redirection_sequence(t_token **tokens);
-// t_ast_node	*create_redirection_node(t_token *current,
-// 					t_ast_node **root, t_ast_node *cmd_node);
-// void	handle_root_assignment(t_ast_node **root, t_ast_node *redir,
-// 				t_ast_node *cmd_node);
-// void	handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
-// 				t_ast_node *cmd_node);
+t_ast_node	*create_redirection_node(t_token *current,
+					t_ast_node **root, t_ast_node *cmd_node);
+void	handle_root_assignment(t_ast_node **root, t_ast_node *redir,
+				t_ast_node *cmd_node);
+void	handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
+				t_ast_node *cmd_node);
 
 
 // execute_ast.c && utils//
