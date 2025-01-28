@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:30:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/28 12:02:35 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:15:24 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,46 +51,31 @@ int	init_command_check(char *word, char **env, char *quote_type)
 		*quote_type = word[0];
 	return (0);
 }
-char    *check_and_replace_exit_status(const char *str, int exit_status)
+
+char	*check_and_replace_exit_status(const char *str, int exit_status)
 {
-    char    *dollar_pos;
-    char    *result;
-    char    *exit_str;
-    int     len;
+	char	*dollar_pos;
+	char	*result;
+	char	*exit_str;
+	int		len;
 
-    // First check if $? exists
-    if (!check_exit_status(str))
-        return (strdup(str));
-
-    // Find position of $?
-    dollar_pos = strstr(str, "$?");
-    
-    // Convert exit status to string
-    exit_str = ft_itoa(exit_status);
-    if (!exit_str)
-        return (NULL);
-    
-    // Calculate new length
-    len = strlen(str) - 2 + strlen(exit_str);
-    
-    // Allocate memory for result
-    result = (char *)malloc(sizeof(char) * (len + 1));
-    if (!result)
-    {
-        free(exit_str);
-        return (NULL);
-    }
-    
-    // Copy parts before $?
-    strncpy(result, str, dollar_pos - str);
-    result[dollar_pos - str] = '\0';
-    
-    // Add exit status
-    strcat(result, exit_str);
-    
-    // Add remaining string after $?
-    strcat(result, dollar_pos + 2);
-    
-    free(exit_str);
-    return (result);
+	if (!check_exit_status(str))
+		return (strdup(str));
+	dollar_pos = strstr(str, "$?");
+	exit_str = ft_itoa(exit_status);
+	if (!exit_str)
+		return (NULL);
+	len = strlen(str) - 2 + strlen(exit_str);
+	result = (char *)malloc(sizeof(char) * (len + 1));
+	if (!result)
+	{
+		free(exit_str);
+		return (NULL);
+	}
+	strncpy(result, str, dollar_pos - str);
+	result[dollar_pos - str] = '\0';
+	strcat(result, exit_str);
+	strcat(result, dollar_pos + 2);
+	free(exit_str);
+	return (result);
 }
