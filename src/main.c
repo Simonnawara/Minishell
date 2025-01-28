@@ -55,6 +55,16 @@ char	*get_command(char *word, int quote_count, char quote_type)
 	return (middle);
 }
 
+int	check_exit_status(const char *str)
+{
+    char	*pos;
+
+    pos = strstr(str, "$?");
+    if (pos)
+        return (1);
+    return (0);
+}
+
 int	parse_prompt(char *prompt, char **env)
 {
 	char **res;
@@ -103,17 +113,22 @@ int	parse_prompt(char *prompt, char **env)
 				processed_arg = cmd;
 				if (quote_type == 34 && ft_strchr(processed_arg, '$'))
 				{
-					if (strcmp(processed_arg, "$?") == 0 && i == 0)
+					if (check_exit_status(processed_arg))
 					{
-						//write(2, g_exit_status, ft_strlen(g_exit_status));
-						printf("%d : command not found\n", g_exit_status);
-						g_exit_status = 127;
-						//free(processed_arg);
-						break ;
+						expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
+						if (i == 0)
+						{
+							printf("%s : command not found\n", expanded_arg);
+							g_exit_status = 127;
+							break ;
+						}
 					}
-					expanded_arg = expand_variables(processed_arg, env);
-					cmd = expanded_arg;
-					free(processed_arg);
+					else
+					{	
+						expanded_arg = expand_variables(processed_arg, env);
+						cmd = expanded_arg;
+						free(processed_arg);
+					}
 				}
 				type = classify_token_prev(cmd, env, prev_type);
 				new_token = create_token(cmd, type);
@@ -142,20 +157,59 @@ int	parse_prompt(char *prompt, char **env)
 			processed_arg = cmd;
 			if (quote_type == 0 && ft_strchr(processed_arg, '$'))
 			{
-				if (strcmp(processed_arg, "$?") == 0 && i == 0)
+				if (check_exit_status(processed_arg))
 				{
-					//write(2, g_exit_status, ft_strlen(g_exit_status));
-					printf("%d : command not found\n", g_exit_status);
-					g_exit_status = 127;
-					//free(processed_arg);
-					break ;
+					expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
+					if (i == 0)
+					{
+						printf("%s : command not found\n", expanded_arg);
+						g_exit_status = 127;
+						break ;
+					}
 				}
-				expanded_arg = expand_variables(processed_arg, env);
-				cmd = expanded_arg;
-				free(expanded_arg);
+				else
+				{
+					expanded_arg = expand_variables(processed_arg, env);
+					cmd = expanded_arg;
+					free(expanded_arg);
+				}
+			}
+			if (quote_type == 0 && res[i][0] == '~')
+			{
+				char *home_value = get_env_value("HOME", env);
+				if (!home_value)
+				{
+					// Fallback to constructing path using USER if HOME isn't set
+					char *user = get_env_value("USER", env);
+					if (!user)
+						return (1);
+						
+					home_value = ft_strjoin("/home/", user);
+				}
+				
+				// If there's more path after ~, append it
+				if (strlen(res[i]) > 1)
+				{
+					char *full_path = ft_strjoin(home_value, res[i] + 1);
+					if (!full_path)
+						return (1);
+					
+					cmd = full_path;
+					free(res[i]);
+					res[i] = full_path;
+				}
+				else
+				{
+					cmd = ft_strdup(home_value);
+					if (!cmd)
+						return (1);
+					
+					free(res[i]);
+					res[i] = cmd;
+				}
 			}
 			type = classify_token_prev(cmd, env, prev_type);
-			new_token = create_token(cmd, type);
+			new_token = create_token(cmd, type); 
 			if (new_token && new_token->value && !ft_strcmp(new_token->value,
 					"echo"))
 			{

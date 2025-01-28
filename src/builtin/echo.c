@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 10:51:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 14:45:25 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:20:45 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	is_valid_n_option(const char *str)
 	return (1);
 }
 
-static char	*get_env_value(char *var_name, char **env)
+char	*get_env_value(char *var_name, char **env)
 {
 	int	i;
 	int	var_len;
@@ -212,10 +212,11 @@ int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec)
 			if ((quote_type == '"' || quote_type == 0)
 				&& ft_strchr(processed_arg, '$'))
 			{
-				if (strcmp(processed_arg, "$?") == 0)
+				if (check_exit_status(processed_arg))
 				{
-					printf("%d\n", g_exit_status);
-					cleanup_echo_resources(stripped_arg, processed_arg, NULL);
+					expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
+					printf("%s\n", expanded_arg);
+					cleanup_echo_resources(stripped_arg, processed_arg, expanded_arg);
 					return (0);
 				}
 				else

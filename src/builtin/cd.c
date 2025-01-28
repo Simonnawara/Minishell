@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 10:56:52 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 10:02:43 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:21:33 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	print_error(char **args)
 	g_exit_status = 1;
 }
 
-static char	*get_env_value(char **env, const char *var)
+static char	*get_env_value1(char **env, const char *var)
 {
 	int		i;
 	int		var_len;
@@ -80,7 +80,7 @@ static int	update_pwd_vars(t_exec *exec, const char *new_path)
 
 	if (!exec || !new_path)
 		return (1);
-	old_pwd = get_env_value(exec->env, "PWD");
+	old_pwd = get_env_value1(exec->env, "PWD");
 	if (old_pwd)
 	{
 		ret = update_env_var(exec, "OLDPWD", old_pwd);
@@ -125,12 +125,12 @@ int	ft_cd(char **args, t_exec *exec)
 	if (!exec || !exec->env)
 		return (1);
 
-	pwd = get_env_value(exec->env, "PWD");
+	pwd = get_env_value1(exec->env, "PWD");
 	if (!pwd)
 		pwd = ft_strdup("/");
 	if (!args[1] || ft_strcmp(args[1], "~") == 0)
 	{
-		target = get_env_value(exec->env, "HOME");
+		target = get_env_value1(exec->env, "HOME");
 		if (!target)
 		{
 			free(pwd);
@@ -141,7 +141,7 @@ int	ft_cd(char **args, t_exec *exec)
 	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
-		target = get_env_value(exec->env, "OLDPWD");
+		target = get_env_value1(exec->env, "OLDPWD");
 		if (!target)
 		{
 			free(pwd);

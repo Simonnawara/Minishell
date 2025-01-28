@@ -135,6 +135,8 @@ int				is_command_found(char *word, char **env);
 int				verify_forbidden_tokens(char *prompt);
 int				ft_strcmp(const char *s1, const char *s2);
 void			*ft_memcpy(void *dest, const void *src, size_t n);
+char			*check_and_replace_exit_status(const char *str, int exit_status);
+int				check_exit_status(const char *str);
 
 // error_pipe.c //
 int				pipe_error(void);
@@ -195,6 +197,7 @@ int				is_builtin(char *cmd);
 int				ft_echo(char **args, char **res, int echo_counter,
 					t_exec *exec);
 char			*expand_variables(char *str, char **env);
+char	*get_env_value(char *var_name, char **env);
 int				ft_pwd(void);
 int				ft_export(char **args, t_exec *exec);
 int				ft_unset(t_exec *exec, char **args);
