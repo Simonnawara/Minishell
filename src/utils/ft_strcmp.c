@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 12:30:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/28 12:02:35 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:25:23 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char    *check_and_replace_exit_status(const char *str, int exit_status)
     
     // Add remaining string after $?
     strcat(result, dollar_pos + 2);
-    
+
     free(exit_str);
     return (result);
 }

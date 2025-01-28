@@ -6,65 +6,11 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 10:01:01 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:51:36 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	add_argument_to_command(t_ast_node *cmd_node, char *arg)
-{
-	int		i;
-	int		j;
-	char	**new_args;
-
-	i = 0;
-	j = -1;
-	if (cmd_node->args)
-		while (cmd_node->args[i])
-			i++;
-	new_args = malloc(sizeof(char *) * (i + 2));
-	if (!new_args)
-		return (0);
-	while (++j < i)
-	{
-		new_args[j] = ft_strdup(cmd_node->args[j]);
-		if (!new_args[j])
-		{
-			while (--j >= 0)
-				free(new_args[j]);
-			free(new_args);
-			return (0);
-		}
-	}
-	if (!(new_args[i] = ft_strdup(arg)))
-	{
-		while (--j >= 0)
-			free(new_args[j]);
-		free(new_args);
-		return (0);
-	}
-	new_args[i + 1] = NULL;
-	if (cmd_node->args)
-		free_array(cmd_node->args);
-	cmd_node->args = new_args;
-	return (1);
-}
-
-t_ast_node	*create_ast_node(t_token_type type, char *value)
-{
-	t_ast_node	*node;
-
-	node = malloc(sizeof(t_ast_node));
-	if (!node)
-		return (NULL);
-	node->type = type;
-	node->value = ft_strdup(value);
-	node->left = NULL;
-	node->right = NULL;
-	node->args = NULL;
-	return (node);
-}
 
 t_ast_node	*handle_redirection_sequence(t_token **tokens)
 {
@@ -176,36 +122,4 @@ t_ast_node	*build_ast(t_token **tokens)
 		current = current->next;
 	}
 	return (handle_redirection_sequence(tokens));
-}
-
-t_ast_node	*build_command_node(t_token **tokens)
-{
-	t_ast_node	*cmd_node;
-	t_token		*current;
-
-	current = *tokens;
-	if (!current)
-		return (NULL);
-	cmd_node = create_ast_node(T_COMMAND, current->value);
-	if (!cmd_node)
-		return (NULL);
-	cmd_node->res = current->res;
-	cmd_node->echo_counter = current->echo_counter;
-	if (!add_argument_to_command(cmd_node, current->value))
-	{
-		free_ast_node(cmd_node);
-		return (NULL);
-	}
-	current = current->next;
-	while (current && current->type == T_WORD)
-	{
-		if (!add_argument_to_command(cmd_node, current->value))
-		{
-			free_ast_node(cmd_node);
-			return (NULL);
-		}
-		current = current->next;
-	}
-	*tokens = current;
-	return (cmd_node);
 }

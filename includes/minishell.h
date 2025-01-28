@@ -179,8 +179,14 @@ void			print_full_ast(t_ast_node *root);
 t_ast_node		*handle_redirections(t_token **tokens);
 t_ast_node		*handle_multiple_redirections(t_token **tokens);
 
-// execute_ast.c //
+// execute_ast.c && utils//
 int				execute_ast(t_ast_node *ast, t_exec *exec);
+int	execute_pipe_child(t_ast_node *ast, t_exec *exec, int *pipe_fds,
+		int is_left);
+int	handle_pipe(t_ast_node *ast, t_exec *exec);
+void	cleanup_nodes(t_ast_node *root, t_ast_node *cmd_node,
+		t_ast_node *redir);
+
 
 // execute_pipe.c //
 int				execute_pipe_node(t_ast_node *node, t_exec *exec);
