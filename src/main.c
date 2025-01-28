@@ -89,7 +89,7 @@ int	parse_prompt(char *prompt, char **env)
 	exec.compteur_pipe = 0;
 	res = tokenize(prompt);
 	if (!res)
-		return (ft_putendl_fd("Error: Tokenization failed", 2), 1);
+		return (1);
 	i = 0;
 	while (res[i])
 	{
@@ -120,7 +120,7 @@ int	parse_prompt(char *prompt, char **env)
 					}
 				}
 				else
-				{	
+				{
 					expanded_arg = expand_variables(processed_arg, env);
 					cmd = expanded_arg;
 					free(processed_arg);
@@ -180,17 +180,14 @@ int	parse_prompt(char *prompt, char **env)
 					char *user = get_env_value("USER", env);
 					if (!user)
 						return (1);
-						
 					home_value = ft_strjoin("/home/", user);
 				}
-				
 				// If there's more path after ~, append it
 				if (strlen(res[i]) > 1)
 				{
 					char *full_path = ft_strjoin(home_value, res[i] + 1);
 					if (!full_path)
 						return (1);
-					
 					cmd = full_path;
 					free(res[i]);
 					res[i] = full_path;
@@ -200,13 +197,12 @@ int	parse_prompt(char *prompt, char **env)
 					cmd = ft_strdup(home_value);
 					if (!cmd)
 						return (1);
-					
 					free(res[i]);
 					res[i] = cmd;
 				}
 			}
 			type = classify_token_prev(cmd, env, prev_type);
-			new_token = create_token(cmd, type); 
+			new_token = create_token(cmd, type);
 			if (new_token && new_token->value && !ft_strcmp(new_token->value,
 					"echo"))
 			{

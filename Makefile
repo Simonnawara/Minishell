@@ -35,6 +35,9 @@ SRCS =  main.c \
 		exec/error_pipe.c \
 		exec/exec_simple_command.c \
 		builtin/echo.c \
+		builtin/echo_utils1.c \
+		builtin/echo_utils2.c \
+		builtin/echo_utils3.c \
 		builtin/pwd.c \
 		builtin/export.c \
 		builtin/unset.c \
@@ -116,6 +119,6 @@ fclean : clean
 re : fclean all
 
 valgrind: re
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./$(NAME) 
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./$(NAME)
 
 .PHONY: all clean fclean re bonus

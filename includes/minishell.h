@@ -205,38 +205,20 @@ t_ast_node		*handle_multiple_redirections(t_token **tokens);
 t_ast_node		*handle_pipe_creation(t_token **tokens,
 					t_token *current, t_token *split);
 t_ast_node		*handle_redirection_sequence(t_token **tokens);
-<<<<<<< HEAD
-// t_ast_node	*create_redirection_node(t_token *current,
-// 					t_ast_node **root, t_ast_node *cmd_node);
-// void	handle_root_assignment(t_ast_node **root, t_ast_node *redir,
-// 				t_ast_node *cmd_node);
-// void	handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
-// 				t_ast_node *cmd_node);
-
-=======
 t_ast_node		*create_redirection_node(t_token *current,
 					t_ast_node **root, t_ast_node *cmd_node);
 void			handle_root_assignment(t_ast_node **root, t_ast_node *redir,
 					t_ast_node *cmd_node);
 void			handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
 					t_ast_node *cmd_node);
->>>>>>> origin/main
 
 // execute_ast.c && utils//
 int				execute_ast(t_ast_node *ast, t_exec *exec);
 int				execute_pipe_child(t_ast_node *ast, t_exec *exec, int *pipe_fds,
-<<<<<<< HEAD
-				int is_left);
-int				handle_pipe(t_ast_node *ast, t_exec *exec);
-void	cleanup_nodes(t_ast_node *root, t_ast_node *cmd_node,
-		t_ast_node *redir);
-
-=======
 					int is_left);
 int				handle_pipe(t_ast_node *ast, t_exec *exec);
 void			cleanup_nodes(t_ast_node *root, t_ast_node *cmd_node,
 					t_ast_node *redir);
->>>>>>> origin/main
 
 // execute_pipe.c //
 int				execute_pipe_node(t_ast_node *node, t_exec *exec);
@@ -250,8 +232,6 @@ int				execute_simple_command(t_ast_node *node, t_exec *exec,
 int				is_builtin(char *cmd);
 
 // Builtin *.c //
-int				ft_echo(char **args, char **res, int echo_counter,
-					t_exec *exec);
 char			*expand_variables(char *str, char **env);
 char			*get_env_value(char *var_name, char **env);
 int				ft_pwd(void);
@@ -261,37 +241,62 @@ int				ft_env(t_exec *exec, char **args);
 int				ft_exit(t_ast_node *node, t_exec *exec);
 int				ft_cd(char **args, t_exec *exec);
 
+// echo.c //
+int	process_echo_arg(char **res, int res_index, t_exec *exec,
+		int *prev_was_quote);
+int	is_valid_n_option(const char *str);
+int	handle_echo_args(char **res, int res_index, t_exec *exec,
+		int *prev_was_quote);
+int	check_n_option(char **args, int *i, int *n_option);
+int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec);
+
+
+// echo_utils1.c //
+char	*get_env_value(char *var_name, char **env);
+int	expand_var(char *str, int *i, char **env, t_expand_data *data);
+char	*process_var(char *str, int *i, char **env, size_t *total_len);
+int	calculate_total_len(char *str, char **env, size_t *total_len);
+char	*expand_variables(char *str, char **env);
+
+// echo_utils2.c //
+char	*strip_quotes(const char *str);
+void	cleanup_echo_resources(char *stripped_arg, char *processed_arg,
+		char *expanded_arg);
+void	handle_expanded_arg(char *expanded_arg, char *stripped_arg,
+		char *processed_arg);
+void	handle_processed_arg(char *processed_arg, char *stripped_arg);
+void	handle_stripped_arg(char *stripped_arg);
+
+// echo_utils3.c //
+int	handle_exit_status_check(char *stripped_arg, char *processed_arg,
+		char *expanded_arg);
+int	handle_dollar_expansion(char *stripped_arg, char *processed_arg,
+		t_exec *exec);
+int	process_quoted_dollar(char *stripped_arg, char *processed_arg,
+		t_exec *exec);
+int	process_dollar_arg(char *stripped_arg, char *res_i, t_exec *exec,
+		char *processed_arg);
+int	check_space_conditions(char **res, int res_index,
+		int *prev_was_quote);
+
 // cd_utils.c //
 void			print_error(char **args);
 char			*get_env_value1(char **env, const char *var);
 int				update_pwd_vars(t_exec *exec, const char *new_path);
 char			*get_absolute_path(char *base, char *arg);
-<<<<<<< HEAD
-int				update_env_var(t_exec *exec, const char *name, const char *value);
-int				init_export_args(char **args, const char *name,
-		const char *value, char **var);
-=======
 int				update_env_var(t_exec *exec, const char *name,
 					const char *value);
 int				init_export_args(char **args, const char *name,
 					const char *value, char **var);
->>>>>>> origin/main
 
 // export_utils.c && export_utils_more.c //
 char			*find_env_var(char **env, char *name);
 int				is_append_operation(char *var);
 char			*create_new_value(char *name, char *old_value, char *new_value,
-<<<<<<< HEAD
-				int is_append);
-char			*get_existing_value(char **env, char *name, int is_append);
-int				update_existing_var(char **env, char *name, char *new_value,
-				int is_append);
-=======
 					int is_append);
 char			*get_existing_value(char **env, char *name, int is_append);
 int				update_existing_var(char **env, char *name, char *new_value,
 					int is_append);
->>>>>>> origin/main
 char			*get_var_value(char *var);
 char			*get_var_name(char *var);
 int				is_valid_id(char *str);
@@ -316,15 +321,9 @@ int				execute_heredoc(t_ast_node *ast, t_exec *exec);
 int				collect_heredocs(t_ast_node *ast, t_heredoc **hds);
 int				handle_heredoc_error(t_heredoc *new_hds, int i);
 int				execute_command_node(t_ast_node *cmd_node, t_exec *exec,
-<<<<<<< HEAD
-				int last_heredoc_fd);
-int				setup_input_redirection(t_command_table *cmd, t_ast_node *current,
-				t_exec *exec);
-=======
 					int last_heredoc_fd);
 int				setup_input_redirection(t_command_table *cmd,
 					t_ast_node *current, t_exec *exec);
->>>>>>> origin/main
 int				handle_heredoc_error_2(t_heredoc *heredocs, int heredoc_count);
 
 //heredoc_util.c //
@@ -349,10 +348,6 @@ void			reset_signals(void);
 void			ignore_signals(void);
 void			update_exit_status(int status);
 char			*get_exit_status(t_exec *exec);
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/main
 int				init_command_check(char *word, char **env, char *quote_type);
 
 #endif

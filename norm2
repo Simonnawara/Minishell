@@ -1,23 +1,13 @@
-src/builtin/echo.c: Error!
-Error: TERNARY_FBIDDEN      (line:  54, col:  31):	Ternaries are forbidden
-Error: TOO_MANY_FUNCS       (line:  72, col:   1):	Too many functions in file
-Error: TOO_MANY_LINES       (line: 111, col:   1):	Function has more than 25 lines
-Error: TOO_MANY_FUNCS       (line: 113, col:   1):	Too many functions in file
-Error: TOO_MANY_LINES       (line: 143, col:   1):	Function has more than 25 lines
-Error: TOO_MANY_FUNCS       (line: 145, col:   1):	Too many functions in file
-Error: TOO_MANY_FUNCS       (line: 161, col:   1):	Too many functions in file
-Error: TOO_MANY_FUNCS       (line: 180, col:   1):	Too many functions in file
-Error: TOO_FEW_TAB          (line: 189, col:  13):	Missing tabs for indent level
-Error: TOO_MANY_FUNCS       (line: 202, col:   1):	Too many functions in file
-Error: TOO_FEW_TAB          (line: 211, col:  13):	Missing tabs for indent level
-Error: TOO_MANY_FUNCS       (line: 225, col:   1):	Too many functions in file
-Error: TOO_FEW_TAB          (line: 234, col:  13):	Missing tabs for indent level
-Error: TOO_MANY_FUNCS       (line: 254, col:   1):	Too many functions in file
-Error: TOO_FEW_TAB          (line: 271, col:  13):	Missing tabs for indent level
-Error: TOO_MANY_FUNCS       (line: 283, col:   1):	Too many functions in file
-Error: SPACE_REPLACE_TAB    (line: 285, col:   8):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 286, col:   8):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 287, col:   8):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 288, col:   8):	Found space when expecting tab
-Error: BRACE_SHOULD_EOL     (line: 313, col:   1):	Expected newline after brace
-Error: TOO_MANY_LINES       (line: 313, col:   1):	Function has more than 25 lines
+src/builtin/echo.c: OK!
+src/builtin/export_utils.c: OK!
+src/builtin/echo_utils2.c: OK!
+src/builtin/export_utils_more.c: OK!
+src/builtin/export.c: OK!
+src/builtin/echo_utils1.c: OK!
+src/builtin/echo_utils3.c: OK!
+src/builtin/cd_utils.c: OK!
+src/builtin/exit.c: OK!
+src/builtin/env.c: OK!
+src/builtin/cd.c: OK!
+src/builtin/unset.c: OK!
+src/builtin/pwd.c: OK!
