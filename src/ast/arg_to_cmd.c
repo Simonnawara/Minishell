@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 14:39:44 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/28 14:52:06 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:06:06 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,3 +73,29 @@ int	add_argument_to_command(t_ast_node *cmd_node, char *arg)
 	return (1);
 }
 
+t_ast_node	*handle_pipe_creation(t_token **tokens,
+					t_token *current, t_token *split)
+{
+	t_ast_node	*pipe;
+	t_token		*left;
+	t_token		*right;
+
+	pipe = create_ast_node(T_PIPE, "|");
+	if (!pipe)
+		return (NULL);
+	left = *tokens;
+	right = current->next;
+	if (split)
+		split->next = NULL;
+	pipe->left = build_ast(&left);
+	pipe->right = build_ast(&right);
+	if (!pipe->left || !pipe->right)
+	{
+		free_ast_node(pipe->left);
+		free_ast_node(pipe->right);
+		free_ast_node(pipe);
+		return (NULL);
+	}
+	*tokens = NULL;
+	return (pipe);
+}
