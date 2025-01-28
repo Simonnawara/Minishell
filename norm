@@ -258,20 +258,6 @@ src/builtin/env.c: OK!
 src/builtin/exit.c: OK!
 src/builtin/pwd.c: OK!
 src/builtin/unset.c: OK!
-src/builtin/cd.c: Error!
-Error: TOO_MANY_LINES       (line:  75, col:   1):	Function has more than 25 lines
-Error: NEWLINE_PRECEDES_FUNC (line:  76, col:   1):	Functions must be separated by a newline
-Error: TOO_MANY_FUNCS       (line: 119, col:   1):	Too many functions in file
-Error: SPACE_REPLACE_TAB    (line: 121, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 122, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 123, col:   8):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line: 123, col:   9):	Misaligned variable declaration
-Error: EMPTY_LINE_FUNCTION  (line: 127, col:   1):	Empty line in function
-Error: EMPTY_LINE_FUNCTION  (line: 163, col:   1):	Empty line in function
-Error: EMPTY_LINE_FUNCTION  (line: 165, col:   1):	Empty line in function
-Error: EMPTY_LINE_FUNCTION  (line: 173, col:   1):	Empty line in function
-Error: BRACE_SHOULD_EOL     (line: 177, col:   1):	Expected newline after brace
-Error: TOO_MANY_LINES       (line: 177, col:   1):	Function has more than 25 lines
 src/builtin/export.c: Error!
 Error: SPACE_BEFORE_FUNC    (line:  15, col:  11):	space before function name
 Error: TOO_FEW_TAB          (line:  17, col:   1):	Missing tabs for indent level
@@ -699,6 +685,20 @@ Error: LINE_TOO_LONG        (line: 343, col:   1):	line too long
 Error: LINE_TOO_LONG        (line: 343, col:  84):	line too long
 Error: SPACE_EMPTY_LINE     (line: 388, col:   1):	Space on empty line
 Error: CONSECUTIVE_NEWLINES (line: 395, col:   1):	Consecutive newlines
+src/builtin/cd.c: Error!
+Error: TOO_MANY_LINES       (line:  75, col:   1):	Function has more than 25 lines
+Error: NEWLINE_PRECEDES_FUNC (line:  76, col:   1):	Functions must be separated by a newline
+Error: TOO_MANY_FUNCS       (line: 119, col:   1):	Too many functions in file
+Error: SPACE_REPLACE_TAB    (line: 121, col:   9):	Found space when expecting tab
+Error: SPACE_REPLACE_TAB    (line: 122, col:   9):	Found space when expecting tab
+Error: SPACE_REPLACE_TAB    (line: 123, col:   8):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line: 123, col:   9):	Misaligned variable declaration
+Error: EMPTY_LINE_FUNCTION  (line: 127, col:   1):	Empty line in function
+Error: EMPTY_LINE_FUNCTION  (line: 163, col:   1):	Empty line in function
+Error: EMPTY_LINE_FUNCTION  (line: 165, col:   1):	Empty line in function
+Error: EMPTY_LINE_FUNCTION  (line: 173, col:   1):	Empty line in function
+Error: BRACE_SHOULD_EOL     (line: 177, col:   1):	Expected newline after brace
+Error: TOO_MANY_LINES       (line: 177, col:   1):	Function has more than 25 lines
 src/builtin/echo.c: Error!
 Error: TOO_MANY_VARS_FUNC   (line:  57, col:   1):	Too many variables declarations in a function
 Error: TOO_MANY_VARS_FUNC   (line:  58, col:   1):	Too many variables declarations in a function
