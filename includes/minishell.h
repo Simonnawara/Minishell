@@ -34,11 +34,12 @@
 
 extern int	g_exit_status;
 
-typedef struct s_expand_data {
-    char    *result;
-    size_t  total_len;
-    int     j;
-}   t_expand_data;
+typedef struct s_expand_data
+{
+	char	*result;
+	size_t	total_len;
+	int		j;
+}	t_expand_data;
 
 typedef struct s_path
 {
@@ -214,8 +215,8 @@ void			handle_prev_redir(t_ast_node *prev_redir, t_ast_node *redir,
 
 // execute_ast.c && utils//
 int				execute_ast(t_ast_node *ast, t_exec *exec);
-int				execute_pipe_child(t_ast_node *ast, t_exec *exec, int *pipe_fds,
-					int is_left);
+int				execute_pipe_child(t_ast_node *ast, t_exec *exec,
+					int *pipe_fds, int is_left);
 int				handle_pipe(t_ast_node *ast, t_exec *exec);
 void			cleanup_nodes(t_ast_node *root, t_ast_node *cmd_node,
 					t_ast_node *redir);
@@ -242,42 +243,42 @@ int				ft_exit(t_ast_node *node, t_exec *exec);
 int				ft_cd(char **args, t_exec *exec);
 
 // echo.c //
-int	process_echo_arg(char **res, int res_index, t_exec *exec,
-		int *prev_was_quote);
-int	is_valid_n_option(const char *str);
-int	handle_echo_args(char **res, int res_index, t_exec *exec,
-		int *prev_was_quote);
-int	check_n_option(char **args, int *i, int *n_option);
-int	ft_echo(char **args, char **res, int echo_counter, t_exec *exec);
-
+int				process_echo_arg(char **res, int res_index, t_exec *exec,
+					int *prev_was_quote);
+int				is_valid_n_option(const char *str);
+int				handle_echo_args(char **res, int res_index, t_exec *exec,
+					int *prev_was_quote);
+int				check_n_option(char **args, int *i, int *n_option);
+int				ft_echo(char **args, char **res, int echo_counter,
+					t_exec *exec);
 
 // echo_utils1.c //
-char	*get_env_value(char *var_name, char **env);
-int	expand_var(char *str, int *i, char **env, t_expand_data *data);
-char	*process_var(char *str, int *i, char **env, size_t *total_len);
-int	calculate_total_len(char *str, char **env, size_t *total_len);
-char	*expand_variables(char *str, char **env);
+char			*get_env_value(char *var_name, char **env);
+int				expand_var(char *str, int *i, char **env, t_expand_data *data);
+char			*process_var(char *str, int *i, char **env, size_t *total_len);
+int				calculate_total_len(char *str, char **env, size_t *total_len);
+char			*expand_variables(char *str, char **env);
 
 // echo_utils2.c //
-char	*strip_quotes(const char *str);
-void	cleanup_echo_resources(char *stripped_arg, char *processed_arg,
-		char *expanded_arg);
-void	handle_expanded_arg(char *expanded_arg, char *stripped_arg,
-		char *processed_arg);
-void	handle_processed_arg(char *processed_arg, char *stripped_arg);
-void	handle_stripped_arg(char *stripped_arg);
+char			*strip_quotes(const char *str);
+void			cleanup_echo_resources(char *stripped_arg, char *processed_arg,
+					char *expanded_arg);
+void			handle_expanded_arg(char *expanded_arg, char *stripped_arg,
+					char *processed_arg);
+void			handle_processed_arg(char *processed_arg, char *stripped_arg);
+void			handle_stripped_arg(char *stripped_arg);
 
 // echo_utils3.c //
-int	handle_exit_status_check(char *stripped_arg, char *processed_arg,
-		char *expanded_arg);
-int	handle_dollar_expansion(char *stripped_arg, char *processed_arg,
-		t_exec *exec);
-int	process_quoted_dollar(char *stripped_arg, char *processed_arg,
-		t_exec *exec);
-int	process_dollar_arg(char *stripped_arg, char *res_i, t_exec *exec,
-		char *processed_arg);
-int	check_space_conditions(char **res, int res_index,
-		int *prev_was_quote);
+int				handle_exit_status_check(char *stripped_arg,
+					char *processed_arg, char *expanded_arg);
+int				handle_dollar_expansion(char *stripped_arg,
+					char *processed_arg, t_exec *exec);
+int				process_quoted_dollar(char *stripped_arg,
+					char *processed_arg, t_exec *exec);
+int				process_dollar_arg(char *stripped_arg, char *res_i,
+					t_exec *exec, char *processed_arg);
+int				check_space_conditions(char **res, int res_index,
+					int *prev_was_quote);
 
 // cd_utils.c //
 void			print_error(char **args);
