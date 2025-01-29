@@ -70,6 +70,7 @@ typedef struct s_token
 	char			*value;
 	char			**res;
 	int				echo_counter;
+	int				is_echo;
 	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
@@ -125,6 +126,14 @@ typedef struct s_heredoc
 // main.c //
 char			*get_command(char *word, int quote_count, char quote_type);
 char			**init_env(char **original_env);
+int				parse_prompt(char *prompt, char **env);
+
+// main_utils.c //
+int				validate_inputs(int argc);
+void			free_prompt_resources(t_token *tokens, char **res,
+					char *expanded_arg);
+char			*get_command(char *word, int quote_count, char quote_type);
+int				check_exit_status(const char *str);
 
 // free.c //
 void			free_array(char **array);

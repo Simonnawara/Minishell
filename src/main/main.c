@@ -10,61 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-
-extern int g_exit_status;
-
-int	validate_inputs(int argc)
-{
-	if (argc > 1)
-		return (ft_putendl_fd("Error : argument number invalid", 2), 1);
-	return (0);
-}
-
-void	free_prompt_resources(t_token *tokens, char **res, char *expanded_arg)
-{
-	free_token_list(tokens);
-	free_array(res);
-	if (expanded_arg)
-		free(expanded_arg);
-}
-
-char	*get_command(char *word, int quote_count, char quote_type)
-{
-	char *middle;
-	int len;
-	int i;
-	int j;
-
-	len = ft_strlen(word);
-	if (len == 2 && word[0] == quote_type && word[1] == quote_type)
-		return (ft_strdup(""));
-	middle = malloc(sizeof(char) * (len - quote_count + 1));
-	if (!middle)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (word[i])
-	{
-		if (word[i] != quote_type)
-			middle[j++] = word[i];
-		i++;
-	}
-	middle[j] = '\0';
-	return (middle);
-}
-
-int	check_exit_status(const char *str)
-{
-    char	*pos;
-
-    pos = strstr(str, "$?");
-    if (pos)
-        return (1);
-    return (0);
-}
-
+// Process single token
 int	parse_prompt(char *prompt, char **env)
 {
 	char **res;
@@ -254,32 +202,6 @@ int	parse_prompt(char *prompt, char **env)
 	}
 	free_array(res);
 	return (0);
-}
-
-char	**init_env(char **original_env)
-{
-	int i, size = 0;
-	char **new_env;
-
-	while (original_env[size])
-		size++;
-	new_env = (char **)malloc(sizeof(char *) * (size + 1));
-	if (!new_env)
-		return (NULL);
-	for (i = 0; i < size; i++)
-	{
-		new_env[i] = ft_strdup(original_env[i]);
-		if (!new_env[i])
-		{
-			while (--i >= 0)
-				free(new_env[i]);
-			free(new_env);
-			return (NULL);
-		}
-	}
-	new_env[size] = NULL;
-
-	return (new_env);
 }
 
 int	main(int argc, char **argv, char **env)

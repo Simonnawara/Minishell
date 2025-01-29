@@ -11,7 +11,8 @@
 # **************************************************************************** #
 
 NAME = minishell
-SRCS =  main.c \
+SRCS =  main/main.c \
+		main/main_utils_1.c \
 		//utils/free.c \
 		utils/free_2.c \
 		utils/errors.c \

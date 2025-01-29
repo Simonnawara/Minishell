@@ -58,90 +58,6 @@ libft/src/ft_to/ft_tolower.c: OK!
 libft/src/ft_to/ft_toupper.c: OK!
 libft/src/get_next_line/get_next_line.c: OK!
 libft/src/get_next_line/get_next_line_utils.c: OK!
-src/main.c: Error!
-Error: CONSECUTIVE_NEWLINES (line:  15, col:   1):	Consecutive newlines
-Notice: GLOBAL_VAR_DETECTED  (line:  16, col:   1):	Global variable present in file. Make sure it is a reasonable choice.
-Error: SPACE_REPLACE_TAB    (line:  16, col:  11):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line:  35, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line:  36, col:   8):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  36, col:   9):	Misaligned variable declaration
-Error: SPACE_REPLACE_TAB    (line:  37, col:   8):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  37, col:   9):	Misaligned variable declaration
-Error: SPACE_REPLACE_TAB    (line:  38, col:   8):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  38, col:   9):	Misaligned variable declaration
-Error: TOO_FEW_TAB          (line:  60, col:   1):	Missing tabs for indent level
-Error: SPACE_REPLACE_TAB    (line:  60, col:   5):	Found space when expecting tab
-Error: TOO_FEW_TAB          (line:  62, col:   1):	Missing tabs for indent level
-Error: SPACE_REPLACE_TAB    (line:  62, col:   5):	Found space when expecting tab
-Error: TOO_FEW_TAB          (line:  63, col:   1):	Missing tabs for indent level
-Error: SPACE_REPLACE_TAB    (line:  63, col:   5):	Found space when expecting tab
-Error: TOO_FEW_TAB          (line:  64, col:   1):	Missing tabs for indent level
-Error: SPACE_REPLACE_TAB    (line:  64, col:   9):	Found space when expecting tab
-Error: TOO_FEW_TAB          (line:  65, col:   1):	Missing tabs for indent level
-Error: SPACE_REPLACE_TAB    (line:  65, col:   5):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line:  70, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line:  71, col:   8):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  71, col:   9):	Misaligned variable declaration
-Error: SPACE_REPLACE_TAB    (line:  72, col:   8):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  72, col:   9):	Misaligned variable declaration
-Error: SPACE_REPLACE_TAB    (line:  73, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line:  74, col:   9):	Found space when expecting tab
-Error: TOO_MANY_VARS_FUNC   (line:  75, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  75, col:   9):	Found space when expecting tab
-Error: TOO_MANY_VARS_FUNC   (line:  76, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  76, col:   9):	Found space when expecting tab
-Error: TOO_MANY_VARS_FUNC   (line:  77, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  77, col:  17):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  77, col:  18):	Misaligned variable declaration
-Error: TOO_MANY_VARS_FUNC   (line:  78, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  78, col:  12):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  78, col:  13):	Misaligned variable declaration
-Error: TOO_MANY_VARS_FUNC   (line:  79, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  79, col:  12):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  79, col:  13):	Misaligned variable declaration
-Error: TOO_MANY_VARS_FUNC   (line:  80, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  80, col:  15):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  80, col:  16):	Misaligned variable declaration
-Error: TOO_MANY_VARS_FUNC   (line:  81, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  81, col:  11):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  81, col:  12):	Misaligned variable declaration
-Error: TOO_MANY_VARS_FUNC   (line:  82, col:   1):	Too many variables declarations in a function
-Error: SPACE_REPLACE_TAB    (line:  82, col:  17):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line:  82, col:  18):	Misaligned variable declaration
-Error: DECL_ASSIGN_LINE     (line:  82, col:  28):	Declaration and assignation on a single line
-Error: LINE_TOO_LONG        (line: 114, col:  94):	line too long
-Error: LINE_TOO_LONG        (line: 159, col:  94):	line too long
-Error: WRONG_SCOPE_VAR      (line: 176, col:   1):	Variable declared in incorrect scope
-Error: SPACE_REPLACE_TAB    (line: 176, col:  21):	Found space when expecting tab
-Error: DECL_ASSIGN_LINE     (line: 176, col:  34):	Declaration and assignation on a single line
-Error: LINE_TOO_LONG        (line: 179, col:  21):	line too long
-Error: WRONG_SCOPE_COMMENT  (line: 179, col:  21):	Comment is invalid in this scope
-Error: LINE_TOO_LONG        (line: 179, col:  82):	line too long
-Error: WRONG_SCOPE_VAR      (line: 180, col:   1):	Variable declared in incorrect scope
-Error: SPACE_REPLACE_TAB    (line: 180, col:  25):	Found space when expecting tab
-Error: DECL_ASSIGN_LINE     (line: 180, col:  32):	Declaration and assignation on a single line
-Error: WRONG_SCOPE_COMMENT  (line: 185, col:  17):	Comment is invalid in this scope
-Error: WRONG_SCOPE_VAR      (line: 188, col:   1):	Variable declared in incorrect scope
-Error: SPACE_REPLACE_TAB    (line: 188, col:  25):	Found space when expecting tab
-Error: DECL_ASSIGN_LINE     (line: 188, col:  37):	Declaration and assignation on a single line
-Error: WRONG_SCOPE_COMMENT  (line: 228, col:  17):	Comment is invalid in this scope
-Error: WRONG_SCOPE_COMMENT  (line: 229, col:  21):	Comment is invalid in this scope
-Error: WRONG_SCOPE_COMMENT  (line: 233, col:   9):	Comment is invalid in this scope
-Error: TOO_MANY_LINES       (line: 257, col:   1):	Function has more than 25 lines
-Error: TOO_MANY_FUNCS       (line: 259, col:   1):	Too many functions in file
-Error: SPACE_REPLACE_TAB    (line: 261, col:   8):	Found space when expecting tab
-Error: MULT_DECL_LINE       (line: 261, col:  10):	Multiple declarations on a single line
-Error: DECL_ASSIGN_LINE     (line: 261, col:  17):	Declaration and assignation on a single line
-Error: SPACE_REPLACE_TAB    (line: 262, col:   9):	Found space when expecting tab
-Error: MISALIGNED_VAR_DECL  (line: 262, col:  10):	Misaligned variable declaration
-Error: FORBIDDEN_CS         (line: 269, col:   5):	Forbidden control structure
-Error: EMPTY_LINE_FUNCTION  (line: 281, col:   1):	Empty line in function
-Error: TOO_MANY_FUNCS       (line: 285, col:   1):	Too many functions in file
-Error: SPACE_REPLACE_TAB    (line: 287, col:   9):	Found space when expecting tab
-Error: SPACE_REPLACE_TAB    (line: 288, col:   9):	Found space when expecting tab
-Error: NL_AFTER_VAR_DECL    (line: 289, col:   1):	Variable declarations must be followed by a newline
-Error: EMPTY_LINE_FUNCTION  (line: 290, col:   1):	Empty line in function
-Error: TOO_MANY_LINES       (line: 319, col:   1):	Function has more than 25 lines
 src/ast/build_ast_utils.c: OK!
 src/ast/build_ast.c: OK!
 src/ast/execute_ast.c: OK!
@@ -183,3 +99,59 @@ src/utils/free.c: OK!
 src/utils/free_2.c: OK!
 src/utils/errors.c: OK!
 src/utils/ft_strcmp.c: OK!
+src/main/main.c: Error!
+Error: SPACE_REPLACE_TAB    (line:  17, col:   9):	Found space when expecting tab
+Error: SPACE_REPLACE_TAB    (line:  18, col:   8):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  18, col:   9):	Misaligned variable declaration
+Error: SPACE_REPLACE_TAB    (line:  19, col:   8):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  19, col:   9):	Misaligned variable declaration
+Error: SPACE_REPLACE_TAB    (line:  20, col:   9):	Found space when expecting tab
+Error: SPACE_REPLACE_TAB    (line:  21, col:   9):	Found space when expecting tab
+Error: TOO_MANY_VARS_FUNC   (line:  22, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  22, col:   9):	Found space when expecting tab
+Error: TOO_MANY_VARS_FUNC   (line:  23, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  23, col:   9):	Found space when expecting tab
+Error: TOO_MANY_VARS_FUNC   (line:  24, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  24, col:  17):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  24, col:  18):	Misaligned variable declaration
+Error: TOO_MANY_VARS_FUNC   (line:  25, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  25, col:  12):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  25, col:  13):	Misaligned variable declaration
+Error: TOO_MANY_VARS_FUNC   (line:  26, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  26, col:  12):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  26, col:  13):	Misaligned variable declaration
+Error: TOO_MANY_VARS_FUNC   (line:  27, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  27, col:  15):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  27, col:  16):	Misaligned variable declaration
+Error: TOO_MANY_VARS_FUNC   (line:  28, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  28, col:  11):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  28, col:  12):	Misaligned variable declaration
+Error: TOO_MANY_VARS_FUNC   (line:  29, col:   1):	Too many variables declarations in a function
+Error: SPACE_REPLACE_TAB    (line:  29, col:  17):	Found space when expecting tab
+Error: MISALIGNED_VAR_DECL  (line:  29, col:  18):	Misaligned variable declaration
+Error: DECL_ASSIGN_LINE     (line:  29, col:  28):	Declaration and assignation on a single line
+Error: LINE_TOO_LONG        (line:  61, col:  94):	line too long
+Error: LINE_TOO_LONG        (line: 106, col:  94):	line too long
+Error: WRONG_SCOPE_VAR      (line: 123, col:   1):	Variable declared in incorrect scope
+Error: SPACE_REPLACE_TAB    (line: 123, col:  21):	Found space when expecting tab
+Error: DECL_ASSIGN_LINE     (line: 123, col:  34):	Declaration and assignation on a single line
+Error: LINE_TOO_LONG        (line: 126, col:  21):	line too long
+Error: WRONG_SCOPE_COMMENT  (line: 126, col:  21):	Comment is invalid in this scope
+Error: LINE_TOO_LONG        (line: 126, col:  82):	line too long
+Error: WRONG_SCOPE_VAR      (line: 127, col:   1):	Variable declared in incorrect scope
+Error: SPACE_REPLACE_TAB    (line: 127, col:  25):	Found space when expecting tab
+Error: DECL_ASSIGN_LINE     (line: 127, col:  32):	Declaration and assignation on a single line
+Error: WRONG_SCOPE_COMMENT  (line: 132, col:  17):	Comment is invalid in this scope
+Error: WRONG_SCOPE_VAR      (line: 135, col:   1):	Variable declared in incorrect scope
+Error: SPACE_REPLACE_TAB    (line: 135, col:  25):	Found space when expecting tab
+Error: DECL_ASSIGN_LINE     (line: 135, col:  37):	Declaration and assignation on a single line
+Error: WRONG_SCOPE_COMMENT  (line: 175, col:  17):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line: 176, col:  21):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line: 180, col:   9):	Comment is invalid in this scope
+Error: TOO_MANY_LINES       (line: 204, col:   1):	Function has more than 25 lines
+Error: SPACE_REPLACE_TAB    (line: 208, col:   9):	Found space when expecting tab
+Error: SPACE_REPLACE_TAB    (line: 209, col:   9):	Found space when expecting tab
+Error: NL_AFTER_VAR_DECL    (line: 210, col:   1):	Variable declarations must be followed by a newline
+Error: EMPTY_LINE_FUNCTION  (line: 211, col:   1):	Empty line in function
+Error: TOO_MANY_LINES       (line: 240, col:   1):	Function has more than 25 lines
+src/main/main_utils_1.c: OK!
