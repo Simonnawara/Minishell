@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 18:53:21 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/28 14:29:53 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/29 23:49:21 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ t_token_type	classify_token_prev(char *token, char **env,
 
 	if (!token || !*token)
 		return (T_WORD);
-	if (prev_type == T_COMMAND || prev_type == T_BUILTIN)
+	if (prev_type == T_COMMAND || prev_type == T_BUILTIN
+		|| prev_type == T_REDIRECT_IN || prev_type == T_REDIRECT_OUT
+		|| prev_type == T_APPEND || prev_type == T_HEREDOC)
 	{
 		type = get_operator_type(token);
 		if (type != T_WORD)
