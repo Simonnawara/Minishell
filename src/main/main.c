@@ -261,3 +261,26 @@ int	main(int argc, char **argv, char **env)
 	free_array(new_env);
 	return (g_exit_status);
 }
+
+/*
+Tout ce qui reste a gerer (d'apres des tests rapides / rudimentaires) (pas vraiment necessaire a gerer)
+
+Minishell output:
+> $USER'$PATH'
+simna : command not found
+
+Expected Output :
+$USER'$PATH'
+simna$PATH: command not found
+
+ls Makefile > cat
+Fonctionne correctement
+
+ls Makefile > "cat"
+cree un fichier cat, et un fichier "cat", et ecris dans cat
+le ficher "cat" est pas sence exister.
+Meme chose avec tous les mots apres une redirection entre ""
+
+Nivea norme un peu chiant, on a juste une fonction aui prends 5 parametres, mais on peut creer une strucutre.
+
+*/
