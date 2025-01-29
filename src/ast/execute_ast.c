@@ -3,57 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute_ast.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:33:05 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/28 14:29:12 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/29 16:41:34 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// static int	execute_redirection(t_ast_node *ast, t_exec *exec)
-// {
-// 	t_command_table	cmd = {0};
-// 	int				status;
-// 	t_ast_node		*cmd_node;
-// 	t_ast_node		*redir;
-
-// 	cmd_node = ast;
-// 	while (cmd_node && cmd_node->type != T_COMMAND && cmd_node->left)
-// 		cmd_node = cmd_node->left;
-// 	if (!cmd_node || cmd_node->type != T_COMMAND)
-// 		return (ft_putendl_fd("Error: No command found", 2), 1);
-// 	cmd.cmd = cmd_node->value;
-// 	cmd.args = cmd_node->args;
-// 	redir = ast;
-// 	while (redir && redir != cmd_node)
-// 	{
-// 		if (!redir->right || !redir->right->value)
-// 			return (ft_putendl_fd("Error: Invalid redirection syntax", 2), 1);
-// 		if (redir->type == T_REDIRECT_OUT || redir->type == T_APPEND)
-// 		{
-// 			cmd.outfile = redir->right->value;
-// 			cmd.append = (redir->type == T_APPEND);
-// 		}
-// 		else if (redir->type == T_REDIRECT_IN)
-// 		{
-// 			cmd.infile = redir->right->value;
-// 		}
-// 		redir = redir->left;
-// 	}
-// 	if (setup_redirection(&cmd) == -1)
-// 		return (1);
-// 	status = execute_simple_command(cmd_node, exec, cmd);
-// 	restore_io(&cmd);
-// 	if (cmd.all_outfiles)
-// 	{
-// 		for (int i = 0; i < cmd.num_outfiles; i++)
-// 			free(cmd.all_outfiles[i]);
-// 		free(cmd.all_outfiles);
-// 	}
-// 	return (status);
-// }
 
 static int	init_command(t_ast_node *ast, t_command_table *cmd,
 		t_ast_node **cmd_node)

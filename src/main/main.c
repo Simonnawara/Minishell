@@ -1,16 +1,124 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   og_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 10:09:23 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 10:09:23 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:54:04 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	handle_first_arg_exit_status(char *expanded_arg, int i)
+{
+	(void)i;
+	printf("%s : command not found\n", expanded_arg);
+	g_exit_status = 127;
+	return (1);
+}
+
+char	*handle_exit_status_expansion(char *processed_arg, int *stop_processing)
+{
+	char	*expanded_arg;
+
+	if (check_exit_status(processed_arg))
+	{
+		expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
+		return (expanded_arg);
+	}
+	*stop_processing = 0;
+	return (NULL);
+}
+
+char	*handle_double_quote_var_expansion(char *processed_arg, char **env)
+{
+	char	*expanded_arg;
+
+	expanded_arg = expand_variables(processed_arg, env);
+	return (expanded_arg);
+}
+
+int	handle_double_quote_expansion(char **cmd, char **processed_arg, 
+									char **env, int i)
+{
+	char	*expanded_arg;
+	int		stop_processing;
+
+	stop_processing = 1;
+	expanded_arg = handle_exit_status_expansion(*processed_arg, &stop_processing);
+	if (stop_processing && i == 0)
+	{
+		handle_first_arg_exit_status(expanded_arg, i);
+		return (1);
+	}
+	if (expanded_arg)
+	{
+		*cmd = expanded_arg;
+		return (0);
+	}
+	expanded_arg = handle_double_quote_var_expansion(*processed_arg, env);
+	*cmd = expanded_arg;
+	free(*processed_arg);
+	
+	return (0);
+}
+
+int	handle_unquoted_first_arg_exit_status(char *expanded_arg)
+{
+	printf("%s : command not found\n", expanded_arg);
+	g_exit_status = 127;
+	return (1);
+}
+
+char	*handle_unquoted_exit_status_expansion(char *processed_arg, int *stop_processing)
+{
+	char	*expanded_arg;
+
+	if (check_exit_status(processed_arg))
+	{
+		expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
+		return (expanded_arg);
+	}
+	*stop_processing = 0;
+	return (NULL);
+}
+
+char	*handle_unquoted_var_expansion(char *processed_arg, char **env)
+{
+	char	*expanded_arg;
+
+	expanded_arg = expand_variables(processed_arg, env);
+	return (expanded_arg);
+}
+
+int	handle_unquoted_expansion(char **cmd, char **processed_arg, 
+								char **env, int i)
+{
+	char	*expanded_arg;
+	int		stop_processing;
+
+	stop_processing = 1;
+	expanded_arg = handle_unquoted_exit_status_expansion(*processed_arg, &stop_processing);
+	if (stop_processing && i == 0)
+	{
+		handle_unquoted_first_arg_exit_status(expanded_arg);
+		return (1);
+	}
+	if (expanded_arg)
+	{
+		*cmd = expanded_arg;
+		return (0);
+	}
+	expanded_arg = handle_unquoted_var_expansion(*processed_arg, env);
+	*cmd = expanded_arg;
+	free(expanded_arg);
+	
+	return (0);
+}
+
 
 // Process single token
 int	parse_prompt(char *prompt, char **env)
@@ -41,39 +149,18 @@ int	parse_prompt(char *prompt, char **env)
 	i = 0;
 	while (res[i])
 	{
-		quote_type = 0;
-		if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34
-				|| res[i][0] == 39))
-			quote_type = res[i][0];
+		quote_type = get_quote_type(res, i);
 		total_quotes = count_quotes(res[i], quote_type);
 		if (quote_type && total_quotes % 2 == 0)
 		{
+			expanded_arg = NULL;
 			cmd = get_command(res[i], total_quotes, quote_type);
 			if (!cmd)
-			{
-				free_prompt_resources(tokens, res, expanded_arg);
-				return (1);
-			}
+				return (free_prompt_resources(tokens, res, expanded_arg), 1);
 			processed_arg = cmd;
 			if (quote_type == 34 && ft_strchr(processed_arg, '$'))
-			{
-				if (check_exit_status(processed_arg))
-				{
-					expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
-					if (i == 0)
-					{
-						printf("%s : command not found\n", expanded_arg);
-						g_exit_status = 127;
-						break ;
-					}
-				}
-				else
-				{
-					expanded_arg = expand_variables(processed_arg, env);
-					cmd = expanded_arg;
-					free(processed_arg);
-				}
-			}
+				if (handle_double_quote_expansion(&cmd, &processed_arg, env, i))
+        			break;
 			type = classify_token_prev(cmd, env, prev_type);
 			if (strcmp(cmd, "|") == 0)
 				type = T_WORD;
@@ -86,11 +173,7 @@ int	parse_prompt(char *prompt, char **env)
 			}
 			free(cmd);
 			if (!new_token)
-			{
-				free_token_list(tokens);
-				free_array(res);
-				return (1);
-			}
+				return (free_token_list_array(tokens, res), 1);
 			add_token(&tokens, new_token);
 			if (!tokens)
 				ft_putendl_fd("Error: Tokens list is NULL after add_token",
@@ -101,36 +184,18 @@ int	parse_prompt(char *prompt, char **env)
 			cmd = res[i];
 			processed_arg = cmd;
 			if (quote_type == 0 && ft_strchr(processed_arg, '$'))
-			{
-				if (check_exit_status(processed_arg))
-				{
-					expanded_arg = check_and_replace_exit_status(processed_arg, g_exit_status);
-					if (i == 0)
-					{
-						printf("%s : command not found\n", expanded_arg);
-						g_exit_status = 127;
-						break ;
-					}
-				}
-				else
-				{
-					expanded_arg = expand_variables(processed_arg, env);
-					cmd = expanded_arg;
-					free(expanded_arg);
-				}
-			}
-			if (quote_type == 0 && res[i][0] == '~')
+				if (handle_unquoted_expansion(&cmd, &processed_arg, env, i))
+        			break;
+			if (quote_type == 0 && res[i][0] == '~' && res[i][1] != '~')
 			{
 				char *home_value = get_env_value("HOME", env);
 				if (!home_value)
 				{
-					// Fallback to constructing path using USER if HOME isn't set
 					char *user = get_env_value("USER", env);
 					if (!user)
 						return (1);
 					home_value = ft_strjoin("/home/", user);
 				}
-				// If there's more path after ~, append it
 				if (strlen(res[i]) > 1)
 				{
 					char *full_path = ft_strjoin(home_value, res[i] + 1);
@@ -157,14 +222,8 @@ int	parse_prompt(char *prompt, char **env)
 				new_token->res = res;
 				new_token->echo_counter = i;
 			}
-			if (type == T_PIPE)
-				exec.compteur_pipe++;
 			if (!new_token)
-			{
-				free_token_list(tokens);
-				free_array(res);
-				return (1);
-			}
+				return (free_token_list_array(tokens, res), 1);
 			add_token(&tokens, new_token);
 			if (!tokens)
 				ft_putendl_fd("Error: Tokens list is NULL after add_token", 2);
@@ -173,8 +232,6 @@ int	parse_prompt(char *prompt, char **env)
 			{
 				if (tokens)
 					free_token_list(tokens);
-				//if (res)
-					//free_array(res);
 				return (1);
 			}
 		}
@@ -189,11 +246,7 @@ int	parse_prompt(char *prompt, char **env)
 		i++;
 	ast = build_ast(&tokens);
 	if (!ast)
-	{
-		free_token_list(tokens);
-		free_array(res);
-		return (1);
-	}
+		return (free_token_list_array(tokens, res), 1);
 	execute_ast(ast, &exec);
 	if (ast)
 	{

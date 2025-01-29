@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 10:21:06 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 16:22:28 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/29 13:11:39 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,5 @@ void	file_error(char *filename)
 	write(2, filename, ft_strlen(filename));
 	perror(" ");
 }
+
+

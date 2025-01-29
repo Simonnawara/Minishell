@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quotes.c                                           :+:      :+:    :+:   */
+/*   main_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/26 14:50:37 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/29 13:07:33 by sinawara         ###   ########.fr       */
+/*   Created: 2025/01/29 12:59:02 by sinawara          #+#    #+#             */
+/*   Updated: 2025/01/29 14:40:13 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	count_quotes(char *word, char quote)
+char get_quote_type(char **res, int i)
 {
-	int	i;
-	int	quote_count;
+	char quote_type;
 
-	if (!word)
-		return (0);
-	i = 0;
-	quote_count = 0;
-	while (word[i])
-	{
-		if (word[i] == quote)
-			quote_count++;
-		i++;
-	}
-	return (quote_count);
+	quote_type = 0;
+	if (res[i][0] == res[i][ft_strlen(res[i]) - 1] && (res[i][0] == 34
+				|| res[i][0] == 39))
+			quote_type = res[i][0];
+	return (quote_type);
+}
+void free_token_list_array(t_token *tokens, char **array)
+{
+	free_token_list(tokens);
+	free_array(array);
 }

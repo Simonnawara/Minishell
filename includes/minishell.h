@@ -123,6 +123,29 @@ typedef struct s_heredoc
 	int		fd;
 }	t_heredoc;
 
+
+typedef struct s_shell_data
+{
+	char			**env;
+	char			*expanded_arg;
+	t_token_type	prev_type;
+	char			quote_type;
+	int				quote_count;
+	t_exec			*exec;
+}	t_shell_data;
+
+// Function prototypes
+void	init_shell_data(t_shell_data *data, char **env, t_exec *exec);
+//int		handle_quoted_token(char *cmd, t_shell_data *data, int i);
+int		handle_unquoted_token(char *cmd, t_shell_data *data, int i);
+//t_token	*create_and_add_token(char *cmd, t_shell_data *data,
+			//char **res, int i);
+void	cleanup_shell(char **new_env);
+int		free_token_resources(t_token **tokens, t_token *new_token);
+//int	handle_var_expansion(char **cmd, char **env, int i);
+//int		handle_tilde_expansion(char **cmd, t_shell_data *data);
+
+
 // main.c //
 char			*get_command(char *word, int quote_count, char quote_type);
 char			**init_env(char **original_env);
@@ -134,6 +157,10 @@ void			free_prompt_resources(t_token *tokens, char **res,
 					char *expanded_arg);
 char			*get_command(char *word, int quote_count, char quote_type);
 int				check_exit_status(const char *str);
+
+// main_utils2.c //
+char get_quote_type(char **res, int i);
+void free_token_list_array(t_token *tokens, char **array);
 
 // free.c //
 void			free_array(char **array);
@@ -166,7 +193,6 @@ char			*build_path(char *cmd, char **env);
 
 // quotes.c //
 int				count_quotes(char *word, char quote);
-int				get_quote_type(char start_quote, char end_quote);
 
 // tokenize.c //
 char			**tokenize(char *prompt);
