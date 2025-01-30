@@ -58,6 +58,7 @@ SRCS =  main/main.c \
 		exec/redirection_setup.c \
 		exec/heredoc.c \
 		exec/heredoc_util.c \
+		exec/heredoc_util2.c \
 		exec/exit_status.c
 CC = gcc -g -O0
 CCFLAG = -Wall -Wextra -Werror
