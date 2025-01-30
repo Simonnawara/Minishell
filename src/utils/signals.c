@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
+/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:16:44 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/30 16:08:24 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:25:17 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void handle_sigint(int sig)
     (void)sig;
     g_exit_status = 130;
     write(STDERR_FILENO, "\n", 1);
-    rl_on_new_line();      // Move to a new line
-    rl_replace_line("", 0); // Clear the current input line
-    rl_redisplay();        // Redisplay the prompt
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
 }
 
 void handle_heredoc_sigint(int sig)
@@ -41,12 +41,6 @@ void setup_heredoc_signals(void)
 {
     signal(SIGINT, handle_heredoc_sigint);
     signal(SIGQUIT, SIG_IGN);
-}
-
-void setup_signals(void)
-{
-    signal(SIGINT, handle_sigint);
-    signal(SIGQUIT, handle_sigint);  // Handle instead of ignore
 }
 
 void reset_signals(void)
