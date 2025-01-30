@@ -404,6 +404,9 @@ void			print_token_info(t_token *token);
 
 // signals.c //
 void			setup_signals(void);
+void			handle_sigint(int sig);
+void			handle_heredoc_sigint(int sig);
+void			setup_heredoc_signals(void);
 void			reset_signals(void);
 void			ignore_signals(void);
 void			update_exit_status(int status);
