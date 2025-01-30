@@ -365,6 +365,12 @@ char			*append_values(char *name, char *old_value, char *new_value);
 // redirection_input //
 int				setup_redirection(t_command_table *cmd);
 int				restore_io(t_command_table *cmd);
+int				write_to_heredoc(int fd, char *delimiter);
+void			write_line_to_fd(int fd, char *line);
+int				handle_no_line(void);
+int				handle_setup_error(t_heredoc *new_hds, int i);
+int				setup_heredoc_nodes(t_ast_node *current, t_heredoc *new_hds,
+					int total);
 
 // set_env_cd.c //
 int				update_env_variable(char **env, char *key, char *value);
@@ -378,6 +384,10 @@ int				add_new_var(char **env, char *name, char *new_value);
 
 // external command .c //
 int				execute_external_command(t_command_table *cmd, t_exec *exec);
+int				handle_init_error(int saved_stdin, t_heredoc *heredocs,
+					int heredoc_count);
+void			cleanup_heredoc_resources(int saved_stdin, t_heredoc *heredocs,
+					int heredoc_count);
 
 // extern_cmd_path //
 char			*find_command_path(char *cmd, t_path *path_info);

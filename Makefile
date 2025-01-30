@@ -22,6 +22,7 @@ SRCS =  main/main.c \
 		utils/errors.c \
 		utils/ft_strcmp.c \
 		utils/signals.c \
+		utils/signal.c \
 		tokens/path.c \
 		tokens/quotes.c \
 		tokens/tokenize.c \
