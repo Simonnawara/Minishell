@@ -6,13 +6,13 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 11:45:48 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/28 13:15:55 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:00:19 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	add_new_var(char **env, char *name, char *new_value)
+int	add_new_var(char **env, char *name, char *new_value)
 {
 	char	*final_value;
 	int		i;
@@ -28,12 +28,11 @@ static int	add_new_var(char **env, char *name, char *new_value)
 	return (0);
 }
 
-static int	update_env(char **env, char *var)
+int	update_env(char **env, char *var)
 {
 	char	*name;
 	char	*new_value;
 	int		is_append;
-	int		ret;
 
 	if (!env || !var)
 		return (1);
@@ -41,28 +40,40 @@ static int	update_env(char **env, char *var)
 	if (!name)
 		return (1);
 	is_append = is_append_operation(var);
+	if (!ft_strchr(var, '='))
+		return (handle_no_value(env, name));
 	new_value = get_var_value(var);
 	if (!new_value)
 	{
 		free(name);
 		return (1);
 	}
-	if (find_env_var(env, name))
-		ret = update_existing_var(env, name, new_value, is_append);
-	else
-		ret = add_new_var(env, name, new_value);
-	free(name);
-	free(new_value);
-	return (ret);
+	return (handle_value(env, name, new_value, is_append));
 }
 
 static void	print_export_vars(char **env)
 {
-	int	i;
+	int		i;
+	char	*equals_pos;
+	char	*var_name;
+	char	*var_value;
 
 	i = 0;
 	while (env[i])
-		ft_printf("declare -x %s\n", env[i++]);
+	{
+		equals_pos = ft_strchr(env[i], '=');
+		if (equals_pos)
+		{
+			var_name = ft_substr(env[i], 0, equals_pos - env[i]);
+			var_value = ft_strdup(equals_pos + 1);
+			ft_printf("declare -x %s=\"%s\"\n", var_name, var_value);
+			free(var_name);
+			free(var_value);
+		}
+		else
+			ft_printf("declare -x %s\n", env[i]);
+		i++;
+	}
 }
 
 static int	handle_export_args(char **args, char **env)

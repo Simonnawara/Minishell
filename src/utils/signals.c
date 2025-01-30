@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:16:44 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 10:07:42 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:00:59 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,27 @@ static void	handle_sigint(int sig)
 	rl_redisplay();
 }
 
-void	setup_signals(void)
+
+static void handle_sigquit(int sig)
 {
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+    (void)sig;
+    // Do nothing in parent shell, but don't ignore
 }
 
-void	reset_signals(void)
+void setup_signals(void)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+    signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, handle_sigquit);  // Handle instead of ignore
 }
 
-void	ignore_signals(void)
+void reset_signals(void)
 {
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+}
+
+void ignore_signals(void)
+{
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
 }

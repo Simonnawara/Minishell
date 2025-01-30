@@ -52,6 +52,7 @@ SRCS =  main/main.c \
 		builtin/cd_utils.c \
 		builtin/export_utils.c \
 		builtin/export_utils_more.c \
+		builtin/export_utils3.c \
 		exec/execute_cmd_extern.c \
 		exec/redirection_setup.c \
 		exec/heredoc.c \

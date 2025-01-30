@@ -1,0 +1,132 @@
+includes/minishell.h: OK!
+Notice: GLOBAL_VAR_DETECTED  (line:  35, col:   1):	Global variable present in file. Make sure it is a reasonable choice.
+libft/include/ft_printf.h: OK!
+libft/include/get_next_line.h: OK!
+libft/include/libft.h: OK!
+libft/src/ft_is/ft_isalnum.c: OK!
+libft/src/ft_is/ft_isalpha.c: OK!
+libft/src/ft_is/ft_isascii.c: OK!
+libft/src/ft_is/ft_isdigit.c: OK!
+libft/src/ft_is/ft_isprint.c: OK!
+libft/src/ft_lst/ft_lstadd_back.c: OK!
+libft/src/ft_lst/ft_lstadd_front.c: OK!
+libft/src/ft_lst/ft_lstclear.c: OK!
+libft/src/ft_lst/ft_lstdelone.c: OK!
+libft/src/ft_lst/ft_lstiter.c: OK!
+libft/src/ft_lst/ft_lstlast.c: OK!
+libft/src/ft_lst/ft_lstmap.c: OK!
+libft/src/ft_lst/ft_lstnew.c: OK!
+libft/src/ft_lst/ft_lstsize.c: OK!
+libft/src/ft_mem/ft_bzero.c: OK!
+libft/src/ft_mem/ft_calloc.c: OK!
+libft/src/ft_mem/ft_memchr.c: OK!
+libft/src/ft_mem/ft_memcmp.c: OK!
+libft/src/ft_mem/ft_memcpy.c: OK!
+libft/src/ft_mem/ft_memmove.c: OK!
+libft/src/ft_mem/ft_memset.c: OK!
+libft/src/ft_printf/ft_hexptr.c: OK!
+libft/src/ft_printf/ft_pointer.c: OK!
+libft/src/ft_printf/ft_print_hex.c: OK!
+libft/src/ft_printf/ft_printcaps_hex.c: OK!
+libft/src/ft_printf/ft_printf.c: OK!
+libft/src/ft_printf/ft_putchar.c: OK!
+libft/src/ft_printf/ft_putnbr_fd.c: OK!
+libft/src/ft_printf/ft_putstr_fd.c: OK!
+libft/src/ft_printf/ft_putunsigned.c: OK!
+libft/src/ft_printf/ft_unsigned.c: OK!
+libft/src/ft_put/ft_putchar_fd.c: OK!
+libft/src/ft_put/ft_putendl_fd.c: OK!
+libft/src/ft_put/ft_putnbr_fd.c: OK!
+libft/src/ft_put/ft_putstr_fd.c: OK!
+libft/src/ft_str/ft_split.c: OK!
+libft/src/ft_str/ft_strchr.c: OK!
+libft/src/ft_str/ft_strdup.c: OK!
+libft/src/ft_str/ft_striteri.c: OK!
+libft/src/ft_str/ft_strjoin.c: OK!
+libft/src/ft_str/ft_strlcat.c: OK!
+libft/src/ft_str/ft_strlcpy.c: OK!
+libft/src/ft_str/ft_strlen.c: OK!
+libft/src/ft_str/ft_strmapi.c: OK!
+libft/src/ft_str/ft_strncmp.c: OK!
+libft/src/ft_str/ft_strnstr.c: OK!
+libft/src/ft_str/ft_strrchr.c: OK!
+libft/src/ft_str/ft_strtrim.c: OK!
+libft/src/ft_str/ft_substr.c: OK!
+libft/src/ft_to/ft_atoi.c: OK!
+libft/src/ft_to/ft_itoa.c: OK!
+libft/src/ft_to/ft_tolower.c: OK!
+libft/src/ft_to/ft_toupper.c: OK!
+libft/src/get_next_line/get_next_line.c: OK!
+libft/src/get_next_line/get_next_line_utils.c: OK!
+src/ast/build_ast_utils.c: OK!
+src/ast/build_ast.c: OK!
+src/ast/execute_ast_utils.c: OK!
+src/ast/build_command_node.c: OK!
+src/ast/arg_to_cmd.c: OK!
+src/ast/handle_redir.c: OK!
+src/ast/execute_ast.c: OK!
+src/tokens/tokenize_2.0.c: OK!
+src/tokens/path.c: OK!
+src/tokens/token_type_utils.c: OK!
+src/tokens/tokenize.c: OK!
+src/tokens/tokenize_utils.c: OK!
+src/tokens/tokenize_utils2.c: OK!
+src/tokens/quotes.c: OK!
+src/tokens/token_type.c: OK!
+src/builtin/env.c: OK!
+src/builtin/exit.c: OK!
+src/builtin/pwd.c: OK!
+src/builtin/unset.c: OK!
+src/builtin/export.c: OK!
+src/builtin/cd_utils.c: OK!
+src/builtin/export_utils.c: OK!
+src/builtin/export_utils_more.c: OK!
+src/builtin/cd.c: OK!
+src/builtin/echo.c: OK!
+src/builtin/echo_utils1.c: OK!
+src/builtin/echo_utils2.c: OK!
+src/builtin/echo_utils3.c: OK!
+src/builtin/export_utils3.c: OK!
+src/exec/error_pipe.c: OK!
+src/exec/exec_simple_command.c: OK!
+src/exec/heredoc.c: OK!
+src/exec/execute_cmd_extern.c: OK!
+src/exec/exit_status.c: OK!
+Notice: GLOBAL_VAR_DETECTED  (line:  15, col:   1):	Global variable present in file. Make sure it is a reasonable choice.
+src/exec/heredoc_util.c: OK!
+src/exec/redirection_setup.c: OK!
+src/utils/signals.c: Error!
+Error: CONSECUTIVE_NEWLINES (line:  25, col:   1):	Consecutive newlines
+Error: SPACE_BEFORE_FUNC    (line:  26, col:  12):	space before function name
+Error: TOO_FEW_TAB          (line:  28, col:   1):	Missing tabs for indent level
+Error: SPACE_REPLACE_TAB    (line:  28, col:   5):	Found space when expecting tab
+Error: SPACE_EMPTY_LINE     (line:  29, col:   5):	Space on empty line
+Error: WRONG_SCOPE_COMMENT  (line:  29, col:   5):	Comment is invalid in this scope
+Error: SPACE_BEFORE_FUNC    (line:  32, col:   5):	space before function name
+Error: TOO_FEW_TAB          (line:  34, col:   1):	Missing tabs for indent level
+Error: SPACE_REPLACE_TAB    (line:  34, col:   5):	Found space when expecting tab
+Error: TOO_FEW_TAB          (line:  35, col:   1):	Missing tabs for indent level
+Error: SPACE_REPLACE_TAB    (line:  35, col:   5):	Found space when expecting tab
+Error: CONSECUTIVE_SPC      (line:  35, col:  37):	Two or more consecutives spaces
+Error: WRONG_SCOPE_COMMENT  (line:  35, col:  39):	Comment is invalid in this scope
+Error: WRONG_SCOPE_COMMENT  (line:  35, col:  39):	Comment is invalid in this scope
+Error: SPACE_BEFORE_FUNC    (line:  38, col:   5):	space before function name
+Error: TOO_FEW_TAB          (line:  40, col:   1):	Missing tabs for indent level
+Error: SPACE_REPLACE_TAB    (line:  40, col:   5):	Found space when expecting tab
+Error: TOO_FEW_TAB          (line:  41, col:   1):	Missing tabs for indent level
+Error: SPACE_REPLACE_TAB    (line:  41, col:   5):	Found space when expecting tab
+Error: SPACE_BEFORE_FUNC    (line:  44, col:   5):	space before function name
+Error: TOO_FEW_TAB          (line:  46, col:   1):	Missing tabs for indent level
+Error: SPACE_REPLACE_TAB    (line:  46, col:   5):	Found space when expecting tab
+Error: TOO_FEW_TAB          (line:  47, col:   1):	Missing tabs for indent level
+Error: SPACE_REPLACE_TAB    (line:  47, col:   5):	Found space when expecting tab
+src/utils/free.c: OK!
+src/utils/errors.c: OK!
+src/utils/ft_strcmp.c: OK!
+src/utils/free_2.c: OK!
+src/utils/free3.c: OK!
+src/main/main.c: OK!
+src/main/main_utils1.c: OK!
+src/main/main_utils2.c: OK!
+src/main/main_utils3.c: OK!
+src/main/main_utils4.c: OK!
