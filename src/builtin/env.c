@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:19:51 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 10:12:04 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:50:38 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	ft_env(t_exec *exec, char **args)
 	if (args && args[1])
 	{
 		ft_putendl_fd("env: too many arguments", 2);
+		g_exit_status = 1;
 		return (1);
 	}
 	update_underscore_var(exec->env);
