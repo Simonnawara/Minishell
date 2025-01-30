@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 14:05:34 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/28 14:30:37 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:57:49 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	update_last_status(t_exec *exec, int status)
 {
 	exec->last_status = status;
+	g_exit_status = status;
 }
 
 int	execute_pipe_child(t_ast_node *ast, t_exec *exec, int *pipe_fds,

@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:43:51 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/11 12:51:11 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:57:20 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	ft_exit(t_ast_node *node, t_exec *exec)
 		return (1);
 	}
 	exit_code = check_exit_arg(node->args[1]);
+	g_exit_status = exit_code;
 	if (exit_code == -1)
 	{
 		free_executor(exec);
