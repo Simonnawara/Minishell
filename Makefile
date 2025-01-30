@@ -14,8 +14,11 @@ NAME = minishell
 SRCS =  main/main.c \
 		main/main_utils1.c \
 		main/main_utils2.c \
+		main/main_utils3.c \
+		main/main_utils4.c \
 		//utils/free.c \
 		utils/free_2.c \
+		utils/free3.c \
 		utils/errors.c \
 		utils/ft_strcmp.c \
 		utils/signals.c \

@@ -119,10 +119,9 @@ typedef struct s_exec
 
 typedef struct s_heredoc
 {
-	char	*filename;
-	int		fd;
+	char			*filename;
+	int				fd;
 }	t_heredoc;
-
 
 typedef struct s_shell_data
 {
@@ -134,22 +133,27 @@ typedef struct s_shell_data
 	t_exec			*exec;
 }	t_shell_data;
 
-// Function prototypes
-void	init_shell_data(t_shell_data *data, char **env, t_exec *exec);
-//int		handle_quoted_token(char *cmd, t_shell_data *data, int i);
-int		handle_unquoted_token(char *cmd, t_shell_data *data, int i);
-//t_token	*create_and_add_token(char *cmd, t_shell_data *data,
-			//char **res, int i);
-void	cleanup_shell(char **new_env);
-int		free_token_resources(t_token **tokens, t_token *new_token);
-//int	handle_var_expansion(char **cmd, char **env, int i);
-//int		handle_tilde_expansion(char **cmd, t_shell_data *data);
+typedef struct s_quote_data
+{
+	int		i;
+	char	**res;
+}	t_quote_data;
 
+// Function prototypes
+void			init_shell_data(t_shell_data *data, char **env, t_exec *exec);
+int				handle_unquoted_token(char *cmd, t_shell_data *data, int i);
+void			cleanup_shell(char **new_env);
+int				free_token_resources(t_token **tokens, t_token *new_token);
 
 // main.c //
 char			*get_command(char *word, int quote_count, char quote_type);
 char			**init_env(char **original_env);
 int				parse_prompt(char *prompt, char **env);
+t_token			*process_unquoted_token(char **res, int i, char **env,
+					t_token_type prev_type);
+int				process_token(t_token **tokens, char **res, int i, char **env);
+t_token			*process_quoted_token(char quote_type, char **env,
+					t_token_type prev_type, t_quote_data *data);
 
 // main_utils.c //
 int				validate_inputs(int argc);
@@ -159,8 +163,27 @@ char			*get_command(char *word, int quote_count, char quote_type);
 int				check_exit_status(const char *str);
 
 // main_utils2.c //
-char get_quote_type(char **res, int i);
-void free_token_list_array(t_token *tokens, char **array);
+char			get_quote_type(char **res, int i);
+void			free_token_list_array(t_token *tokens, char **array);
+char			**init_main(char **original_env);
+int				security_signal(char *prompt, char **new_env);
+void			init_parse_data(t_exec *exec, char **env, t_token **tokens,
+					t_ast_node **ast);
+
+// main_utils3.c //
+t_token_type	get_last_token_type(t_token *tokens);
+char			*init_home_value(char **env);
+int				handle_empty_cmd(char **cmd, char *home_value,
+					char *full_path, char **env);
+
+// main_utils4.c //
+int				handle_exit_status(char *expanded_arg);
+char			*expand_exit_status(char *processed_arg, int *stop_processing);
+int				handle_expansion(char **cmd, char **processed_arg, char **env,
+					int i);
+int				handle_home_expansion(char **cmd, char **res, int i,
+					char **env);
+t_quote_data	*init_quote_data(char **res, int i);
 
 // free.c //
 void			free_array(char **array);
