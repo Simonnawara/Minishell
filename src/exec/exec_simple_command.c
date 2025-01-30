@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:17:02 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 15:39:15 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:16:00 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ int	execute_simple_command(t_ast_node *node, t_exec *exec, t_command_table cmd)
 		ret = execute_builtin(&cmd, exec);
 	else
 		ret = execute_external_command(&cmd, exec);
-	g_exit_status = ret;
+	g_exit_status = 0;
 	return (ret);
 }

@@ -6,13 +6,13 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 13:59:54 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/28 15:39:23 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:06:42 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static t_token	*process_token(t_token *current, t_ast_node **root,
+static t_token	*process_token_ast(t_token *current, t_ast_node **root,
 		t_ast_node *cmd_node, t_ast_node **prev_redir)
 {
 	t_ast_node	*redir;
@@ -36,7 +36,7 @@ static void	process_redirections(t_token *current, t_ast_node **root,
 		if ((current->type == T_REDIRECT_IN || current->type == T_REDIRECT_OUT
 				|| current->type == T_APPEND || current->type == T_HEREDOC)
 			&& current->next)
-			current = process_token(current, root, cmd_node, prev_redir);
+			current = process_token_ast(current, root, cmd_node, prev_redir);
 		else
 			current = current->next;
 	}
