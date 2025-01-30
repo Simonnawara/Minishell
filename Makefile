@@ -62,11 +62,6 @@ SRCS =  main/main.c \
 		exec/exit_status.c
 CC = gcc -g -O0
 CCFLAG = -Wall -Wextra -Werror
-DEBUG ?= 0
-ifeq ($(DEBUG), 1)
-    CCFLAG += -DDEBUG -fsanitize=address,undefined
-endif
-
 LIB = -C ./libft/
 
 SUCCESS_COLOR = \033[32m
@@ -125,8 +120,5 @@ fclean : clean
 	@echo "$(SUCCESS_COLOR)$(NAME) - FCleaned with Success"
 
 re : fclean all
-
-valgrind: re
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=1 ./$(NAME)
 
 .PHONY: all clean fclean re bonus
