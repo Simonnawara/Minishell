@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:05:36 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/27 10:04:30 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 09:09:33 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static int	is_valid_env_name(char *name)
 	if (!name || !*name || ft_isdigit(*name))
 		return (0);
 	i = 0;
+	if (name[0] == '_')
+		return (0);
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]) && name[i] != '_')
