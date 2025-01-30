@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 14:50:45 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/27 13:05:29 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:32:58 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,50 @@ int	free_word_and_return(char *word, int return_value)
 	return (return_value);
 }
 
-void	free_token_list(t_token *tokens)
+void cleanup_token(t_token *token)
 {
-	t_token	*tmp;
+    if (!token)
+        return;
 
-	if (!tokens)
-		return ;
-	while (tokens)
-	{
-		tmp = tokens->next;
-		if (tokens->value)
-			free(tokens->value);
-		if (tokens->res)
-			free_array(tokens->res);
-		free(tokens);
-		tokens = tmp;
-	}
+    if (token->value)
+    {
+        free(token->value);
+        token->value = NULL;
+    }
+
+    if (token->res && token->is_echo)
+    {
+        free_array(token->res);
+        token->res = NULL;
+    }
+
+    free(token);
+}
+
+void free_token_list(t_token *tokens)
+{
+    t_token *next;
+    
+    while (tokens)
+    {
+        next = tokens->next;
+        
+        // Free the value first
+        if (tokens->value)
+        {
+            free(tokens->value);
+            tokens->value = NULL;
+        }
+        
+        // Only free res if it's owned by this token
+        if (tokens->res && tokens->is_echo)
+        {
+            free_array(tokens->res);
+            tokens->res = NULL;
+        }
+        
+        // Free the token itself
+        free(tokens);
+        tokens = next;
+    }
 }

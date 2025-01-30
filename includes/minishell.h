@@ -144,6 +144,7 @@ void			free_token_list(t_token *tokens);
 void			free_ast_node(t_ast_node *node);
 void			free_ast(t_ast_node *root);
 void			free_command_table(t_command_table *cmd);
+void			cleanup_token(t_token *token);
 
 // errors.c //
 void			file_error(char *filename);
