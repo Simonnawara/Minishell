@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 12:43:51 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/30 11:57:20 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:00:08 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,31 @@ static int	check_exit_arg(char *arg)
 
 static void	free_executor(t_exec *exec)
 {
+	int	i;
+
 	if (exec->ast)
 		free_ast(exec->ast);
 	if (exec->path_info)
 	{
 		if (exec->path_info->paths)
 			free_array(exec->path_info->paths);
-		if (exec->path_info->path_var)
-			free(exec->path_info->path_var);
-		if (exec->path_info->full_path)
-			free(exec->path_info->full_path);
-		if (exec->path_info->temp)
-			free(exec->path_info->temp);
+		free(exec->path_info->path_var);
+		free(exec->path_info->full_path);
+		free(exec->path_info->temp);
 		free(exec->path_info);
 	}
 	if (exec->env)
-		free_array(exec->env);
+	{
+		i = 0;
+		while (exec->env[i])
+		{
+			if (exec->env_allocated && exec->env_allocated[i])
+				free(exec->env[i]);
+			i++;
+		}
+		free(exec->env);
+	}
+	free(exec->env_allocated);
 }
 
 int	ft_exit(t_ast_node *node, t_exec *exec)
@@ -84,7 +93,6 @@ int	ft_exit(t_ast_node *node, t_exec *exec)
 		return (1);
 	}
 	exit_code = check_exit_arg(node->args[1]);
-	g_exit_status = exit_code;
 	if (exit_code == -1)
 	{
 		free_executor(exec);

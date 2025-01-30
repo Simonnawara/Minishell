@@ -6,7 +6,7 @@
 /*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:04:00 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/28 13:21:27 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:01:13 by trouilla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ char	*create_new_value(char *name, char *old_value, char *new_value,
 
 	if (is_append && old_value)
 		return (append_values(name, old_value, new_value));
+	if (!new_value)
+	{
+		result = ft_strdup(name);
+		return (result);
+	}
 	total_len = ft_strlen(name) + 1 + ft_strlen(new_value) + 1;
 	result = malloc(total_len);
 	if (!result)
@@ -62,16 +67,21 @@ char	*create_new_value(char *name, char *old_value, char *new_value,
 char	*get_existing_value(char **env, char *name, int is_append)
 {
 	char	*old_value;
-	char	*temp;
+	char	*env_entry;
+	char	*equals_pos;
 
 	old_value = NULL;
 	if (is_append)
 	{
-		temp = ft_strchr(find_env_var(env, name), '=');
-		if (temp)
-			old_value = temp + 1;
-		else
-			old_value = "";
+		env_entry = find_env_var(env, name);
+		if (env_entry)
+		{
+			equals_pos = ft_strchr(env_entry, '=');
+			if (equals_pos)
+				old_value = equals_pos + 1;
+			else
+				old_value = "";
+		}
 	}
 	return (old_value);
 }

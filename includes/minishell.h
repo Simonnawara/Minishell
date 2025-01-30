@@ -368,6 +368,13 @@ int				restore_io(t_command_table *cmd);
 
 // set_env_cd.c //
 int				update_env_variable(char **env, char *key, char *value);
+void			clean_env(char **env);
+char			*get_var_name_only(char *var);
+int				handle_no_value(char **env, char *name);
+int				handle_value(char **env, char *name, char *new_value,
+					int is_append);
+int				update_env(char **env, char *var);
+int				add_new_var(char **env, char *name, char *new_value);
 
 // external command .c //
 int				execute_external_command(t_command_table *cmd, t_exec *exec);

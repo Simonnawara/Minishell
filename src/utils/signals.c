@@ -6,7 +6,7 @@
 /*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:16:44 by sinawara          #+#    #+#             */
-/*   Updated: 2025/01/30 15:46:57 by sinawara         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:08:24 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,20 @@ void setup_heredoc_signals(void)
     signal(SIGQUIT, SIG_IGN);
 }
 
-void	reset_signals(void)
+void setup_signals(void)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+    signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, handle_sigint);  // Handle instead of ignore
 }
 
-void	ignore_signals(void)
+void reset_signals(void)
 {
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+}
+
+void ignore_signals(void)
+{
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
 }
