@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_utils_1.c                                     :+:      :+:    :+:   */
+/*   main_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trouilla <trouilla@student.s19.be>         +#+  +:+       +#+        */
+/*   By: sinawara <sinawara@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 09:56:57 by trouilla          #+#    #+#             */
-/*   Updated: 2025/01/29 10:06:50 by trouilla         ###   ########.fr       */
+/*   Updated: 2025/01/29 13:19:18 by sinawara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_prompt_resources(t_token *tokens, char **res, char *expanded_arg)
 	if (expanded_arg)
 		free(expanded_arg);
 }
+
 
 char	*get_command(char *word, int quote_count, char quote_type)
 {
