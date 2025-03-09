@@ -4,7 +4,7 @@
 
 ## 📝 Project Overview
 
-**Minishell** is a minimalistic shell implementation built as part of the 42 School curriculum. It mimics the behavior of Bash, providing a simple command-line interface that supports various shell functionalities, including process execution, redirections, pipes, and environment variable handling.
+**Minishell** is a custom shell implementation built as part of the 42 School curriculum. It mimics the behavior of Bash, providing a command-line interface that supports various shell functionalities, including process execution, redirections, pipes, and environment variable handling.
 
 ## 🎯 Features
 
